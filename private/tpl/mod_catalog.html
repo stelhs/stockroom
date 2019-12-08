@@ -1,0 +1,132 @@
+<div align="center">
+
+    <h3> Каталог </h3>
+    <h2>
+        <!-- START BLOCK : catalog_path --><a href="{link}">{name}</a><!-- END BLOCK : catalog_path -->
+    </h2>
+
+    <!-- START BLOCK : catalog -->
+        <!-- START BLOCK : catalog_photo -->
+            <div class="catalog_photo">
+                <a href="{link_remove}" onclick="return window.confirm('Удалить фотографию?')">
+                    <img class="catalog_remove_img" src="{http_img}delete.png">
+                </a>
+                <a href="{img_orig}">
+                    <img src="{img}">
+                </a>
+            </div>
+        <!-- END BLOCK : catalog_photo -->
+
+
+        <script>
+            function submit_catalog(method) 
+            {
+               var form;
+               form = document.getElementById("catalog_form");
+               form.method.value = method;
+               if (!form.catalog_name.value)
+                   alert("Name is empty");
+               else
+                   form.submit();
+            }
+        </script>
+        <div>
+            <form name="catalog" method="POST" action="{form_url}" id="catalog_form" enctype='multipart/form-data'>
+                <input type="hidden" name="method" value="">
+                <input type="hidden" name="catalog_id" value="{catalog_id}">
+
+                <table border="0" width="100%">
+                    <tr>
+                        <td align="right" valign="top">ID: </td>
+                        <td> {catalog_id}</td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Группа: </td>
+                        <td> <input type="text" name="catalog_name" size="20" value="{catalog_name}"></td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Описание: </td>
+                        <td>
+                            <textarea rows=3 cols=23 name="catalog_description" onclick="this.select()">{catalog_description}</textarea>
+                        </td>
+                    </tr>
+                </table>
+                <div style="text-align: left">
+                    <a href="javascript:;" onclick="if (window.confirm('Отредактировать группу \'{catalog_name}\' ?')) submit_catalog('edit_catalog')">
+                        <img src="{http_img}edit.png">
+                    </a>
+
+                    <a href="javascript:;" onclick="if (window.confirm('Добавить новую группу в \'{catalog_name}\' ?')) submit_catalog('add_catalog')">
+                        <img src="{http_img}add_node.png">
+                    </a>
+
+                    <a href="{link_delete}" onclick="return window.confirm('Удалить группу \'{catalog_name}\' ?')">
+                        <img src="{http_img}delete.png">
+                    </a>
+
+                    <a href="javascript:;" onclick="submit_catalog('cut_catalog')">
+                        <img src="{http_img}cut.png">
+                    </a>
+
+                    <!-- START BLOCK : past_catalog -->            
+                        <a href="javascript:;" onclick="if (window.confirm('Вставить узел \'{past_catalog_name}\' в узел \'{catalog_name}\' ?')) submit_catalog('past_catalog')">
+                            <img src="{http_img}past.png">
+                        </a>
+                    <!-- END BLOCK : past_catalog -->            
+                    <!-- START BLOCK : past_catalog_blocked -->
+                        <img src="{http_img}past.png" style="opacity: 0.2;">
+                    <!-- END BLOCK : past_catalog_blocked -->            
+
+                    <a href="{link_add_object}">
+                        <img src="{http_img}add_object.png">
+                    </a>
+                </div>
+            </form>
+        </div>
+    <!-- END BLOCK : catalog -->
+
+    <!-- START BLOCK : no_catalog -->
+        Location {catalog_id} is not found
+    <!-- END BLOCK : no_catalog -->
+
+    <!-- START BLOCK : sub_catalogs_list -->
+        <br><br>
+        Локации:<br>
+        <table border="1" width="100%">
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+            </tr>
+            <!-- START BLOCK : sub_catalogs_row -->
+                <tr>
+                    <td><a href="{link}">{id}</a></td>
+                    <td><a href="{link}">{name}</a></td>
+                </tr>
+            <!-- END BLOCK : sub_catalogs_row -->
+        </table>
+        <br><br>
+    <!-- END BLOCK : sub_catalogs_list -->
+
+     <!-- START BLOCK : objects_list -->
+        Предметы:<br>
+        <table align="left">
+            <!-- START BLOCK : object_row -->
+                <tr>
+                    <td>
+                        <a href="{link_to_object}">
+                            <div class="obj_photo_node">
+                                    <img src="{img}">
+                            </div>
+                        </a>
+                    </td>
+                    <td>
+                        <b>{name}</b><br>
+                        ID: {id}<br>
+                        {description}
+                    </td>
+                </tr>
+            <!-- END BLOCK : object_row -->
+        </table>
+    <!-- END BLOCK : objects_list -->
+
+</div>

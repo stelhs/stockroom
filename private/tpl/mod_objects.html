@@ -1,0 +1,114 @@
+<div align="center">
+    <script src="{http_js}mod_objects.js"></script>
+
+    <table border="0" cellspacing="5" cellpadding="5" width="100%">
+        <tr>
+            <td>Каталог:</td>
+            <td>
+                <!-- START BLOCK : catalog_path -->
+                    <a href="{link}">{name}</a>
+                <!-- END BLOCK : catalog_path -->
+            </td>
+        </tr>
+        <tr>
+            <td>Располжение:</td>
+            <td>
+                <!-- START BLOCK : location_path -->
+                    <a href="{link}">{name}</a>
+                <!-- END BLOCK : location_path -->
+            </td>
+        </tr>
+    </table>
+    <hr>
+
+    <!-- START BLOCK : object_edit_id -->
+       <h3>{name} id: {id}</h3>
+    <!-- END BLOCK : object_edit_id -->
+
+    <!-- START BLOCK : object_add -->
+       <h3>Добавление предмета</h3>
+    <!-- END BLOCK : object_add -->
+
+
+    <form name="form" method="POST" action="{form_url}" id="object_form" enctype='multipart/form-data'>
+        <input type="hidden" name="method" value="">
+        <input type="hidden" name="object_id" value="{object_id}">
+        <input type="hidden" name="catalog_id" value="{catalog_id}">
+        <input type="hidden" name="location_id" value="{location_id}">
+
+        <table border="0" cellspacing="5" cellpadding="5" width="100%">
+            <tr>
+                <td align="right" valign="top">Название</td>
+                <td><input type="text" name="object_name" size="30" value="{object_name}"></td>
+            </tr>
+            <tr>
+                <td align="right" valign="top">Описание</td>
+                <td><textarea rows=6 cols=30 name="object_description">{object_description}</textarea></td>
+            </tr>
+            <tr>
+                <td align="right" valign="top">Количество</td>
+                <td><input type="text" name="objects_number" size="1" value="{number}"> шт.</td>
+            </tr>
+            <tr>
+                <td>Фотографии:</td>
+                <td><input type="file" name="photos[]" accept="image/*" multiple></td>
+            </tr>
+            <tr>
+                <td>Каталог:</td>
+                <td><div id="catalog_path"></div></td>
+            </tr>
+            <tr>
+                <td>Расположение:</td>
+                <td><div id="location_path"></div></td>
+            </tr>
+        </table>
+        <div style="text-align: left">
+            <!-- START BLOCK : edit_button -->
+                <a href="javascript:;" onclick="if (window.confirm('Отредактировать предмет \'{object_name}\' ?')) submit_object('object_edit')">
+                    <img src="{http_img}edit.png">
+                </a>
+            <!-- END BLOCK : edit_button -->
+
+            <a href="javascript:;" onclick="if (window.confirm('Добавить новый предмет рядом с \'{object_name}\' ?')) submit_object('object_add')">
+                <img src="{http_img}add_object.png">
+            </a>
+
+            <!-- START BLOCK : remove_button -->
+                <a href="{link}" onclick="return window.confirm('Удалить предмет \'{object_name}\' ?')">
+                    <img src="{http_img}delete.png">
+                </a>
+            <!-- END BLOCK : remove_button -->
+
+            <a href="javascript:;" onclick="submit_location('cut_location')">
+                <img src="{http_img}cut.png">
+            </a>
+
+            <!-- START BLOCK : past_location -->
+                <a href="javascript:;" onclick="if (window.confirm('Вставить узел \'{past_location_name}\' в узел \'{location_name}\' ?')) submit_location('past_location')">
+                    <img src="{http_img}past.png">
+                </a>
+            <!-- END BLOCK : past_location -->            
+            <!-- START BLOCK : past_location_blocked -->
+                <img src="{http_img}past.png" style="opacity: 0.2;">
+            <!-- END BLOCK : past_location_blocked -->            
+
+        </div>
+
+    </form>
+
+    <!-- START BLOCK : photo -->
+        <div class="obj_photo">
+            <a href="{link_remove}" onclick="return window.confirm('Удалить фотографию?')">
+                <img class="obj_remove_img" src="{http_img}delete.png">
+            </a>
+            <a href="{img_orig}">
+                <img src="{img}">
+            </a>
+        </div>
+    <!-- END BLOCK : photo -->
+</div>
+
+<script type="text/javascript">
+    draw_location_path({location_id});
+    draw_catalog_path({catalog_id});
+</script>

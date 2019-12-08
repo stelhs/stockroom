@@ -1,0 +1,141 @@
+<div align="center">
+
+    <h3> Локация </h3>
+    <h2>
+        <!-- START BLOCK : location_path --><a href="{link}">{name}</a><!-- END BLOCK : location_path -->
+    </h2>
+
+    <!-- START BLOCK : location -->
+        <!-- START BLOCK : location_photo -->
+            <div class="location_photo">
+                <a href="{link_remove}" onclick="return window.confirm('Удалить фотографию?')">
+                    <img class="location_remove_img" src="{http_img}delete.png">
+                </a>
+                <a href="{img_orig}">
+                    <img src="{img}">
+                </a>
+            </div>
+        <!-- END BLOCK : location_photo -->
+
+
+        <script>
+            function submit_location(method) 
+            {
+               var form;
+               form = document.getElementById("location_form");
+               fix_percent(form.location_fullness);
+               form.method.value = method;
+               if (!form.location_name.value)
+                   alert("Name is empty");
+               else
+                   form.submit();
+            }
+        </script>
+        <div>
+            <form name="location" method="POST" action="{form_url}" id="location_form" enctype='multipart/form-data'>
+                <input type="hidden" name="method" value="">
+                <input type="hidden" name="location_id" value="{location_id}">
+
+                <table border="0" width="100%">
+                    <tr>
+                        <td align="right" valign="top">ID: </td>
+                        <td> {location_id}</td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Название: </td>
+                        <td> <input type="text" name="location_name" size="20" value="{location_name}"></td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Описание: </td>
+                        <td>
+                            <textarea rows=3 cols=23 name="location_description" onclick="this.select()">{location_description}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Заполненность: </td>
+                        <td> <input type="text" name="location_fullness" size="2" value="{location_fullness}"> %</td>
+                    </tr>
+                    <tr>
+                        <td>Фото узла:</td>
+                        <td><input type="file" name="photos[]" accept="image/*" multiple></td>
+                    </tr>
+                </table>
+                <div style="text-align: left">
+                    <a href="javascript:;" onclick="if (window.confirm('Отредактировать узел \'{location_name}\' ?')) submit_location('edit_location')">
+                        <img src="{http_img}edit.png">
+                    </a>
+
+                    <a href="javascript:;" onclick="if (window.confirm('Добавить новый узел в \'{location_name}\' ?')) submit_location('add_location')">
+                        <img src="{http_img}add_node.png">
+                    </a>
+
+                    <a href="{link_delete}" onclick="return window.confirm('Удалить узел \'{location_name}\' ?')">
+                        <img src="{http_img}delete.png">
+                    </a>
+
+                    <a href="javascript:;" onclick="submit_location('cut_location')">
+                        <img src="{http_img}cut.png">
+                    </a>
+
+                    <!-- START BLOCK : past_location -->            
+                        <a href="javascript:;" onclick="if (window.confirm('Вставить узел \'{past_location_name}\' в узел \'{location_name}\' ?')) submit_location('past_location')">
+                            <img src="{http_img}past.png">
+                        </a>
+                    <!-- END BLOCK : past_location -->            
+                    <!-- START BLOCK : past_location_blocked -->
+                        <img src="{http_img}past.png" style="opacity: 0.2;">
+                    <!-- END BLOCK : past_location_blocked -->            
+
+                    <a href="{link_add_object}">
+                        <img src="{http_img}add_object.png">
+                    </a>
+                </div>
+            </form>
+        </div>
+    <!-- END BLOCK : location -->
+
+    <!-- START BLOCK : no_location -->
+        Location {location_id} is not found
+    <!-- END BLOCK : no_location -->
+
+    <!-- START BLOCK : sub_locations_list -->
+        <br><br>
+        Локации:<br>
+        <table border="1" width="100%">
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+            </tr>
+            <!-- START BLOCK : sub_locations_row -->
+                <tr>
+                    <td><a href="{link}">{id}</a></td>
+                    <td><a href="{link}">{name}</a></td>
+                </tr>
+            <!-- END BLOCK : sub_locations_row -->
+        </table>
+        <br><br>
+    <!-- END BLOCK : sub_locations_list -->
+
+     <!-- START BLOCK : objects_list -->
+        Предметы:<br>
+        <table align="left">
+            <!-- START BLOCK : object_row -->
+                <tr>
+                    <td>
+                        <a href="{link_to_object}">
+                            <div class="obj_photo_node">
+                                    <img src="{img}">
+                            </div>
+                        </a>
+                    </td>
+                    <td>
+                        <b>{name}</b><br>
+                        ID: {id}<br>
+                        {description}
+                    </td>
+                </tr>
+            <!-- END BLOCK : object_row -->
+        </table>
+    <!-- END BLOCK : objects_list -->
+
+</div>

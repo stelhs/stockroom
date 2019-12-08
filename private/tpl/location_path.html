@@ -1,0 +1,16 @@
+<!-- START BLOCK : location -->
+    <a style="vertical-align: top" href="javascript:;" style="display: inline" onclick="draw_location_path({id})">{name} / </a>
+<!-- END BLOCK : location -->
+
+<!-- START BLOCK : location_last -->
+    <a style="vertical-align: top" href="javascript:;" style="display: inline" onclick="display_sublocations()">{name} / </a>
+<!-- END BLOCK : location_last -->
+
+<!-- START BLOCK : select_button -->
+    <div style="display: none; border: solid 1px; padding-left: 20px; padding-right: 20px;" id="list_sublocations">
+
+        <!-- START BLOCK : sub_location -->
+            <a href="javascript:;" onclick="draw_location_path({id})">{name}</a><br>
+        <!-- END BLOCK : sub_location -->
+    </div>
+<!-- END BLOCK : select_button -->

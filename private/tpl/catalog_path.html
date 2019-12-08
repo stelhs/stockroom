@@ -1,0 +1,16 @@
+<!-- START BLOCK : catalog -->
+    <a style="vertical-align: top" href="javascript:;" style="display: inline" onclick="draw_catalog_path({id})">{name} / </a>
+<!-- END BLOCK : catalog -->
+
+<!-- START BLOCK : catalog_last -->
+    <a style="vertical-align: top" href="javascript:;" style="display: inline" onclick="display_sub_catalogs()">{name} / </a>
+<!-- END BLOCK : catalog_last -->
+
+<!-- START BLOCK : select_button -->
+    <div style="display: none; border: solid 1px; padding-left: 20px; padding-right: 20px;" id="list_sub_catalogs">
+
+        <!-- START BLOCK : sub_catalog -->
+            <a href="javascript:;" onclick="draw_catalog_path({id})">{name}</a><br>
+        <!-- END BLOCK : sub_catalog -->
+    </div>
+<!-- END BLOCK : select_button -->
