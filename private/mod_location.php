@@ -46,12 +46,26 @@ class Mod_location extends Module {
 
         $for_pasting_loc_id = $this->cutted_location_id();
         if ($for_pasting_loc_id) {
-            $plocation = $this->location_by_id($for_pasting_loc_id);
-            $tpl->assign('past_location', ['past_location_name' => $plocation['name'],
-                                           'location_name' => $location['name']]);
+            $plocation = location_by_id($for_pasting_loc_id);
+            $tpl->assign('location_clipboard',
+                         ['id' => $plocation['id'],
+                          'name' => $plocation['name'],
+                          'link_reset' => mk_url(['mod' => $this->name,
+                                                  'method' => 'reset_clipboard',
+                                                  'id' => $location_id],
+                                                 'query')]);
+
+            foreach ($plocation['path'] as $item)
+                $tpl->assign('clipboard_location_path', ['name' => $item['name'],
+                                                         'link' => $item['url']]);
+
+            if ($for_pasting_loc_id != $location_id)
+                $tpl->assign('past_location', ['past_location_name' => $plocation['name'],
+                                               'location_name' => $location['name']]);
+            else
+                $tpl->assign('past_location_blocked');
         }
-        else
-            $tpl->assign('past_location_blocked');
+
 
 
         $sub_locations = db()->query_list('select * from location where parent_id = %d',
@@ -141,7 +155,7 @@ class Mod_location extends Module {
             $rc = $this->remove_location($args['location_id']);
             if ($rc) {
                 message_box_err(sprintf("Can't remove location '%s'", $location['name']));
-                return mk_url(['mod' => $this->name, 'id' => $args['location_id']]);    
+                return mk_url(['mod' => $this->name, 'id' => $args['location_id']]);
             }
 
             message_box_ok(sprintf("location '%s' successfully removed", $location['name']));
@@ -166,9 +180,13 @@ class Mod_location extends Module {
             $this->move_location($plocation_id, $args['location_id']);
             message_box_ok(sprintf("Node '%s' moved from '%s' to '$s'",
                                    $plocation['name'], $parent_plocation['name'], $location['name']));
-            $this->cancel_cut_location();
+            $this->reset_clipboard();
 
             return mk_url(['mod' => $this->name, 'id' => $args['location_id']]);
+
+        case 'reset_clipboard':
+            $this->reset_clipboard();
+            return mk_url(['mod' => $this->name, 'id' => $args['id']]);
 
         case 'remove_photo':
             $this->remove_location_photo($args['photo_hash']);
@@ -248,15 +266,15 @@ class Mod_location extends Module {
         $_SESSION['cut_location'] = $location_id;
     }
 
-    function cancel_cut_location()
+    function reset_clipboard()
     {
         unset($_SESSION['cut_location']);
     }
 
     function cutted_location_id()
     {
-        return $_SESSION['cut_location']; 
-    }  
+        return $_SESSION['cut_location'];
+    }
 
 }
 

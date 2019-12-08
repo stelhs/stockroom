@@ -42,15 +42,27 @@ class Mod_catalog extends Module {
                                            'link_remove' => $link_remove]);
         }
 
-        $for_pasting_loc_id = $this->cutted_catalog_id();
-        if ($for_pasting_loc_id) {
-            $pcatalog = catalog_by_id($for_pasting_loc_id);
-            $tpl->assign('past_catalog', ['past_catalog_name' => $pcatalog['name'],
-                                           'catalog_name' => $catalog['name']]);
-        }
-        else
-            $tpl->assign('past_catalog_blocked');
+        $for_pasting_cat_id = $this->cutted_catalog_id();
+        if ($for_pasting_cat_id) {
+            $pcatalog = catalog_by_id($for_pasting_cat_id);
+            $tpl->assign('catalog_clipboard',
+                         ['id' => $pcatalog['id'],
+                          'name' => $pcatalog['name'],
+                          'link_reset' => mk_url(['mod' => $this->name,
+                                                  'method' => 'reset_clipboard',
+                                                  'id' => $catalog_id],
+                                                 'query')]);
 
+            foreach ($pcatalog['path'] as $item)
+                $tpl->assign('clipboard_catalog_path', ['name' => $item['name'],
+                                                        'link' => $item['url']]);
+
+            if ($for_pasting_cat_id != $catalog_id)
+                $tpl->assign('past_catalog', ['past_catalog_name' => $pcatalog['name'],
+                                              'catalog_name' => $location['name']]);
+            else
+                $tpl->assign('past_catalog_blocked');
+        }
 
         $sub_catalogs = db()->query_list('select * from catalog where parent_id = %d',
                                       $catalog_id);
@@ -137,7 +149,7 @@ class Mod_catalog extends Module {
             $rc = $this->remove_catalog($args['catalog_id']);
             if ($rc) {
                 message_box_err(sprintf("Can't remove catalog '%s'", $catalog['name']));
-                return mk_url(['mod' => $this->name, 'id' => $args['catalog_id']]);    
+                return mk_url(['mod' => $this->name, 'id' => $args['catalog_id']]);
             }
 
             message_box_ok(sprintf("catalog '%s' successfully removed", $catalog['name']));
@@ -162,9 +174,13 @@ class Mod_catalog extends Module {
             $this->move_catalog($pcatalog_id, $args['catalog_id']);
             message_box_ok(sprintf("Node '%s' moved from '%s' to '$s'",
                                    $pcatalog['name'], $parent_pcatalog['name'], $catalog['name']));
-            $this->cancel_cut_catalog();
+            $this->reset_clipboard();
 
             return mk_url(['mod' => $this->name, 'id' => $args['catalog_id']]);
+
+        case 'reset_clipboard':
+            $this->reset_clipboard();
+            return mk_url(['mod' => $this->name, 'id' => $args['id']]);
 
         case 'remove_photo':
             $this->remove_catalog_photo($args['photo_hash']);
@@ -217,7 +233,7 @@ class Mod_catalog extends Module {
         $objects = objects_by_catalog($catalog_id);
         if (is_array($objects) && count($objects))
             return -1;
-            
+
 
         db()->query('delete from catalog where id = %d', (int)$catalog_id);
         $photos = images_by_obj_id('catalog', $catalog_id);
@@ -242,15 +258,15 @@ class Mod_catalog extends Module {
         $_SESSION['cut_catalog'] = $catalog_id;
     }
 
-    function cancel_cut_catalog()
+    function reset_clipboard()
     {
         unset($_SESSION['cut_catalog']);
     }
 
     function cutted_catalog_id()
     {
-        return $_SESSION['cut_catalog']; 
-    }  
+        return $_SESSION['cut_catalog'];
+    }
 
 }
 
