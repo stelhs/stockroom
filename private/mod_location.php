@@ -30,7 +30,8 @@ class Mod_location extends Module {
                                   'link_delete' => mk_url(['mod' => $this->name,
                                                            'method' => 'remove_location',
                                                            'location_id' => $location_id], 'query'),
-                                  'link_add_object' => mk_url(['mod' => 'object', 'location_id' => $location_id])]);
+                                  'link_add_object' => mk_url(['mod' => 'object', 'location_id' => $location_id]),
+                                  'box_checked' => ($location['is_box'] ? 'checked' : '')]);
 
         $photos = images_by_obj_id('locations', $location_id);
         foreach ($photos as $photo) {
@@ -100,9 +101,13 @@ class Mod_location extends Module {
                         'name' => $obj['name'],
                         'description' => $obj['description'],
                         'link_to_object' => mk_url(['mod' => 'object', 'id' => $obj['id']]),
-                        'img' => $img_url];
+                        'img' => $img_url,
+                        'number' => $obj['number']];
                 $tpl->assign('object_row', $row);
-            }
+                $catalog = catalog_by_id($obj['catalog_id']);
+                foreach ($catalog['path'] as $item)
+                    $tpl->assign('catalog_path', ['name' => $item['name'],
+                                                 'link' => $item['url']]);            }
         }
 
         return $tpl->result();
@@ -113,10 +118,13 @@ class Mod_location extends Module {
     {
         switch($args['method']) {
         case 'add_location':
-            $new_location_id = $this->add_location($args['location_id'],
-                                           $args['location_name'],
-                                           $args['location_description'],
-                                           $args['location_fullness']);
+            $new_location_id = db()->insert('location',
+                                            ['parent_id' => (int)$args['location_id'],
+                                             'name' => $args['location_name'],
+                                             'description' => $args['location_description'],
+                                             'fullness' => (int)$args['location_fullness'],
+                                             'is_box' => ($args['is_box'] ? '1' : '0'),
+                                             'user_id' => (int)user_by_cookie()['id']]);
             if($new_location_id <= 0) {
                  message_box_err("Can't added new location");
                  return mk_url(['mod' => $this->name]);
@@ -134,10 +142,14 @@ class Mod_location extends Module {
             return mk_url(['mod' => $this->name, 'id' => $new_location_id]);
 
         case 'edit_location':
-            $this->edit_location($args['location_id'],
-                             $args['location_name'],
-                             $args['location_description'],
-                             $args['location_fullness']);
+            db()->update('location',
+                         $args['location_id'],
+                         ['name' => $args['location_name'],
+                          'description' => $args['location_description'],
+                          'fullness' => (int)$args['location_fullness'],
+                          'is_box' => ($args['is_box'] ? '1' : '0'),
+                          'user_id' => (int)user_by_cookie()['id']]);
+
 
             if ($_FILES['photos']['name']) {
                 $photos = images_upload_from_form('photos', 'locations', $args['location_id']);
@@ -181,7 +193,6 @@ class Mod_location extends Module {
             message_box_ok(sprintf("Node '%s' moved from '%s' to '$s'",
                                    $plocation['name'], $parent_plocation['name'], $location['name']));
             $this->reset_clipboard();
-
             return mk_url(['mod' => $this->name, 'id' => $args['location_id']]);
 
         case 'reset_clipboard':
@@ -211,16 +222,6 @@ class Mod_location extends Module {
         }
 
         return mk_url(['mod' => $this->name]);
-    }
-
-    function add_location($parentd_id, $name, $description, $fullness)
-    {
-        $id = db()->insert('location', ['parent_id' => (int)$parentd_id,
-                                     'name' => $name,
-                                     'description' => $description,
-                                     'fullness' => (int)$fullness,
-                                     'user_id' => (int)user_by_cookie()['id']]);
-        return $id;
     }
 
     function edit_location($location_id, $name, $description, $fullness)

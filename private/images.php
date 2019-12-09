@@ -21,7 +21,7 @@ class Image {
         if (!is_array($row) || !isset($row['hash']))
             throw new Exception(sprintf('Image %s not found', $hash));
 
-        $this->id = $id;
+        $this->id = $row['id'];
         $this->obj_type = $row['obj_type'];
         $this->obj_id = $row['obj_id'];
         $this->hash = $row['hash'];
@@ -35,7 +35,7 @@ class Image {
 
     /**
      * Determine what size (width or height) is needed to resize the image.
-     * If the width and height are set together, the image resize 
+     * If the width and height are set together, the image resize
      * is changed to fill full square of the image.
      * Supposed that protruding parts of the image
      * overlap by 'div overflow:hidden' setting.
@@ -89,6 +89,7 @@ class Image {
             return -1;
         $filetype = $size['mime'];
 
+
         switch ($filetype) {
         case 'image/jpeg':
         case 'image/pjpeg':
@@ -135,7 +136,7 @@ class Image {
 
         default:
             return -1;
-        }        
+        }
 
         @imagedestroy($src);
         @imagedestroy($dest);
@@ -150,44 +151,53 @@ class Image {
 
         $mode = $this->resize_mode($rect['w'], $rect['h'],
                                    $this->width, $this->height);
-        
+
         switch ($mode) {
         case 'width':
             $dst_file = sprintf('%sw%d', $this->filename, $rect['w']);
             break;
-        
+
         case 'height':
             $dst_file = sprintf('%sh%d', $this->filename, $rect['h']);
             break;
 
         case 'none':
+            $dst_file = sprintf('%s%s', $this->filename, $size_name);
+            copy($this->full_filename(), sprintf('%s%s.%s', $this->images_path(),
+                                                 $dst_file, $this->extension));
+            $dw = $this->width;
+            $dh = $this->height;
+            break;
+
         default:
             return -1;
         }
 
-        if (isset($rect['w']) && ($rect['w'] < $this->width)) {
-            $dw = $rect['w'];
-            $dh = (int)($this->height * ($rect['w'] / $this->width));
+        if ($mode != 'none') {
+            if (isset($rect['w']) && ($rect['w'] < $this->width)) {
+                $dw = $rect['w'];
+                $dh = (int)($this->height * ($rect['w'] / $this->width));
+            }
+            else
+                if ($rect['h'] < $this->height) {
+                $dw = (int)($rect['w'] * ($rect['h'] / $this->height));
+                $dh = $rect['h'];
+            }
+
+            $row = db()->query('select id from images where '.
+                               'hash="%s" and width=%d and height=%d',
+                               $this->hash, $dw, $dh);
+
+            if (is_array($row) && $row['id'])
+                return 0;
+
+            $rc = $this->resize_img_file($this->full_filename(),
+                                         sprintf('%s%s.%s', $this->images_path(),
+                                                 $dst_file, $this->extension),
+                                                 $dw, $dh);
+            if ($rc)
+                return $rc;
         }
-        else 
-            if ($rect['h'] < $this->height) {
-            $dw = (int)($rect['w'] * ($rect['h'] / $this->height));
-            $dh = $rect['h'];
-        }
-
-        $row = db()->query('select id from images where '.
-                           'hash="%s" and width=%d and height=%d',
-                           $this->hash, $dw, $dh);
-
-        if (is_array($row) && $row['id'])
-            return 0;
-
-        $rc = $this->resize_img_file($this->full_filename(),
-                                     sprintf('%s%s.%s', $this->images_path(),
-                                             $dst_file, $this->extension),
-                                             $dw, $dh);
-        if ($rc)
-            return $rc;
 
         db()->insert('images', ['obj_type' => $this->obj_type,
                                 'obj_id' => $this->obj_id,
@@ -199,6 +209,43 @@ class Image {
                                 'width' => $dw,
                                 'height' => $dh,
                                 'original_filename' => $this->original_filename]);
+    }
+
+    function duplicate($obj_type, $obj_id)
+    {
+        $img_dir = sprintf('%si/obj', conf()['absolute_root_path']);
+        $filename = '';
+        for (;;) {
+            $name = substr(sha1(sprintf('%s%d', $this->hash, time())), 0, 16);
+            $filename = sprintf('%s.%s', $name, $this->extension);
+            $full_filename = sprintf('%s/%s', $img_dir, $filename);
+            if (!file_exists($full_filename))
+                break;
+        }
+        $rc = copy($this->full_filename(), $full_filename);
+        if (!$rc)
+            return -1;
+
+        $new_hash = sha1($full_filename);
+        $id = db()->insert('images', ['obj_type' => $obj_type,
+                                      'obj_id' => $obj_id,
+                                      'name' => $row['name'],
+                                      'size_name' => 'original',
+                                      'hash' => $new_hash,
+                                      'filename' => $name,
+                                      'extension' => $this->extension,
+                                      'width' => $this->width,
+                                      'height' => $this->height,
+                                      'original_filename' => $this->original_filename]);
+        if (!$id)
+            return -1;
+
+        $new_image = image_by_hash($new_hash);
+        $list_resized = $this->list_resized();
+        foreach ($list_resized as $size_name => $size)
+            $new_image->resize($size_name, $size);
+
+        return $new_image;
     }
 
     function filename($size_name = NULL)
@@ -223,12 +270,12 @@ class Image {
 
     function full_filename($size_name = NULL)
     {
-        return sprintf('%s/%s', $this->images_path(), $this->filename($size_name));
+        return sprintf('%s%s', $this->images_path(), $this->filename($size_name));
     }
 
     function images_path()
     {
-        return sprintf('%s/i/obj/', conf()['absolute_root_path']);
+        return sprintf('%si/obj/', conf()['absolute_root_path']);
     }
 
     function remove()
@@ -255,6 +302,19 @@ class Image {
         return $this->hash;
     }
 
+    function list_resized()
+    {
+        $rows = db()->query_list('select size_name, width, height from images '.
+                                 'where hash = "%s" and '.
+                                     'size_name != "original"',
+                                 $this->hash);
+        $list = [];
+        foreach ($rows as $row)
+            $list[$row['size_name']] = ['w' => $row['width'],
+                                        'h' => $row['height']];
+
+        return $list;
+    }
 }
 
 function images_by_obj_id($obj_type, $obj_id)
@@ -311,6 +371,44 @@ function image_upload($tmp_name, $orig_name, $obj_type, $obj_id, $img_name = "")
                                  'width' => $width,
                                  'height' => $height,
                                  'original_filename' => $orig_name]);
+
+    if (!$id)
+        return -1;
+    return $hash;
+}
+
+function image_upload_local($src_name, $obj_type, $obj_id, $img_name = "")
+{
+    $ext = strtolower(pathinfo($src_name, PATHINFO_EXTENSION));
+    $img_dir = sprintf('%si/obj', conf()['absolute_root_path']);
+    $filename = '';
+    for (;;) {
+        $name = substr(sha1(sprintf('%s%s%d', $src_name, $src_name, time())), 0, 16);
+        $filename = sprintf('%s.%s', $name, $ext);
+        $full_filename = sprintf('%s/%s', $img_dir, $filename);
+        if (!file_exists($full_filename))
+            break;
+    }
+
+    $rc = copy($src_name, $full_filename);
+    if (!$rc) {
+        printf("can't move uploaded file\n");
+        return -1;
+    }
+
+    list($width, $height) = getimagesize($full_filename);
+    $hash = sha1($full_filename);
+
+    $id = db()->insert('images', ['obj_type' => $obj_type,
+                                 'obj_id' => $obj_id,
+                                 'name' => $img_name,
+                                 'size_name' => 'original',
+                                 'hash' => $hash,
+                                 'filename' => $name,
+                                 'extension' => $ext,
+                                 'width' => $width,
+                                 'height' => $height,
+                                 'original_filename' => basename($src_name)]);
 
     if (!$id)
         return -1;

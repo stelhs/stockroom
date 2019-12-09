@@ -12,7 +12,7 @@ function location_by_id($location_id)
     $root_path_item = ['name' => ' / ', 'url' => mk_url(['mod' => 'location'])];
 
     if ($location_id == 0) {
-        $root_location['path'] = $root_path_item;
+        $root_location['path'] = [$root_path_item];
         return $root_location;
     }
 

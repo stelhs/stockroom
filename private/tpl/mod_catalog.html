@@ -34,7 +34,7 @@
 
 
         <script>
-            function submit_catalog(method) 
+            function submit_catalog(method)
             {
                var form;
                form = document.getElementById("catalog_form");
@@ -83,14 +83,14 @@
                         <img src="{http_img}cut.png">
                     </a>
 
-                    <!-- START BLOCK : past_catalog -->            
+                    <!-- START BLOCK : past_catalog -->
                         <a href="javascript:;" onclick="if (window.confirm('Вставить узел \'{past_catalog_name}\' в узел \'{catalog_name}\' ?')) submit_catalog('past_catalog')">
                             <img src="{http_img}past.png">
                         </a>
-                    <!-- END BLOCK : past_catalog -->            
+                    <!-- END BLOCK : past_catalog -->
                     <!-- START BLOCK : past_catalog_blocked -->
                         <img src="{http_img}past.png" style="opacity: 0.2;">
-                    <!-- END BLOCK : past_catalog_blocked -->            
+                    <!-- END BLOCK : past_catalog_blocked -->
 
                     <a href="{link_add_object}">
                         <img src="{http_img}add_object.png">
@@ -137,7 +137,9 @@
                     <td>
                         <b>{name}</b><br>
                         ID: {id}<br>
-                        {description}
+                        {number}шт.<br
+                        {description}<br>
+                        <!-- START BLOCK : location_path --><a href="{link}">{name}</a><!-- END BLOCK : location_path -->
                     </td>
                 </tr>
             <!-- END BLOCK : object_row -->

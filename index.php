@@ -15,11 +15,13 @@ function main($tpl)
     session_start();
 
     $tpl->assign(NULL, ['link_location' => mk_url(['mod' => 'location']),
-                        'link_catalog' => mk_url(['mod' => 'catalog'])]); 
+                        'link_catalog' => mk_url(['mod' => 'catalog']),
+                        'link_search' => mk_url(['mod' => 'search']),
+                        'link_boxes' => mk_url(['mod' => 'boxes'])]);
 
     $mbx = message_box_get();
     if($mbx)
-        $tpl->assign($mbx['block'], $mbx['data']);    
+        $tpl->assign($mbx['block'], $mbx['data']);
 
     $user = user_by_cookie();
     if (!$user) {

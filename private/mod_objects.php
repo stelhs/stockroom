@@ -78,7 +78,7 @@ class Mod_object extends Module {
                 return mk_url(['mod' => 'location', 'id' => $args['location_id']]);
             }
 
-            if ($_FILES['photos']['name']) {
+            if ($_FILES['photos']['name'][0]) {
                 $photos = images_upload_from_form('photos', 'objects', $object_id);
                 if (!count($photos))
                     message_box_err('Can`t upload photos');
@@ -87,6 +87,13 @@ class Mod_object extends Module {
                     $photo->resize('mini', ['w' => 1000]);
                     $photo->resize('list', ['w' => 300]);
                 }
+            }
+
+            /* If duplicate */
+            if ($args['object_id']) {
+                $photos = images_by_obj_id('objects', $args['object_id']);
+                foreach ($photos as $photo)
+                    $photo->duplicate('objects', $object_id);
             }
 
             message_box_ok(sprintf('Added new object %d', $object_id));
@@ -102,7 +109,7 @@ class Mod_object extends Module {
             if ($rc)
                 message_box_err('Can`t edit object');
 
-            if ($_FILES['photos']['name']) {
+            if ($_FILES['photos']['name'][0]) {
                 $photos = images_upload_from_form('photos', 'objects', $args['object_id']);
                 if (!count($photos))
                     message_box_err('Can`t upload photos');

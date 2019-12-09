@@ -12,7 +12,7 @@ function catalog_by_id($catalog_id)
     $root_path_item = ['name' => ' / ', 'url' => mk_url(['mod' => 'catalog'])];
 
     if ($catalog_id == 0) {
-        $root_catalog['path'] = $root_path_item;
+        $root_catalog['path'] = [$root_path_item];
         return $root_catalog;
     }
 

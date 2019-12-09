@@ -36,7 +36,7 @@
 
 
         <script>
-            function submit_location(method) 
+            function submit_location(method)
             {
                var form;
                form = document.getElementById("location_form");
@@ -69,6 +69,10 @@
                         </td>
                     </tr>
                     <tr>
+                        <td align="right" valign="top"></td>
+                        <td><input type="checkbox" name="is_box" {box_checked} style="width: 40px; height: 40px"> Коробка</td>
+                    </tr>
+                    <tr>
                         <td align="right" valign="top">Заполненность: </td>
                         <td> <input type="text" name="location_fullness" size="2" value="{location_fullness}"> %</td>
                     </tr>
@@ -94,14 +98,14 @@
                         <img src="{http_img}cut.png">
                     </a>
 
-                    <!-- START BLOCK : past_location -->            
+                    <!-- START BLOCK : past_location -->
                         <a href="javascript:;" onclick="if (window.confirm('Вставить узел \'{past_location_name}\' в узел \'{location_name}\' ?')) submit_location('past_location')">
                             <img src="{http_img}past.png">
                         </a>
-                    <!-- END BLOCK : past_location -->            
+                    <!-- END BLOCK : past_location -->
                     <!-- START BLOCK : past_location_blocked -->
                         <img src="{http_img}past.png" style="opacity: 0.2;">
-                    <!-- END BLOCK : past_location_blocked -->            
+                    <!-- END BLOCK : past_location_blocked -->
 
                     <a href="{link_add_object}">
                         <img src="{http_img}add_object.png">
@@ -122,11 +126,13 @@
             <tr>
                 <th>Id</th>
                 <th>Name</th>
+                <th>Описание</th>
             </tr>
             <!-- START BLOCK : sub_locations_row -->
                 <tr>
                     <td><a href="{link}">{id}</a></td>
                     <td><a href="{link}">{name}</a></td>
+                    <td><a href="{link}">{description}</a></td>
                 </tr>
             <!-- END BLOCK : sub_locations_row -->
         </table>
@@ -148,7 +154,9 @@
                     <td>
                         <b>{name}</b><br>
                         ID: {id}<br>
-                        {description}
+                        {number}шт.<br>
+                        {description}<br>
+                        <!-- START BLOCK : catalog_path --><a href="{link}">{name}</a><!-- END BLOCK : catalog_path -->
                     </td>
                 </tr>
             <!-- END BLOCK : object_row -->

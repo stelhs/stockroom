@@ -1,0 +1,71 @@
+<div align="center">
+
+    <h3> Поиск </h3>
+
+    <form name="search" method="GET" action="{form_url}" id="search_form">
+        <input type="hidden" name="mod" value="{mod}">
+        <input type="text" name="text" size="20" value="{text}">
+        <input class="buttonSend" type="submit" value="Искать"/>
+    </form>
+    <br>
+    <div align="left">
+        <!-- START BLOCK : no_result -->
+            Ничего ненайдено
+        <!-- END BLOCK : no_result -->
+
+        <!-- START BLOCK : result_catalog -->
+            <p style="color: orange">Результат по каталогу:</p>
+            <table>
+                <!-- START BLOCK : result_catalog_row -->
+                    <tr>
+                        <td>{id}:</td>
+                        <td>
+                            <a href="{link}">
+                                <!-- START BLOCK : result_catalog_path -->{name}<!-- END BLOCK : result_catalog_path -->
+                            </a>
+                        </td>
+                    </tr>
+                <!-- END BLOCK : result_catalog_row -->
+            </table>
+        <!-- END BLOCK : result_catalog -->
+
+        <!-- START BLOCK : result_location -->
+            <p style="color: green">Результат по локации:</p>
+            <table>
+                <!-- START BLOCK : result_location_row -->
+                    <tr>
+                        <td>{id}:</td>
+                        <td>
+                            <a href="{link}">
+                                <!-- START BLOCK : result_location_path -->{name}<!-- END BLOCK : result_location_path -->
+                            </a>
+                        </td>
+                    </tr>
+                <!-- END BLOCK : result_location_row -->
+            </table>
+        <!-- END BLOCK : result_location -->
+
+        <!-- START BLOCK : result_objects -->
+            <p style="color: orange">Результат по предметам:</p>
+            <table align="left">
+                <!-- START BLOCK : result_objects_row -->
+                    <tr>
+                        <td>
+                            <a href="{link}">
+                                <div class="obj_photo_node">
+                                        <img src="{img}">
+                                </div>
+                            </a>
+                        </td>
+                        <td>
+                            <b>{name}</b><br>
+                            ID: {id}<br>
+                            {number}шт.<br>
+                            {description}
+                        </td>
+                    </tr>
+                <!-- END BLOCK : result_objects_row -->
+            </table>
+        <!-- END BLOCK : result_objects -->
+    </div>
+</div>

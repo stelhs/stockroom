@@ -3,6 +3,8 @@
 require_once "private/mod_location.php";
 require_once "private/mod_catalog.php";
 require_once "private/mod_objects.php";
+require_once "private/mod_search.php";
+require_once "private/mod_boxes.php";
 
 class Module {
     public $name = "undefined";

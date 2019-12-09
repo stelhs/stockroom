@@ -82,6 +82,9 @@ class Mod_catalog extends Module {
             }
         }
 
+        if ($catalog_id == 0)
+            return $tpl->result();
+
         $objects = objects_by_catalog($catalog_id);
         if ($objects) {
             $tpl->assign('objects_list');
@@ -95,9 +98,14 @@ class Mod_catalog extends Module {
                 $row = ['id' => $obj['id'],
                         'name' => $obj['name'],
                         'description' => $obj['description'],
+                        'number' => $obj['number'],
                         'link_to_object' => mk_url(['mod' => 'object', 'id' => $obj['id']]),
                         'img' => $img_url];
                 $tpl->assign('object_row', $row);
+                $location = location_by_id($obj['location_id']);
+                foreach ($location['path'] as $item)
+                    $tpl->assign('location_path', ['name' => $item['name'],
+                                                   'link' => $item['url']]);
             }
         }
 
