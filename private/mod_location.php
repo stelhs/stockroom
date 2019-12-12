@@ -31,7 +31,9 @@ class Mod_location extends Module {
                                                            'method' => 'remove_location',
                                                            'location_id' => $location_id], 'query'),
                                   'link_add_object' => mk_url(['mod' => 'object', 'location_id' => $location_id]),
-                                  'box_checked' => ($location['is_box'] ? 'checked' : '')]);
+                                  'box_checked' => ($location['is_box'] ? 'checked' : ''),
+                                  'free_boxes_link' => mk_url(['mod' => 'boxes',
+                                                               'location_id' => $location_id])]);
 
         $photos = images_by_obj_id('locations', $location_id);
         foreach ($photos as $photo) {
@@ -69,7 +71,7 @@ class Mod_location extends Module {
 
 
 
-        $sub_locations = db()->query_list('select * from location where parent_id = %d',
+        $sub_locations = db()->query_list('select * from location where parent_id = %d order by name asc',
                                       $location_id);
         if ($sub_locations) {
             $tpl->assign('sub_locations_list');
@@ -101,13 +103,17 @@ class Mod_location extends Module {
                         'name' => $obj['name'],
                         'description' => $obj['description'],
                         'link_to_object' => mk_url(['mod' => 'object', 'id' => $obj['id']]),
-                        'img' => $img_url,
-                        'number' => $obj['number']];
+                        'img' => $img_url];
                 $tpl->assign('object_row', $row);
+                if ($obj['number'] > 1)
+                    $tpl->assign('object_count', ['count' => $obj['number']]);
+
                 $catalog = catalog_by_id($obj['catalog_id']);
                 foreach ($catalog['path'] as $item)
                     $tpl->assign('catalog_path', ['name' => $item['name'],
-                                                 'link' => $item['url']]);            }
+                                                 'link' => $item['url']]);
+            }
+
         }
 
         return $tpl->result();
@@ -211,11 +217,14 @@ class Mod_location extends Module {
             return 0;
 
         case 'get_sub_location':
-            $list = db()->query_list('select * from location where parent_id = %d', $args['id']);
-            if (!$list) {
+            $rows = db()->query_list('select * from location where parent_id = %d '.
+                                     'order by name asc', $args['id']);
+            if (!$rows) {
                 echo json_encode([]);
                 return 0;
             }
+            foreach ($rows as $row)
+                $list[] = $row;
             echo json_encode($list);
             return 0;
 

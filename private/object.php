@@ -27,7 +27,8 @@ function object_edit($obj_id, $catalog_id, $location_id, $name, $description, $n
 
 function objects_by_location($node_id)
 {
-    return db()->query_list('select * from objects where location_id = %d', $node_id);
+    return db()->query_list('select * from objects where location_id = %d '.
+                            'order by id asc', $node_id);
 }
 
 function objects_by_catalog($cat_id)

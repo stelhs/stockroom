@@ -64,7 +64,8 @@ class Mod_catalog extends Module {
                 $tpl->assign('past_catalog_blocked');
         }
 
-        $sub_catalogs = db()->query_list('select * from catalog where parent_id = %d',
+        $sub_catalogs = db()->query_list('select * from catalog where parent_id = %d '.
+                                         'order by name asc',
                                       $catalog_id);
         if ($sub_catalogs) {
             $tpl->assign('sub_catalogs_list');
@@ -98,10 +99,12 @@ class Mod_catalog extends Module {
                 $row = ['id' => $obj['id'],
                         'name' => $obj['name'],
                         'description' => $obj['description'],
-                        'number' => $obj['number'],
                         'link_to_object' => mk_url(['mod' => 'object', 'id' => $obj['id']]),
                         'img' => $img_url];
                 $tpl->assign('object_row', $row);
+                if ($obj['number'] > 1)
+                    $tpl->assign('object_count', ['count' => $obj['number']]);
+
                 $location = location_by_id($obj['location_id']);
                 foreach ($location['path'] as $item)
                     $tpl->assign('location_path', ['name' => $item['name'],
@@ -202,11 +205,15 @@ class Mod_catalog extends Module {
             return 0;
 
         case 'get_sub_catalog':
-            $list = db()->query_list('select * from catalog where parent_id = %d', $args['id']);
-            if (!$list) {
+            $rows = db()->query_list('select * from catalog where parent_id = %d '.
+                                     'order by name asc', $args['id']);
+            if (!$rows) {
                 echo json_encode([]);
                 return 0;
             }
+
+            foreach ($rows as $row)
+                $list[] = $row;
             echo json_encode($list);
             return 0;
 

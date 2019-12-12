@@ -110,6 +110,9 @@
                     <a href="{link_add_object}">
                         <img src="{http_img}add_object.png">
                     </a>
+                    <a href="{free_boxes_link}">
+                        <img src="{http_img}ok.png">
+                    </a>
                 </div>
             </form>
         </div>
@@ -153,8 +156,9 @@
                     </td>
                     <td>
                         <b>{name}</b><br>
-                        ID: {id}<br>
-                        {number}шт.<br>
+                        <!-- START BLOCK : object_count -->
+                            <span style="color: red">{count}шт.</span><br>
+                        <!-- END BLOCK : object_count -->
                         {description}<br>
                         <!-- START BLOCK : catalog_path --><a href="{link}">{name}</a><!-- END BLOCK : catalog_path -->
                     </td>

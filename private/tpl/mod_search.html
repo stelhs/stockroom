@@ -46,7 +46,7 @@
         <!-- END BLOCK : result_location -->
 
         <!-- START BLOCK : result_objects -->
-            <p style="color: orange">Результат по предметам:</p>
+            <p style="color: blue">Результат по предметам:</p>
             <table align="left">
                 <!-- START BLOCK : result_objects_row -->
                     <tr>
@@ -59,9 +59,12 @@
                         </td>
                         <td>
                             <b>{name}</b><br>
-                            ID: {id}<br>
-                            {number}шт.<br>
-                            {description}
+                            <!-- START BLOCK : object_count -->
+                                <span style="color: red">{count}шт.</span><br>
+                            <!-- END BLOCK : object_count -->
+                            {description}<br>
+                            <!-- START BLOCK : catalog_path --><a href="{link}">{name}</a><!-- END BLOCK : catalog_path --><br>
+                            <!-- START BLOCK : location_path --><a href="{link}">{name}</a><!-- END BLOCK : location_path --><br>
                         </td>
                     </tr>
                 <!-- END BLOCK : result_objects_row -->

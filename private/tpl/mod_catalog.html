@@ -136,8 +136,9 @@
                     </td>
                     <td>
                         <b>{name}</b><br>
-                        ID: {id}<br>
-                        {number}шт.<br
+                        <!-- START BLOCK : object_count -->
+                            <span style="color: red">{count}шт.</span><br>
+                        <!-- END BLOCK : object_count -->
                         {description}<br>
                         <!-- START BLOCK : location_path --><a href="{link}">{name}</a><!-- END BLOCK : location_path -->
                     </td>

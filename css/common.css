@@ -145,8 +145,8 @@ img {
 
 .obj_photo {
     overflow: hidden;
-    width:1000px;
-    height: 1000px;
+    width: 1000px;
+    height: 580px;
     border: solid 2px gray;
     text-align: center;
     position: relative;

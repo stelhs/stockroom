@@ -17,8 +17,7 @@ function process_query($args)
         return;
     }
 
-    switch ($args['method']) {
-    case 'user_auth':
+    if ($args['method'] == 'user_auth') {
         $user = user_by_login_pass($args['login'], $args['pass']);
         if (!is_array($user)) {
             message_box_set("message_auth_error");
@@ -28,13 +27,18 @@ function process_query($args)
 
         user_to_cookie($user);
         header('Location: ' . mk_url());
+    }
+
+    $user = user_by_cookie();
+    if (!$user)
         return;
 
+    switch ($args['method']) {
     case 'user_logout':
         $user = user_by_cookie();
         if (!is_array($user))
             return;
-        
+
         user_remove_cookie($user);
         header('Location: ' . mk_url());
         return;

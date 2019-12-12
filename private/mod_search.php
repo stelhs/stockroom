@@ -68,8 +68,19 @@ class Mod_search extends Module {
                                                 'id' => $object['id']]),
                               'name' => $object['name'],
                               'description' => $object['description'],
-                              'number' => $object['number'],
                               'img' => $img_url]);
+                if ($object['number'] > 1)
+                    $tpl->assign('object_count', ['count' => $object['number']]);
+
+                $location = location_by_id($object['location_id']);
+                foreach ($location['path'] as $item)
+                    $tpl->assign('location_path', ['name' => $item['name'],
+                                                   'link' => $item['url']]);
+
+                $catalog = catalog_by_id($object['catalog_id']);
+                foreach ($catalog['path'] as $item)
+                    $tpl->assign('catalog_path', ['name' => $item['name'],
+                                                 'link' => $item['url']]);
             }
         }
 

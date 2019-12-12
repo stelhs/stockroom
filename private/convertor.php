@@ -54,11 +54,9 @@ function process_dir($path, $parent_id) {
     }
 }
 
-function main()
+function convert_base()
 {
     return 0;
-    set_time_limit(0);
-
     db()->query('delete from catalog');
     db()->query('ALTER TABLE catalog AUTO_INCREMENT = 1');
 
@@ -75,6 +73,59 @@ function main()
 
     $gd_path = '/storage/google-disk/';
     process_dir($gd_path, 0);
+}
+
+
+function convert_metal_base()
+{
+    $c = file_get_contents("source.txt");
+    $rows = split_string_by_separators($c, "\n");
+    $list = [];
+    foreach ($rows as $row) {
+        $row = trim($row);
+        if (!$row)
+            continue;
+
+//        preg_match('/([\w\s]+)\s([\d\w\.]+)\s+длина\s+(\d+)/ui', $row, $mathed);
+//        preg_match('/([\w\s]+)\s([\d\w\.]+)x(\d+)/ui', $row, $mathed);
+        preg_match('/([\w\s]+)\s([\d\w\.]+)\s+(\d+)/ui', $row, $mathed);
+        $list[trim($mathed[1])][$mathed[2]][] = $mathed[3];
+    }
+    dump($list);
+    return;
+    foreach ($list as $cat_name => $sub_list) {
+        $cat_id = db()->insert('catalog', ['name' => $cat_name,
+                                           'parent_id' => 101,
+                                           'user_id' => 1]);
+        if ($cat_id < 1) {
+            printf("catalog create fail\n");
+            return;
+        }
+        foreach ($sub_list as $size_name => $lengths_list) {
+            $sub_cat_id = db()->insert('catalog', ['name' => $size_name,
+                                                   'parent_id' => $cat_id,
+                                                   'user_id' => 1]);
+            if ($sub_cat_id < 1) {
+                printf("sub catalog create fail\n");
+                return;
+            }
+
+            foreach ($lengths_list as $length) {
+                db()->insert('objects', ['name' => sprintf('%s %s - %s', $cat_name, $size_name, $length),
+                                         'catalog_id' => $sub_cat_id,
+                                         'location_id' => 117,
+                                         'user_id' => 1]);
+            }
+        }
+    }
+
+}
+
+function main()
+{
+    set_time_limit(0);
+
+//    convert_metal_base();
 }
 
 

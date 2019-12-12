@@ -29,7 +29,7 @@ function main($tpl)
         return;
     }
 
-    $tpl->assign('user_logout', ['link_logout' => mk_url(['method' => 'user_logout'])]);
+    $tpl->assign('user_logout', ['link_logout' => mk_url(['method' => 'user_logout'], 'query')]);
 
     $mod_name = "catalog";
     if(isset($_GET['mod']))
