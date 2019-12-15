@@ -29,6 +29,10 @@
        <h3>Добавление предмета</h3>
     <!-- END BLOCK : object_add -->
 
+    <!-- START BLOCK : object_was_duplicated -->
+       <h3 style="color: red">Предмет продублирован! Незабыть отредактировать!</h3>
+    <!-- END BLOCK : object_was_duplicated -->
+
 
     <form name="form" method="POST" action="{form_url}" id="object_form" enctype='multipart/form-data'>
         <input type="hidden" name="method" value="">
@@ -77,27 +81,27 @@
         <div style="text-align: left">
             <!-- START BLOCK : edit_button -->
                 <a href="javascript:;" onclick="submit_object('object_edit')">
-                    <img src="{http_img}edit.png">
+                    <img class="img_button" src="{http_img}edit.png">
                 </a>
             <!-- END BLOCK : edit_button -->
 
-            <a href="javascript:;" onclick="if (window.confirm('Добавить новый предмет рядом с \'{object_name}\' ?')) submit_object('object_add')">
-                <img src="{http_img}add_object.png">
+            <a href="javascript:;" onclick="if (window.confirm('Добавить продублировать предмет \'{object_name}\' ?')) submit_object('object_add')">
+                <img class="img_button" src="{http_img}add_object.png">
             </a>
 
             <!-- START BLOCK : remove_button -->
                 <a href="{link}" onclick="return window.confirm('Удалить предмет \'{object_name}\' ?')">
-                    <img src="{http_img}delete.png">
+                    <img class="img_button" src="{http_img}delete.png">
                 </a>
             <!-- END BLOCK : remove_button -->
 
             <!-- START BLOCK : past_location -->
                 <a href="javascript:;" onclick="if (window.confirm('Вставить узел \'{past_location_name}\' в узел \'{location_name}\' ?')) submit_location('past_location')">
-                    <img src="{http_img}past.png">
+                    <img class="img_button" src="{http_img}past.png">
                 </a>
             <!-- END BLOCK : past_location -->
             <!-- START BLOCK : past_location_blocked -->
-                <img src="{http_img}past.png" style="opacity: 0.2;">
+                <img class="img_button" src="{http_img}past.png" style="opacity: 0.2;">
             <!-- END BLOCK : past_location_blocked -->
 
         </div>

@@ -67,33 +67,33 @@
                     </tr>
                 </table>
                 <div style="text-align: left">
-                    <a href="javascript:;" onclick="if (window.confirm('Отредактировать группу \'{catalog_name}\' ?')) submit_catalog('edit_catalog')">
-                        <img src="{http_img}edit.png">
+                    <a href="javascript:;" onclick="if (window.confirm('Отредактировать категорию \'{catalog_name}\' ?')) submit_catalog('edit_catalog')">
+                        <img class="img_button" src="{http_img}edit.png">
                     </a>
 
-                    <a href="javascript:;" onclick="if (window.confirm('Добавить новую группу в \'{catalog_name}\' ?')) submit_catalog('add_catalog')">
-                        <img src="{http_img}add_node.png">
+                    <a href="javascript:;" onclick="submit_catalog('add_catalog')">
+                        <img class="img_button" src="{http_img}add_node.png">
                     </a>
 
-                    <a href="{link_delete}" onclick="return window.confirm('Удалить группу \'{catalog_name}\' ?')">
-                        <img src="{http_img}delete.png">
+                    <a href="{link_delete}" onclick="return window.confirm('Удалить категорию \'{catalog_name}\' ?')">
+                        <img class="img_button" src="{http_img}delete.png">
                     </a>
 
                     <a href="javascript:;" onclick="submit_catalog('cut_catalog')">
-                        <img src="{http_img}cut.png">
+                        <img class="img_button" src="{http_img}cut.png">
                     </a>
 
                     <!-- START BLOCK : past_catalog -->
-                        <a href="javascript:;" onclick="if (window.confirm('Вставить узел \'{past_catalog_name}\' в узел \'{catalog_name}\' ?')) submit_catalog('past_catalog')">
-                            <img src="{http_img}past.png">
+                        <a href="javascript:;" onclick="if (window.confirm('Вставить группу \'{past_catalog_name}\' в подгруппу \'{catalog_name}\' ?')) submit_catalog('past_catalog')">
+                            <img class="img_button" src="{http_img}past.png">
                         </a>
                     <!-- END BLOCK : past_catalog -->
                     <!-- START BLOCK : past_catalog_blocked -->
-                        <img src="{http_img}past.png" style="opacity: 0.2;">
+                        <img class="img_button" src="{http_img}past.png" style="opacity: 0.2;">
                     <!-- END BLOCK : past_catalog_blocked -->
 
                     <a href="{link_add_object}">
-                        <img src="{http_img}add_object.png">
+                        <img class="img_button" src="{http_img}add_object.png">
                     </a>
                 </div>
             </form>

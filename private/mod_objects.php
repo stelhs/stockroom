@@ -68,6 +68,11 @@ class Mod_object extends Module {
         }
         unset($_SESSION['updated']);
 
+        if ($_SESSION['duplicated']) {
+            unset($_SESSION['duplicated']);
+            $tpl->assign('object_was_duplicated');
+        }
+
         return $tpl->result();
     }
 
@@ -102,6 +107,7 @@ class Mod_object extends Module {
                 $photos = images_by_obj_id('objects', $args['object_id']);
                 foreach ($photos as $photo)
                     $photo->duplicate('objects', $object_id);
+                $_SESSION['duplicated'] = 1;
             }
 
             message_box_ok(sprintf('Added new object %d', $object_id));
@@ -152,7 +158,7 @@ class Mod_object extends Module {
             $obj = object_by_id($obj_id);
             db()->query('delete from objects where id = %d', $obj_id);
             message_box_ok(sprintf('Object %d was removed', $obj_id));
-            return mk_url(['mod' => 'catalog', 'id' => $obj['catalog_id']]);
+            return mk_url(['mod' => 'location', 'id' => $obj['location_id']]);
 
 
         case 'remove_photo':

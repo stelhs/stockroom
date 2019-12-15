@@ -83,35 +83,35 @@
                 </table>
                 <div style="text-align: left">
                     <a href="javascript:;" onclick="if (window.confirm('Отредактировать узел \'{location_name}\' ?')) submit_location('edit_location')">
-                        <img src="{http_img}edit.png">
+                        <img class="img_button" src="{http_img}edit.png">
                     </a>
 
-                    <a href="javascript:;" onclick="if (window.confirm('Добавить новый узел в \'{location_name}\' ?')) submit_location('add_location')">
-                        <img src="{http_img}add_node.png">
+                    <a href="javascript:;" onclick="submit_location('add_location')">
+                        <img class="img_button" src="{http_img}add_node.png">
                     </a>
 
                     <a href="{link_delete}" onclick="return window.confirm('Удалить узел \'{location_name}\' ?')">
-                        <img src="{http_img}delete.png">
+                        <img class="img_button" src="{http_img}delete.png">
                     </a>
 
                     <a href="javascript:;" onclick="submit_location('cut_location')">
-                        <img src="{http_img}cut.png">
+                        <img class="img_button" src="{http_img}cut.png">
                     </a>
 
                     <!-- START BLOCK : past_location -->
                         <a href="javascript:;" onclick="if (window.confirm('Вставить узел \'{past_location_name}\' в узел \'{location_name}\' ?')) submit_location('past_location')">
-                            <img src="{http_img}past.png">
+                            <img class="img_button" src="{http_img}past.png">
                         </a>
                     <!-- END BLOCK : past_location -->
                     <!-- START BLOCK : past_location_blocked -->
-                        <img src="{http_img}past.png" style="opacity: 0.2;">
+                        <img class="img_button" src="{http_img}past.png" style="opacity: 0.2;">
                     <!-- END BLOCK : past_location_blocked -->
 
                     <a href="{link_add_object}">
-                        <img src="{http_img}add_object.png">
+                        <img class="img_button" src="{http_img}add_object.png">
                     </a>
                     <a href="{free_boxes_link}">
-                        <img src="{http_img}free_boxes.png">
+                        <img class="img_button" src="{http_img}free_boxes.png">
                     </a>
                 </div>
             </form>
