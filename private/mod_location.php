@@ -111,7 +111,7 @@ class Mod_location extends Module {
                 }
                 $row = ['id' => $obj['id'],
                         'name' => $obj['name'],
-                        'description' => $obj['description'],
+                        'description' => str_replace("\n", '<br>', $obj['description']),
                         'link_to_object' => mk_url(['mod' => 'object', 'id' => $obj['id']]),
                         'img' => $img_url];
                 $tpl->assign('object_row', $row);
