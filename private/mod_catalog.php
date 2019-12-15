@@ -68,17 +68,23 @@ class Mod_catalog extends Module {
                                          'order by name asc',
                                       $catalog_id);
         if ($sub_catalogs) {
-            $tpl->assign('sub_catalogs_list');
+            $tpl->assign('sub_catalogs_list', ['total_number' => count($sub_catalogs)]);
             foreach($sub_catalogs as $sub_catalog)
             {
                 $user = user_by_id($sub_catalog['user_id']);
+
+                $row = db()->query('select count(id) as number from objects '.
+                                   'where catalog_id=%d', $sub_catalog['id']);
+                $objects_number = $row['number'] ? $row['number'] : '';
+
                 $row = ['id' => $sub_catalog['id'],
                         'name' => $sub_catalog['name'],
                         'description' => $sub_catalog['description'],
                         'added_date' => $sub_catalog['created'],
                         'user' => $user['login'],
                         'link' => mk_url(['mod' => $this->name,
-                                          'id' => $sub_catalog['id']])];
+                                          'id' => $sub_catalog['id']]),
+                        'objects_number' => $objects_number];
                 $tpl->assign('sub_catalogs_row', $row);
             }
         }
@@ -88,7 +94,7 @@ class Mod_catalog extends Module {
 
         $objects = objects_by_catalog($catalog_id);
         if ($objects) {
-            $tpl->assign('objects_list');
+            $tpl->assign('objects_list', ['total_number' => count($objects)]);
             foreach ($objects as $obj) {
                 $img_url = '';
                 $photos = images_by_obj_id('objects', $obj['id']);

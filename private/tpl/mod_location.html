@@ -124,11 +124,12 @@
 
     <!-- START BLOCK : sub_locations_list -->
         <br><br>
-        Локации:<br>
+        <p style="text-align: left; color: green">Локации ({total_number}):</p>
         <table border="1" width="100%">
             <tr>
                 <th>Id</th>
                 <th>Названи</th>
+                <th></th>
                 <th></th>
                 <th>Описание</th>
             </tr>
@@ -137,6 +138,7 @@
                     <td><a href="{link}">{id}</a></td>
                     <td><a href="{link}">{name}</a></td>
                     <td><a href="{link}">{fullness}</a></td>
+                    <td><a href="{link}">{objects_number}</a></td>
                     <td><a href="{link}">{description}</a></td>
                 </tr>
             <!-- END BLOCK : sub_locations_row -->
@@ -145,7 +147,7 @@
     <!-- END BLOCK : sub_locations_list -->
 
      <!-- START BLOCK : objects_list -->
-        Предметы:<br>
+        <p style="text-align: left; color: blue">Предметы ({total_number}):</p>
         <table align="left">
             <!-- START BLOCK : object_row -->
                 <tr>

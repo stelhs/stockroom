@@ -106,16 +106,18 @@
 
     <!-- START BLOCK : sub_catalogs_list -->
         <br><br>
-        Локации:<br>
+        <p style="text-align: left; color: orange">Категории ({total_number}):</p>
         <table border="1" width="100%">
             <tr>
                 <th>Id</th>
                 <th>Name</th>
+                <th></th>
             </tr>
             <!-- START BLOCK : sub_catalogs_row -->
                 <tr>
                     <td><a href="{link}">{id}</a></td>
                     <td><a href="{link}">{name}</a></td>
+                    <td><a href="{link}">{objects_number}</a></td>
                 </tr>
             <!-- END BLOCK : sub_catalogs_row -->
         </table>
@@ -123,7 +125,7 @@
     <!-- END BLOCK : sub_catalogs_list -->
 
      <!-- START BLOCK : objects_list -->
-        Предметы:<br>
+        <p style="text-align: left; color: blue">Предметы ({total_number}):</p>
         <table align="left">
             <!-- START BLOCK : object_row -->
                 <tr>

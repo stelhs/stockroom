@@ -74,17 +74,23 @@ class Mod_location extends Module {
         $sub_locations = db()->query_list('select * from location where parent_id = %d order by name asc',
                                       $location_id);
         if ($sub_locations) {
-            $tpl->assign('sub_locations_list');
+            $tpl->assign('sub_locations_list', ['total_number' => count($sub_locations)]);
             foreach($sub_locations as $sub_location)
             {
                 $user = user_by_id($sub_location['user_id']);
+
+                $row = db()->query('select count(id) as number from objects '.
+                                   'where location_id=%d', $sub_location['id']);
+                $objects_number = $row['number'] ? $row['number'] : '';
+
                 $row = ['id' => $sub_location['id'],
                         'name' => $sub_location['name'],
                         'description' => $sub_location['description'],
                         'added_date' => $sub_location['created'],
                         'user' => $user['login'],
                         'link' => mk_url(['mod' => $this->name,
-                                          'id' => $sub_location['id']])];
+                                          'id' => $sub_location['id']]),
+                        'objects_number' => $objects_number];
 
                 if ($sub_location['is_box'])
                     $row['fullness'] = $sub_location['fullness'].'%';
@@ -95,7 +101,7 @@ class Mod_location extends Module {
 
         $objects = objects_by_location($location_id);
         if ($objects) {
-            $tpl->assign('objects_list');
+            $tpl->assign('objects_list', ['total_number' => count($objects)]);
             foreach ($objects as $obj) {
                 $img_url = '';
                 $photos = images_by_obj_id('objects', $obj['id']);
