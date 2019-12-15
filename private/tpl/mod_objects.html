@@ -61,6 +61,18 @@
                 <td>Расположение:</td>
                 <td><div id="location_path"></div></td>
             </tr>
+            <!-- START BLOCK : box_fullness -->
+                <tr>
+                    <td align="right" valign="top">{location_name}:</td>
+                    <td> <input type="text" name="location_fullness" size="2" value="{location_fullness}"> % </td>
+                </tr>
+            <!-- END BLOCK : box_fullness -->
+            <!-- START BLOCK : box_fullness_please_update -->
+                <tr>
+                    <td align="right" valign="top">{location_name}:</td>
+                    <td> <input type="text" name="location_fullness" size="2" value="{location_fullness}"> % <span style="color: red">Не забыть обновить заполненность ящика!</span></td>
+                </tr>
+            <!-- END BLOCK : box_fullness_please_update -->
         </table>
         <div style="text-align: left">
             <!-- START BLOCK : edit_button -->

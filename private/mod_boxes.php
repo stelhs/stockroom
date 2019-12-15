@@ -19,8 +19,8 @@ class Mod_boxes extends Module {
         if ($location_id) {
             $location = location_by_id($location_id);
             foreach ($location['path'] as $item)
-                $tpl->assign('location_path', ['name' => $item['name'],
-                                               'link' => $item['url']]);
+                $tpl->assign('location_path_header', ['name' => $item['name'],
+                                                      'link' => $item['url']]);
         }
 
         $tpl->assign('location');

@@ -60,6 +60,14 @@ class Mod_object extends Module {
         foreach ($catalog['path'] as $item)
             $tpl->assign('catalog_path', ['name' => $item['name'],
                                            'link' => $item['url']]);
+
+        if ($location['is_box']) {
+            $block = ['location_fullness' => $location['fullness'],
+                      'location_name' => $location['name']];
+            $tpl->assign(($_SESSION['updated'] ? 'box_fullness_please_update' : 'box_fullness'), $block);
+        }
+        unset($_SESSION['updated']);
+
         return $tpl->result();
     }
 
@@ -97,6 +105,7 @@ class Mod_object extends Module {
             }
 
             message_box_ok(sprintf('Added new object %d', $object_id));
+            $_SESSION['updated'] = 1;
             return mk_url(['mod' => $this->name, 'id' => $object_id]);
 
         case 'object_edit':
@@ -108,6 +117,12 @@ class Mod_object extends Module {
                               $args['objects_number']);
             if ($rc)
                 message_box_err('Can`t edit object');
+
+            if (isset($args['location_fullness'])) {
+                $obj = object_by_id($args['object_id']);
+                db()->query('update location set fullness=%d where id=%d',
+                            $args['location_fullness'], $obj['location_id']);
+            }
 
             if ($_FILES['photos']['name'][0]) {
                 $photos = images_upload_from_form('photos', 'objects', $args['object_id']);
@@ -125,6 +140,7 @@ class Mod_object extends Module {
             }
 
             message_box_ok(sprintf('Object %d changed', $args['object_id']));
+            $_SESSION['updated'] = 1;
             return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
 
         case 'remove_object':

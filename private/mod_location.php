@@ -85,6 +85,10 @@ class Mod_location extends Module {
                         'user' => $user['login'],
                         'link' => mk_url(['mod' => $this->name,
                                           'id' => $sub_location['id']])];
+
+                if ($sub_location['is_box'])
+                    $row['fullness'] = $sub_location['fullness'].'%';
+
                 $tpl->assign('sub_locations_row', $row);
             }
         }
