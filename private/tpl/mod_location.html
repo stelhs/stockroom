@@ -1,5 +1,7 @@
 <div align="center">
 
+    <!-- START INSERT : object_is_absent.html --><!-- END INSERT : object_is_absent.html -->
+
     <!-- START BLOCK : location_clipboard -->
         <div style="text-align: left; vertical-align: top;">
             <div style="display: block;
@@ -159,9 +161,12 @@
                         </a>
                     </td>
                     <td>
+                        <!-- START BLOCK : object_is_absent -->
+                            <span style="color: red">Предмет отсутствует</span><br>
+                        <!-- END BLOCK : object_is_absent -->
                         <b>{name}</b><br>
                         <!-- START BLOCK : object_count -->
-                            <span style="color: red">{count}шт.</span><br>
+                            <span style="color: orange">{count}шт.</span><br>
                         <!-- END BLOCK : object_count -->
                         {description}<br>
                         <!-- START BLOCK : catalog_path --><a href="{link}">{name}</a><!-- END BLOCK : catalog_path -->

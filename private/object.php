@@ -35,3 +35,26 @@ function objects_by_catalog($cat_id)
 {
     return db()->query_list('select * from objects where catalog_id = %d', $cat_id);
 }
+
+function print_absent_objects($tpl)
+{
+    $objects = db()->query_list('select * from objects where is_absent=1');
+    if (!count($objects))
+        return;
+    $tpl->assign('absent_objects');
+    foreach ($objects as $obj) {
+        $img_url = '';
+        $photos = images_by_obj_id('objects', $obj['id']);
+        if (count($photos)) {
+            $photo = $photos[0];
+            $img_url = $photo->url('list');
+        }
+        $row = ['id' => $obj['id'],
+                'name' => $obj['name'],
+                'description' => str_replace("\n", '<br>', $obj['description']),
+                'link_to_object' => mk_url(['mod' => 'object', 'id' => $obj['id']]),
+                'img' => $img_url];
+        $tpl->assign('absent_object_row', $row);
+    }
+}
+

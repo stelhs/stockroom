@@ -9,7 +9,7 @@ class Mod_search extends Module {
     function content($args = [])
     {
         $tpl = new strontium_tpl("private/tpl/mod_search.html", conf()['global_marks'], false);
-        $text = $args['text'];
+        $text = trim($args['text']);
 
         $tpl->assign(NULL, ['form_url' => mk_url(),
                             'mod' => $this->name,
@@ -17,6 +17,45 @@ class Mod_search extends Module {
 
         if (!$text)
             return $tpl->result();
+
+        /* search object by #ID */
+        preg_match('/^#(\d+)/', $text, $m);
+        if (isset($m[1])) {
+            $object = object_by_id($m[1]);
+            if (!$object) {
+                $tpl->assign('no_result');
+                return $tpl->result();
+            }
+
+            $tpl->assign('result_objects');
+            $img_url = '';
+            $photos = images_by_obj_id('objects', $object['id']);
+            if (count($photos)) {
+                $photo = $photos[0];
+                $img_url = $photo->url('list');
+            }
+
+            $tpl->assign('result_objects_row',
+                         ['id' => $object['id'],
+                          'link' => mk_url(['mod' => 'object',
+                                            'id' => $object['id']]),
+                          'name' => $object['name'],
+                          'description' => $object['description'],
+                          'img' => $img_url]);
+            if ($object['number'] > 1)
+                $tpl->assign('object_count', ['count' => $object['number']]);
+
+            $location = location_by_id($object['location_id']);
+            foreach ($location['path'] as $item)
+                $tpl->assign('location_path', ['name' => $item['name'],
+                                               'link' => $item['url']]);
+
+            $catalog = catalog_by_id($object['catalog_id']);
+            foreach ($catalog['path'] as $item)
+                $tpl->assign('catalog_path', ['name' => $item['name'],
+                                             'link' => $item['url']]);
+            return $tpl->result();
+        }
 
         $cat_result = $this->find_by_catalog($text);
         $loc_result = $this->find_by_location($text);

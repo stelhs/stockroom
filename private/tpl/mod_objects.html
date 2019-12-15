@@ -1,6 +1,8 @@
 <div align="center">
     <script src="{http_js}mod_objects.js"></script>
 
+    <!-- START INSERT : object_is_absent.html --><!-- END INSERT : object_is_absent.html -->
+
     <table border="0" cellspacing="5" cellpadding="5" width="100%">
         <tr>
             <td>Каталог:</td>
@@ -20,6 +22,10 @@
         </tr>
     </table>
     <hr>
+
+    <!-- START BLOCK : object_is_absent -->
+       <h1 style="color: red">Предмет отсутсвует!</h1>
+    <!-- END BLOCK : object_is_absent -->
 
     <!-- START BLOCK : object_edit_id -->
        <h3>{name} id: {id}</h3>
@@ -104,6 +110,16 @@
                 <img class="img_button" src="{http_img}past.png" style="opacity: 0.2;">
             <!-- END BLOCK : past_location_blocked -->
 
+            <!-- START BLOCK : take_away -->
+                <a href="javascript:;" onclick="if (window.confirm('Взять предмет ?')) submit_object('take_away')">
+                    <img class="img_button" src="{http_img}take_away.png">
+                </a>
+            <!-- END BLOCK : take_away -->
+            <!-- START BLOCK : return_back -->
+                <a href="javascript:;" onclick="if (window.confirm('Вернуть предмет ?')) submit_object('return_back')">
+                    <img class="img_button" src="{http_img}return_back.png">
+                </a>
+            <!-- END BLOCK : return_back -->
         </div>
 
     </form>

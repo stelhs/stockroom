@@ -13,6 +13,8 @@ class Mod_location extends Module {
 
         $tpl = new strontium_tpl("private/tpl/mod_location.html", conf()['global_marks'], false);
 
+        print_absent_objects($tpl);
+
         if (!$location) {
             $tpl->assign('no_location', ['location_id' => $location_id]);
             return $tpl->result();
@@ -117,6 +119,9 @@ class Mod_location extends Module {
                 $tpl->assign('object_row', $row);
                 if ($obj['number'] > 1)
                     $tpl->assign('object_count', ['count' => $obj['number']]);
+
+                if ($obj['is_absent'])
+                    $tpl->assign('object_is_absent');
 
                 $catalog = catalog_by_id($obj['catalog_id']);
                 foreach ($catalog['path'] as $item)

@@ -29,6 +29,14 @@ class Mod_object extends Module {
                             'object_name' => $object['name'],
                             'object_description' => $object['description']]);
 
+        print_absent_objects($tpl);
+
+        if ($object['is_absent']) {
+            $tpl->assign('object_is_absent');
+            $tpl->assign('return_back');
+        } else
+            $tpl->assign('take_away');
+
         $tpl->assign('object_edit_id', ['id' => $object_id,
                                         'name' => $object['name']]);
         $tpl->assign('edit_button', ['object_name' => $object['name']]);
@@ -160,12 +168,18 @@ class Mod_object extends Module {
             message_box_ok(sprintf('Object %d was removed', $obj_id));
             return mk_url(['mod' => 'location', 'id' => $obj['location_id']]);
 
-
         case 'remove_photo':
             $photo = image_by_hash($args['photo_hash']);
             $photo->remove();
             return mk_url(['mod' => $this->name, 'id' => $args['obj_id']]);
 
+        case 'take_away':
+            db()->update('objects', $args['object_id'], ['is_absent' => 1]);
+            return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
+
+        case 'return_back':
+            db()->update('objects', $args['object_id'], ['is_absent' => 0]);
+            return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
 
         }
         return mk_url(['mod' => $this->name]);
