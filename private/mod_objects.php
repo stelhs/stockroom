@@ -86,6 +86,10 @@ class Mod_object extends Module {
 
     function query($args)
     {
+        $user = user_by_cookie();
+        if ($user['role'] != 'admin')
+            return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
+
         switch($args['method']) {
         case 'object_add':
             $object_id = object_add($args['catalog_id'],

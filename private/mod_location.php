@@ -137,6 +137,10 @@ class Mod_location extends Module {
 
     function query($args)
     {
+        $user = user_by_cookie();
+        if ($user['role'] != 'admin')
+            return mk_url(['mod' => $this->name, 'id' => $args['location_id']]);
+
         switch($args['method']) {
         case 'add_location':
             $new_location_id = db()->insert('location',

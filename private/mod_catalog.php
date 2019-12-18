@@ -129,6 +129,10 @@ class Mod_catalog extends Module {
 
     function query($args)
     {
+        $user = user_by_cookie();
+        if ($user['role'] != 'admin')
+            return mk_url(['mod' => $this->name, 'id' => $args['catalog_id']]);
+
         switch($args['method']) {
         case 'add_catalog':
             $new_catalog_id = $this->add_catalog($args['catalog_id'],
