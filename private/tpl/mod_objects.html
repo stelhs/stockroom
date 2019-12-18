@@ -57,7 +57,15 @@
             </tr>
             <tr>
                 <td align="right" valign="top">Количество</td>
-                <td><input type="text" name="objects_number" size="1" value="{number}"> шт.</td>
+                <td>
+                    <input type="text" name="objects_number" size="1" value="{number}" id="number"> шт.
+                    <a href="javascript:;" onclick="dec_input('number', 1, 1)">
+                        <img style="margin-left: 100px" src="{http_img}minus_mini.png">
+                    </a>
+                    <a href="javascript:;" onclick="inc_input('number', 1, 0)">
+                        <img style="margin-left: 50px" src="{http_img}plus_mini.png">
+                    </a>
+                </td>
             </tr>
             <tr>
                 <td>Фотографии:</td>
@@ -80,7 +88,17 @@
             <!-- START BLOCK : box_fullness_please_update -->
                 <tr>
                     <td align="right" valign="top">{location_name}:</td>
-                    <td> <input type="text" name="location_fullness" size="2" value="{location_fullness}"> % <span style="color: red">Не забыть обновить заполненность ящика!</span></td>
+                    <td>
+                        <input type="text" name="location_fullness" size="2" value="{location_fullness}" id="location_fullness"> %
+                        <a href="javascript:;" onclick="dec_input('location_fullness', 5, 0)">
+                            <img style="margin-left: 100px" src="{http_img}minus_mini.png">
+                        </a>
+                        <a href="javascript:;" onclick="inc_input('location_fullness', 5, 100)">
+                            <img style="margin-left: 50px" src="{http_img}plus_mini.png">
+                        </a>
+                        <br>
+                        <span style="color: red">Не забыть обновить заполненность ящика!</span>
+                    </td>
                 </tr>
             <!-- END BLOCK : box_fullness_please_update -->
         </table>

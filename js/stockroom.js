@@ -34,3 +34,28 @@ function tpl_open(name)
     return t;
 }
 
+
+
+function dec_input(id, step, min)
+{
+    o = $$(id);
+    var v = parseInt(o.value);
+    v -= step;
+    if (v < min)
+        v = min;
+    o.value = v;
+    o.style.color = 'red';
+    setTimeout(function(){ o.style.color = 'lightgray'; }, 300);
+}
+
+function inc_input(id, step, max)
+{
+    o = $$(id);
+    var v = parseInt(o.value);
+    v += step;
+    if (max > 0 && v > max)
+        v = max;
+    o.value = v;
+    o.style.color = 'red';
+    setTimeout(function(){ o.style.color = 'lightgray'; }, 300);
+}

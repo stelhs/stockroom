@@ -76,7 +76,15 @@
                     </tr>
                     <tr>
                         <td align="right" valign="top">Заполненность: </td>
-                        <td> <input type="text" name="location_fullness" size="2" value="{location_fullness}"> %</td>
+                        <td>
+                            <input type="text" name="location_fullness" size="2" value="{location_fullness}" id="location_fullness"> %
+                            <a href="javascript:;" onclick="dec_input('location_fullness', 5, 0)">
+                                <img style="margin-left: 100px" src="{http_img}minus_mini.png">
+                            </a>
+                            <a href="javascript:;" onclick="inc_input('location_fullness', 5, 100)">
+                                <img style="margin-left: 50px" src="{http_img}plus_mini.png">
+                            </a>
+                        </td>
                     </tr>
                     <tr>
                         <td>Фото узла:</td>
