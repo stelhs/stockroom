@@ -1,0 +1,25 @@
+<!-- START BLOCK : absent_objects -->
+    <div style="display: block;">
+        <div style="width: 700px; border: solid 1px red">
+            <h1 style="color: red">Напоминание, отсутсвуют предметы:</h1>
+
+            <table width="100%">
+                <!-- START BLOCK : absent_object_row -->
+                    <tr>
+                        <td>
+                            <a href="{link_to_object}">
+                                <div class="obj_photo_node">
+                                        <img src="{img}">
+                                </div>
+                            </a>
+                        </td>
+                        <td width="100%">
+                            <b>{name}</b><br>
+                            {description}<br>
+                        </td>
+                    </tr>
+                <!-- END BLOCK : absent_object_row -->
+            </table>
+        </div>
+    </div>
+<!-- END BLOCK : absent_objects -->
