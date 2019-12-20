@@ -3,6 +3,8 @@
 require_once '/usr/local/lib/php/common.php';
 require_once '/usr/local/lib/php/os.php';
 
+$img_log = new Plog('stockroom:image');
+
 class Image {
     private $id;
     private $obj_type;
@@ -14,8 +16,10 @@ class Image {
     private $width;
     private $height;
     private $original_filename;
+    private $log;
 
     function __construct($hash) {
+        $this->log = $img_log;
         $row = db()->query('select * from images ' .
                            'where hash = "%s" and size_name = "original"', $hash);
         if (!is_array($row) || !isset($row['hash']))
@@ -341,6 +345,7 @@ function image_by_hash($hash)
 
 function image_upload($tmp_name, $orig_name, $obj_type, $obj_id, $img_name = "")
 {
+    global $img_log;
     $ext = strtolower(pathinfo($orig_name, PATHINFO_EXTENSION));
     $img_dir = sprintf('%si/obj', conf()['absolute_root_path']);
     $filename = '';
@@ -353,8 +358,8 @@ function image_upload($tmp_name, $orig_name, $obj_type, $obj_id, $img_name = "")
     }
 
     $rc = move_uploaded_file($tmp_name, $full_filename);
-    if (!$rc) {
-        printf("can't move uploaded file\n");
+    if ($rc <= 0) {
+        $img_log->err("can't move uploaded file. Error: %d\n", $rc);
         return -1;
     }
 
@@ -392,7 +397,7 @@ function image_upload_local($src_name, $obj_type, $obj_id, $img_name = "")
 
     $rc = copy($src_name, $full_filename);
     if (!$rc) {
-        printf("can't move uploaded file\n");
+        $img_log->err("can't move uploaded file\n");
         return -1;
     }
 
