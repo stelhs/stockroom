@@ -13,6 +13,7 @@ class Mod_catalog extends Module {
         $tpl = new strontium_tpl("private/tpl/mod_catalog.html", conf()['global_marks'], false);
 
         print_absent_objects($tpl);
+        print_absent_locations($tpl);
 
         if (!$catalog) {
             $tpl->assign('no_catalog', ['catalog_id' => $catalog_id]);
@@ -79,6 +80,10 @@ class Mod_catalog extends Module {
                                    'where catalog_id=%d', $sub_catalog['id']);
                 $objects_number = $row['number'] ? $row['number'] : '';
 
+                $row = db()->query('select count(id) as number from catalog '.
+                                   'where parent_id=%d', $sub_catalog['id']);
+                $category_number = $row['number'] ? $row['number'] : '';
+
                 $row = ['id' => $sub_catalog['id'],
                         'name' => $sub_catalog['name'],
                         'description' => $sub_catalog['description'],
@@ -86,7 +91,8 @@ class Mod_catalog extends Module {
                         'user' => $user['login'],
                         'link' => mk_url(['mod' => $this->name,
                                           'id' => $sub_catalog['id']]),
-                        'objects_number' => $objects_number];
+                        'objects_number' => $objects_number,
+                        'category_number' => $category_number];
                 $tpl->assign('sub_catalogs_row', $row);
             }
         }

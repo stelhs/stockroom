@@ -29,12 +29,11 @@ class Mod_object extends Module {
                             'object_name' => $object['name'],
                             'object_description' => $object['description']]);
 
-        print_absent_objects($tpl);
+        print_absent_locations($tpl);
 
-        if ($object['is_absent']) {
-            $tpl->assign('object_is_absent');
+        if ($object['is_absent'])
             $tpl->assign('return_back');
-        } else
+        else
             $tpl->assign('take_away');
 
         $tpl->assign('object_edit_id', ['id' => $object_id,
@@ -114,13 +113,13 @@ class Mod_object extends Module {
                 }
             }
 
-            /* If duplicate */
+            /* If duplicate
             if ($args['object_id']) {
                 $photos = images_by_obj_id('objects', $args['object_id']);
                 foreach ($photos as $photo)
                     $photo->duplicate('objects', $object_id);
                 $_SESSION['duplicated'] = 1;
-            }
+            }*/
 
             message_box_ok(sprintf('Added new object %d', $object_id));
             $_SESSION['updated'] = 1;

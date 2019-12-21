@@ -1,6 +1,7 @@
 <div align="center">
 
     <!-- START INSERT : object_is_absent.html --><!-- END INSERT : object_is_absent.html -->
+    <!-- START INSERT : location_is_absent.html --><!-- END INSERT : location_is_absent.html -->
 
     <!-- START BLOCK : catalog_clipboard -->
         <div style="text-align: left; vertical-align: top;">
@@ -69,12 +70,12 @@
                     </tr>
                 </table>
                 <div style="text-align: left">
-                    <a href="javascript:;" onclick="if (window.confirm('Отредактировать категорию \'{catalog_name}\' ?')) submit_catalog('edit_catalog')">
+                    <a href="javascript:;" onclick="submit_catalog('edit_catalog')">
                         <img class="img_button" src="{http_img}edit.png">
                     </a>
 
                     <a href="javascript:;" onclick="submit_catalog('add_catalog')">
-                        <img class="img_button" src="{http_img}add_node.png">
+                        <img class="img_button" src="{http_img}add_subnode.png">
                     </a>
 
                     <a href="{link_delete}" onclick="return window.confirm('Удалить категорию \'{catalog_name}\' ?')">
@@ -114,12 +115,14 @@
                 <th>Id</th>
                 <th>Name</th>
                 <th></th>
+                <th></th>
             </tr>
             <!-- START BLOCK : sub_catalogs_row -->
                 <tr>
                     <td><a href="{link}">{id}</a></td>
                     <td><a href="{link}">{name}</a></td>
                     <td><a href="{link}">{objects_number}</a></td>
+                    <td><a href="{link}"><span style="color: orange">{category_number}</span></a></td>
                 </tr>
             <!-- END BLOCK : sub_catalogs_row -->
         </table>

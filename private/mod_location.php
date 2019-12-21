@@ -14,6 +14,7 @@ class Mod_location extends Module {
         $tpl = new strontium_tpl("private/tpl/mod_location.html", conf()['global_marks'], false);
 
         print_absent_objects($tpl);
+        print_absent_locations($tpl);
 
         if (!$location) {
             $tpl->assign('no_location', ['location_id' => $location_id]);
@@ -36,6 +37,11 @@ class Mod_location extends Module {
                                   'box_checked' => ($location['is_box'] ? 'checked' : ''),
                                   'free_boxes_link' => mk_url(['mod' => 'boxes',
                                                                'location_id' => $location_id])]);
+
+        if ($location['is_absent']) {
+            $tpl->assign('return_back');
+        } else
+            $tpl->assign('take_away');
 
         $photos = images_by_obj_id('locations', $location_id);
         foreach ($photos as $photo) {
@@ -85,6 +91,10 @@ class Mod_location extends Module {
                                    'where location_id=%d', $sub_location['id']);
                 $objects_number = $row['number'] ? $row['number'] : '';
 
+                $row = db()->query('select count(id) as number from location '.
+                                   'where parent_id=%d', $sub_location['id']);
+                $location_number = $row['number'] ? $row['number'] : '';
+
                 $row = ['id' => $sub_location['id'],
                         'name' => $sub_location['name'],
                         'description' => $sub_location['description'],
@@ -92,7 +102,8 @@ class Mod_location extends Module {
                         'user' => $user['login'],
                         'link' => mk_url(['mod' => $this->name,
                                           'id' => $sub_location['id']]),
-                        'objects_number' => $objects_number];
+                        'objects_number' => $objects_number,
+                        'location_number' => $location_number];
 
                 if ($sub_location['is_box'])
                     $row['fullness'] = $sub_location['fullness'].'%';
@@ -143,8 +154,14 @@ class Mod_location extends Module {
 
         switch($args['method']) {
         case 'add_location':
+            $parent_location = location_by_id((int)$args['location_id']);
+            $parent_id = $parent_location['parent_id'];
+        case 'add_sublocation':
+            if ($args['method'] == 'add_sublocation')
+                $parent_id = (int)$args['location_id'];
+
             $new_location_id = db()->insert('location',
-                                            ['parent_id' => (int)$args['location_id'],
+                                            ['parent_id' => $parent_id,
                                              'name' => $args['location_name'],
                                              'description' => $args['location_description'],
                                              'fullness' => (int)$args['location_fullness'],
@@ -246,6 +263,14 @@ class Mod_location extends Module {
                 $list[] = $row;
             echo json_encode($list);
             return 0;
+
+        case 'take_away':
+            db()->update('location', $args['location_id'], ['is_absent' => 1]);
+            return mk_url(['mod' => $this->name, 'id' => $args['location_id']]);
+
+        case 'return_back':
+            db()->update('location', $args['location_id'], ['is_absent' => 0]);
+            return mk_url(['mod' => $this->name, 'id' => $args['location_id']]);
 
         }
 

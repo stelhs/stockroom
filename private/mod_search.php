@@ -57,6 +57,25 @@ class Mod_search extends Module {
             return $tpl->result();
         }
 
+        /* search location by ##ID */
+        preg_match('/^##(\d+)/', $text, $m);
+        if (isset($m[1])) {
+            $location = location_by_id($m[1]);
+            if (!$location) {
+                $tpl->assign('no_result');
+                return $tpl->result();
+            }
+            $tpl->assign('result_location');
+            $tpl->assign('result_location_row',
+                         ['id' => $location['id'],
+                          'link' => mk_url(['mod' => 'location',
+                          'id' => $location['id']])]);
+
+            foreach ($location['path'] as $node)
+                $tpl->assign('result_location_path', ['name' => $node['name']]);
+            return $tpl->result();
+        }
+
         $cat_result = $this->find_by_catalog($text);
         $loc_result = $this->find_by_location($text);
         $obj_result = $this->find_by_object($text);

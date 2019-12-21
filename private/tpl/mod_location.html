@@ -1,6 +1,7 @@
 <div align="center">
 
     <!-- START INSERT : object_is_absent.html --><!-- END INSERT : object_is_absent.html -->
+    <!-- START INSERT : location_is_absent.html --><!-- END INSERT : location_is_absent.html -->
 
     <!-- START BLOCK : location_clipboard -->
         <div style="text-align: left; vertical-align: top;">
@@ -67,7 +68,7 @@
                     <tr>
                         <td align="right" valign="top">Описание: </td>
                         <td>
-                            <textarea rows=3 cols=23 name="location_description" onclick="this.select()">{location_description}</textarea>
+                            <textarea rows=3 cols=23 name="location_description">{location_description}</textarea>
                         </td>
                     </tr>
                     <tr>
@@ -92,8 +93,12 @@
                     </tr>
                 </table>
                 <div style="text-align: left">
-                    <a href="javascript:;" onclick="if (window.confirm('Отредактировать узел \'{location_name}\' ?')) submit_location('edit_location')">
+                    <a href="javascript:;" onclick="submit_location('edit_location')">
                         <img class="img_button" src="{http_img}edit.png">
+                    </a>
+
+                    <a href="javascript:;" onclick="submit_location('add_sublocation')">
+                        <img class="img_button" src="{http_img}add_subnode.png">
                     </a>
 
                     <a href="javascript:;" onclick="submit_location('add_location')">
@@ -120,9 +125,21 @@
                     <a href="{link_add_object}">
                         <img class="img_button" src="{http_img}add_object.png">
                     </a>
+                    <!-- START BLOCK : take_away -->
+                        <a href="javascript:;" onclick="if (window.confirm('Взять коробку ?')) submit_location('take_away')">
+                            <img class="img_button" src="{http_img}take_away.png">
+                        </a>
+                    <!-- END BLOCK : take_away -->
+                    <!-- START BLOCK : return_back -->
+                        <a href="javascript:;" onclick="if (window.confirm('Вернуть коробку ?')) submit_location('return_back')">
+                            <img class="img_button" src="{http_img}return_back.png">
+                        </a>
+                    <!-- END BLOCK : return_back -->
+
                     <a href="{free_boxes_link}">
                         <img class="img_button" src="{http_img}free_boxes.png">
                     </a>
+
                 </div>
             </form>
         </div>
@@ -141,6 +158,7 @@
                 <th>Названи</th>
                 <th></th>
                 <th></th>
+                <th></th>
                 <th>Описание</th>
             </tr>
             <!-- START BLOCK : sub_locations_row -->
@@ -149,6 +167,7 @@
                     <td><a href="{link}">{name}</a></td>
                     <td><a href="{link}">{fullness}</a></td>
                     <td><a href="{link}">{objects_number}</a></td>
+                    <td><a href="{link}"><span style="color: green">{location_number}</span></a></td>
                     <td><a href="{link}">{description}</a></td>
                 </tr>
             <!-- END BLOCK : sub_locations_row -->
