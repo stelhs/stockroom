@@ -19,9 +19,11 @@
     <!-- END BLOCK : location_clipboard -->
 
 
-    <h3> Локация </h3>
+    <h3 style="color: green"> Локация </h3>
     <h2>
-        <!-- START BLOCK : location_path --><a href="{link}">{name}</a><!-- END BLOCK : location_path -->
+        <!-- START BLOCK : location_path -->
+            <a href="{link}"><span style="color: green">{name}</span></a>
+        <!-- END BLOCK : location_path -->
     </h2>
 
 
@@ -58,8 +60,8 @@
 
                 <table border="0" width="100%">
                     <tr>
-                        <td align="right" valign="top">ID: </td>
-                        <td> {location_id}</td>
+                        <td align="right" valign="top"><span style="color: green">##{location_id}</span></td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td align="right" valign="top">Название: </td>
@@ -78,7 +80,7 @@
                     <tr>
                         <td align="right" valign="top">Заполненность: </td>
                         <td>
-                            <input type="text" name="location_fullness" size="2" value="{location_fullness}" id="location_fullness"> %
+                            <input type="text" name="location_fullness" size="2" value="{location_fullness}" id="location_fullness" autocomplete="off"> %
                             <a href="javascript:;" onclick="dec_input('location_fullness', 5, 0)">
                                 <img style="margin-left: 100px" src="{http_img}minus_mini.png">
                             </a>
@@ -155,18 +157,18 @@
         <table border="1" width="100%">
             <tr>
                 <th>Id</th>
-                <th>Названи</th>
-                <th></th>
+                <th>Название</th>
+                <th>%</th>
                 <th></th>
                 <th></th>
                 <th>Описание</th>
             </tr>
             <!-- START BLOCK : sub_locations_row -->
                 <tr>
-                    <td><a href="{link}">{id}</a></td>
+                    <td><a href="{link}" style="color: green">##{id}</a></td>
                     <td><a href="{link}">{name}</a></td>
                     <td><a href="{link}">{fullness}</a></td>
-                    <td><a href="{link}">{objects_number}</a></td>
+                    <td><a href="{link}" style="color: blue">{objects_number}</a></td>
                     <td><a href="{link}"><span style="color: green">{location_number}</span></a></td>
                     <td><a href="{link}">{description}</a></td>
                 </tr>
@@ -191,12 +193,17 @@
                         <!-- START BLOCK : object_is_absent -->
                             <span style="color: red">Предмет отсутствует</span><br>
                         <!-- END BLOCK : object_is_absent -->
-                        <b>{name}</b><br>
+                        <a href="{link_to_object}">
+                            <span style="color: blue">#{id}</span>
+                            <b>{name}</b><br>
+                        </a>
                         <!-- START BLOCK : object_count -->
-                            <span style="color: orange">{count}шт.</span><br>
+                            <span style="color: red">{count}шт.</span><br>
                         <!-- END BLOCK : object_count -->
-                        {description}<br>
-                        <!-- START BLOCK : catalog_path --><a href="{link}">{name}</a><!-- END BLOCK : catalog_path -->
+                        <span style="color: #777777">{description}</span><br>
+                        <!-- START BLOCK : catalog_path -->
+                            <a href="{link}"><span style="color: orange">{name}</span></a>
+                        <!-- END BLOCK : catalog_path -->
                     </td>
                 </tr>
             <!-- END BLOCK : object_row -->

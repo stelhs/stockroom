@@ -4,7 +4,7 @@
 
     <form name="search" method="GET" action="{form_url}" id="search_form">
         <input type="hidden" name="mod" value="{mod}">
-        <input type="text" name="text" size="20" value="{text}">
+        <input type="text" name="text" size="20" value="{text}" autofocus>
         <input class="buttonSend" type="submit" value="Искать"/>
     </form>
     <br>
@@ -18,7 +18,7 @@
             <table>
                 <!-- START BLOCK : result_catalog_row -->
                     <tr>
-                        <td>{id}:</td>
+                        <td style="color: orange">{id}:</td>
                         <td>
                             <a href="{link}">
                                 <!-- START BLOCK : result_catalog_path -->{name}<!-- END BLOCK : result_catalog_path -->
@@ -34,7 +34,7 @@
             <table>
                 <!-- START BLOCK : result_location_row -->
                     <tr>
-                        <td>{id}:</td>
+                        <td style="color: green">##{id}:</td>
                         <td>
                             <a href="{link}">
                                 <!-- START BLOCK : result_location_path -->{name}<!-- END BLOCK : result_location_path -->
@@ -58,13 +58,16 @@
                             </a>
                         </td>
                         <td>
-                            <b>{name}</b><br>
+                            <a href="{link}">
+                                <span style="color: blue">#{id}</span>
+                                <b>{name}</b><br>
+                            </a>
                             <!-- START BLOCK : object_count -->
                                 <span style="color: red">{count}шт.</span><br>
                             <!-- END BLOCK : object_count -->
                             {description}<br>
-                            <!-- START BLOCK : catalog_path --><a href="{link}">{name}</a><!-- END BLOCK : catalog_path --><br>
-                            <!-- START BLOCK : location_path --><a href="{link}">{name}</a><!-- END BLOCK : location_path --><br>
+                            <!-- START BLOCK : catalog_path --><a href="{link}" style="color: orange">{name}</a><!-- END BLOCK : catalog_path --><br>
+                            <!-- START BLOCK : location_path --><a href="{link}" style="color: green">{name}</a><!-- END BLOCK : location_path --><br>
                         </td>
                     </tr>
                 <!-- END BLOCK : result_objects_row -->
@@ -72,3 +75,4 @@
         <!-- END BLOCK : result_objects -->
     </div>
 </div>
+<script type="text/javascript"></script>
