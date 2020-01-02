@@ -138,4 +138,3 @@ function draw_catalog_path(cat_id, display_sub)
 }
 
 
-

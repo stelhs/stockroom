@@ -18,11 +18,16 @@ function object_by_id($object_id)
 
 function object_edit($obj_id, $catalog_id, $location_id, $name, $description, $number)
 {
+    $obj = object_by_id($obj_id);
+    $absent = 0;
+    if ($number < $obj['absent'])
+        $absent = $number;
     return db()->update('objects', $obj_id, ['name' => $name,
                                              'description' => $description,
                                              'catalog_id' => $catalog_id,
                                              'location_id' => $location_id,
-                                             'number' => $number]);
+                                             'number' => $number,
+                                             'absent' => $absent]);
 }
 
 function objects_by_location($node_id)
@@ -38,7 +43,7 @@ function objects_by_catalog($cat_id)
 
 function print_absent_objects($tpl)
 {
-    $objects = db()->query_list('select * from objects where is_absent=1');
+    $objects = db()->query_list('select * from objects where absent > 0');
     if (!count($objects))
         return;
     $tpl->assign('absent_objects');
@@ -55,6 +60,8 @@ function print_absent_objects($tpl)
                 'link_to_object' => mk_url(['mod' => 'object', 'id' => $obj['id']]),
                 'img' => $img_url];
         $tpl->assign('absent_object_row', $row);
+        if ($obj['absent'] > 1)
+            $tpl->assign('absent_object_count', ['count' => $obj['absent']]);
     }
 }
 

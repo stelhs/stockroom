@@ -133,11 +133,48 @@
                     <img class="img_button" src="{http_img}take_away.png">
                 </a>
             <!-- END BLOCK : take_away -->
+            <!-- START BLOCK : take_away_many -->
+                <a href="javascript:;" onclick="$$('take_away_quanity_block').style.display='block'">
+                    <img class="img_button" src="{http_img}take_away.png">
+                </a>
+                <div style="display: none" id="take_away_quanity_block">
+                    <span style="color: red">Указать количество :</span>
+                    <input type="text" name="quanity" size="1" value="1" id="take_away_quanity">
+                    <a href="javascript:;" onclick="submit_object('take_away')">
+                        <img src="{http_img}ok.png">
+                    </a>
+                    <a href="javascript:;" onclick="dec_input('take_away_quanity', 1, 1)">
+                        <img style="margin-left: 100px" src="{http_img}minus_mini.png">
+                    </a>
+                    <a href="javascript:;" onclick="inc_input('take_away_quanity', 1, {max_number})">
+                        <img style="margin-left: 50px" src="{http_img}plus_mini.png">
+                    </a>
+                </div>
+            <!-- END BLOCK : take_away_many -->
+
             <!-- START BLOCK : return_back -->
                 <a href="javascript:;" onclick="if (window.confirm('Вернуть предмет ?')) submit_object('return_back')">
                     <img class="img_button" src="{http_img}return_back.png">
                 </a>
             <!-- END BLOCK : return_back -->
+            <!-- START BLOCK : return_back_many -->
+                <a href="javascript:;" onclick="$$('return_back_quanity_block').style.display='block'">
+                    <img class="img_button" src="{http_img}return_back.png">
+                </a>
+                <div style="display: none" id="return_back_quanity_block">
+                    <span style="color: red">Указать количество :</span>
+                    <input type="text" name="quanity" size="1" value="1" id="return_back_quanity">
+                    <a href="javascript:;" onclick="submit_object('return_back')">
+                        <img src="{http_img}ok.png">
+                    </a>
+                    <a href="javascript:;" onclick="dec_input('return_back_quanity', 1, 1)">
+                        <img style="margin-left: 100px" src="{http_img}minus_mini.png">
+                    </a>
+                    <a href="javascript:;" onclick="inc_input('return_back_quanity', 1, {max_number})">
+                        <img style="margin-left: 50px" src="{http_img}plus_mini.png">
+                    </a>
+                </div>
+            <!-- END BLOCK : return_back_many -->
         </div>
 
     </form>

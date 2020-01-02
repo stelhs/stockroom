@@ -10,6 +10,7 @@ class Mod_search extends Module {
     {
         $tpl = new strontium_tpl("private/tpl/mod_search.html", conf()['global_marks'], false);
         $text = trim($args['text']);
+        $text = $text ? $text : '#';
 
         $tpl->assign(NULL, ['form_url' => mk_url(),
                             'mod' => $this->name,
@@ -27,34 +28,8 @@ class Mod_search extends Module {
                 return $tpl->result();
             }
 
-            $tpl->assign('result_objects');
-            $img_url = '';
-            $photos = images_by_obj_id('objects', $object['id']);
-            if (count($photos)) {
-                $photo = $photos[0];
-                $img_url = $photo->url('list');
-            }
-
-            $tpl->assign('result_objects_row',
-                         ['id' => $object['id'],
-                          'link' => mk_url(['mod' => 'object',
-                                            'id' => $object['id']]),
-                          'name' => $object['name'],
-                          'description' => $object['description'],
-                          'img' => $img_url]);
-            if ($object['number'] > 1)
-                $tpl->assign('object_count', ['count' => $object['number']]);
-
-            $location = location_by_id($object['location_id']);
-            foreach ($location['path'] as $item)
-                $tpl->assign('location_path', ['name' => $item['name'],
-                                               'link' => $item['url']]);
-
-            $catalog = catalog_by_id($object['catalog_id']);
-            foreach ($catalog['path'] as $item)
-                $tpl->assign('catalog_path', ['name' => $item['name'],
-                                             'link' => $item['url']]);
-            return $tpl->result();
+            header('location: '.mk_url(['mod' => 'object', 'id' => $object['id']]));
+            return;
         }
 
         /* search location by ##ID */
@@ -65,16 +40,13 @@ class Mod_search extends Module {
                 $tpl->assign('no_result');
                 return $tpl->result();
             }
-            $tpl->assign('result_location');
-            $tpl->assign('result_location_row',
-                         ['id' => $location['id'],
-                          'link' => mk_url(['mod' => 'location',
-                          'id' => $location['id']])]);
 
-            foreach ($location['path'] as $node)
-                $tpl->assign('result_location_path', ['name' => $node['name']]);
-            return $tpl->result();
+            header('location: '.mk_url(['mod' => 'location', 'id' => $location['id']]));
+            return;
         }
+
+        if ($text[0] == '#')
+            return $tpl->result();
 
         $cat_result = $this->find_by_catalog($text);
         $loc_result = $this->find_by_location($text);

@@ -31,10 +31,7 @@ class Mod_object extends Module {
 
         print_absent_locations($tpl);
 
-        if ($object['is_absent'])
-            $tpl->assign('return_back');
-        else
-            $tpl->assign('take_away');
+        $this->print_take_away_buttons($tpl, $object);
 
         $tpl->assign('object_edit_id', ['id' => $object_id,
                                         'name' => $object['name']]);
@@ -83,6 +80,31 @@ class Mod_object extends Module {
         return $tpl->result();
     }
 
+    function print_take_away_buttons($tpl, $object)
+    {
+        if ($object['absent'] == 0) {
+            if ($object['number'] > 1)
+                $tpl->assign('take_away_many', ['max_number' => $object['number']]);
+            else
+                $tpl->assign('take_away');
+            return;
+        }
+
+        if ($object['absent'] == 1)
+            $tpl->assign('return_back');
+        else
+            $tpl->assign('return_back_many', ['max_number' => $object['absent']]);
+
+        $take_quanity = ($object['number'] - $object['absent']);
+        if (!$take_quanity)
+            return;
+
+        if ($take_quanity > 1)
+            $tpl->assign('take_away_many', ['max_number' => $take_quanity]);
+        else
+            $tpl->assign('take_away');
+    }
+
     function query($args)
     {
         $user = user_by_cookie();
@@ -113,13 +135,13 @@ class Mod_object extends Module {
                 }
             }
 
-            /* If duplicate
+            /* If duplicate */
             if ($args['object_id']) {
-                $photos = images_by_obj_id('objects', $args['object_id']);
+             /*   $photos = images_by_obj_id('objects', $args['object_id']);
                 foreach ($photos as $photo)
-                    $photo->duplicate('objects', $object_id);
+                    $photo->duplicate('objects', $object_id);*/
                 $_SESSION['duplicated'] = 1;
-            }*/
+            }
 
             message_box_ok(sprintf('Added new object %d', $object_id));
             $_SESSION['updated'] = 1;
@@ -177,11 +199,21 @@ class Mod_object extends Module {
             return mk_url(['mod' => $this->name, 'id' => $args['obj_id']]);
 
         case 'take_away':
-            db()->update('objects', $args['object_id'], ['is_absent' => 1]);
+            $obj = db()->query('select * from objects where id=%d', $args['object_id']);
+            $quanity = isset($args['quanity']) ? (int)$args['quanity'] : 1;
+            $take = $obj['absent'] + $quanity;
+            if ($take > $obj['number'])
+                $take = $obj['number'];
+            db()->update('objects', $args['object_id'], ['absent' => $take]);
             return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
 
         case 'return_back':
-            db()->update('objects', $args['object_id'], ['is_absent' => 0]);
+            $obj = db()->query('select * from objects where id=%d', $args['object_id']);
+            $quanity = isset($args['quanity']) ? (int)$args['quanity'] : 1;
+            $absent = $obj['absent'] - $quanity;
+            if ($absent < 0)
+                $absent = 0;
+            db()->update('objects', $args['object_id'], ['absent' => $absent]);
             return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
 
         }
