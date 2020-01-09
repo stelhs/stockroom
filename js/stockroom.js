@@ -38,7 +38,9 @@ function tpl_open(name)
 
 function dec_input(id, step, min)
 {
-    o = $$(id);
+    var o = $$(id);
+    if (!o.value.length)
+        return;
     var v = parseInt(o.value);
     v -= step;
     if (v < min)
@@ -50,8 +52,11 @@ function dec_input(id, step, min)
 
 function inc_input(id, step, max)
 {
-    o = $$(id);
-    var v = parseInt(o.value);
+    var o = $$(id);
+    var val = o.value;
+    if (!o.value.length)
+        val = 0;
+    var v = parseInt(val);
     v += step;
     if (max > 0 && v > max)
         v = max;

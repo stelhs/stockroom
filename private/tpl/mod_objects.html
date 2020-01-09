@@ -1,5 +1,5 @@
 <div align="center">
-    <script src="{http_js}mod_objects.js"></script>
+    <script src="{http_js}mod_objects.js?{time}"></script>
 
     <!-- START INSERT : location_is_absent.html --><!-- END INSERT : location_is_absent.html -->
 
@@ -49,7 +49,7 @@
         <table border="0" cellspacing="5" cellpadding="5" width="100%">
             <tr>
                 <td align="right" valign="top">Название</td>
-                <td><input type="text" name="object_name" size="30" value="{object_name}"></td>
+                <td><input type="text" name="object_name" size="30" value='{object_name}'></td>
             </tr>
             <tr>
                 <td align="right" valign="top">Описание</td>
@@ -82,7 +82,7 @@
             <!-- START BLOCK : box_fullness -->
                 <tr>
                     <td align="right" valign="top">{location_name}:</td>
-                    <td> <input type="text" name="location_fullness" size="2" value="{location_fullness}"> % </td>
+                    <td> <input type="text" name="location_fullness" size="2" value="{location_fullness}" id="location_fullness"> % </td>
                 </tr>
             <!-- END BLOCK : box_fullness -->
             <!-- START BLOCK : box_fullness_please_update -->
@@ -192,6 +192,7 @@
 </div>
 
 <script type="text/javascript">
+    first_load_page = true;
     draw_location_path({location_id});
     draw_catalog_path({catalog_id});
 </script>

@@ -26,8 +26,8 @@ class Mod_object extends Module {
                             'catalog_id' => $object['catalog_id'],
                             'location_id' => $object['location_id'],
                             'object_id' => $object_id,
-                            'object_name' => $object['name'],
-                            'object_description' => $object['description']]);
+                            'object_name' => stripslashes($object['name']),
+                            'object_description' => stripslashes($object['description'])]);
 
         print_absent_locations($tpl);
 
@@ -35,13 +35,13 @@ class Mod_object extends Module {
 
         $tpl->assign('object_edit_id', ['id' => $object_id,
                                         'name' => $object['name']]);
-        $tpl->assign('edit_button', ['object_name' => $object['name']]);
+        $tpl->assign('edit_button', ['object_name' => stripslashes($object['name'])]);
         $tpl->assign('remove_button',
                      ['link' => mk_url(['mod' => $this->name,
                                         'method' => 'remove_object',
                                         'id' => $object_id],
                                        'query'),
-                      'object_name' => $object['name']]);
+                      'object_name' => stripslashes($object['name'])]);
 
         $photos = images_by_obj_id('objects', $object_id);
         foreach ($photos as $photo) {
@@ -115,8 +115,8 @@ class Mod_object extends Module {
         case 'object_add':
             $object_id = object_add($args['catalog_id'],
                                     $args['location_id'],
-                                    $args['object_name'],
-                                    $args['object_description'],
+                                    addslashes($args['object_name']),
+                                    addslashes($args['object_description']),
                                     $args['objects_number']);
 
             if ($object_id <= 0) {
@@ -151,13 +151,13 @@ class Mod_object extends Module {
             $rc = object_edit($args['object_id'],
                               $args['catalog_id'],
                               $args['location_id'],
-                              $args['object_name'],
-                              $args['object_description'],
+                              addslashes($args['object_name']),
+                              addslashes($args['object_description']),
                               $args['objects_number']);
             if ($rc)
                 message_box_err('Can`t edit object');
 
-            if (isset($args['location_fullness'])) {
+            if (isset($args['location_fullness']) && $args['location_fullness'] !== "") {
                 $obj = object_by_id($args['object_id']);
                 db()->query('update location set fullness=%d where id=%d',
                             $args['location_fullness'], $obj['location_id']);

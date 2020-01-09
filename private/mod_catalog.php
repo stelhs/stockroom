@@ -21,12 +21,12 @@ class Mod_catalog extends Module {
         }
 
         foreach ($catalog['path'] as $item)
-            $tpl->assign('catalog_path', ['name' => $item['name'],
+            $tpl->assign('catalog_path', ['name' => stripslashes($item['name']),
                                            'link' => $item['url']]);
 
         $tpl->assign('catalog', ['catalog_id' => $catalog_id,
-                                  'catalog_name' => $catalog['name'],
-                                  'catalog_description' => $catalog['description'],
+                                  'catalog_name' => stripslashes($catalog['name']),
+                                  'catalog_description' => stripslashes($catalog['description']),
                                   'form_url' => mk_url(['mod' => $this->name], 'query'),
                                   'link_delete' => mk_url(['mod' => $this->name,
                                                            'method' => 'remove_catalog',
@@ -62,7 +62,7 @@ class Mod_catalog extends Module {
 
             if ($for_pasting_cat_id != $catalog_id)
                 $tpl->assign('past_catalog', ['past_catalog_name' => $pcatalog['name'],
-                                              'catalog_name' => $location['name']]);
+                                              'catalog_name' => stripslashes($location['name'])]);
             else
                 $tpl->assign('past_catalog_blocked');
         }
@@ -112,7 +112,7 @@ class Mod_catalog extends Module {
                 }
                 $row = ['id' => $obj['id'],
                         'name' => $obj['name'],
-                        'description' => str_replace("\n", '<br>', $obj['description']),
+                        'description' => str_replace("\n", '<br>', stripslashes($obj['description'])),
                         'link_to_object' => mk_url(['mod' => 'object', 'id' => $obj['id']]),
                         'img' => $img_url];
                 $tpl->assign('object_row', $row);
@@ -142,8 +142,8 @@ class Mod_catalog extends Module {
         switch($args['method']) {
         case 'add_catalog':
             $new_catalog_id = $this->add_catalog($args['catalog_id'],
-                                           $args['catalog_name'],
-                                           $args['catalog_description']);
+                                           addslashes($args['catalog_name']),
+                                           addslashes($args['catalog_description']));
             if($new_catalog_id <= 0) {
                  message_box_err("Can't added new catalog");
                  return mk_url(['mod' => $this->name]);
@@ -162,8 +162,8 @@ class Mod_catalog extends Module {
 
         case 'edit_catalog':
             $this->edit_catalog($args['catalog_id'],
-                             $args['catalog_name'],
-                             $args['catalog_description']);
+                                addslashes($args['catalog_name']),
+                                addslashes($args['catalog_description']));
 
             if ($_FILES['photos']['name']) {
                 $photos = images_upload_from_form('photos', 'catalogs', $args['catalog_id']);
