@@ -25,13 +25,13 @@ class Mod_catalog extends Module {
                                            'link' => $item['url']]);
 
         $tpl->assign('catalog', ['catalog_id' => $catalog_id,
-                                  'catalog_name' => stripslashes($catalog['name']),
-                                  'catalog_description' => stripslashes($catalog['description']),
-                                  'form_url' => mk_url(['mod' => $this->name], 'query'),
-                                  'link_delete' => mk_url(['mod' => $this->name,
-                                                           'method' => 'remove_catalog',
-                                                           'catalog_id' => $catalog_id], 'query'),
-                                  'link_add_object' => mk_url(['mod' => 'object', 'catalog_id' => $catalog_id])]);
+                                 'catalog_name' => stripslashes($catalog['name']),
+                                 'catalog_description' => stripslashes($catalog['description']),
+                                 'form_url' => mk_url(['mod' => $this->name], 'query'),
+                                 'link_delete' => mk_url(['mod' => $this->name,
+                                                          'method' => 'remove_catalog',
+                                                          'catalog_id' => $catalog_id], 'query'),
+                                 'link_add_object' => mk_url(['mod' => 'object', 'catalog_id' => $catalog_id])]);
 
         $photos = images_by_obj_id('catalogs', $catalog_id);
         foreach ($photos as $photo) {
@@ -41,7 +41,7 @@ class Mod_catalog extends Module {
                                    'catalog_id' => $catalog_id], 'query');
 
             $tpl->assign('catalog_photo', ['img' => $photo->url('mini'),
-                                            'img_orig' => $photo->url(),
+                                           'img_orig' => $photo->url(),
                                            'link_remove' => $link_remove]);
         }
 
@@ -97,8 +97,8 @@ class Mod_catalog extends Module {
             }
         }
 
-        if ($catalog_id == 0)
-            return $tpl->result();
+    /*   if ($catalog_id == 0)
+            return $tpl->result();*/
 
         $objects = objects_by_catalog($catalog_id);
         if ($objects) {

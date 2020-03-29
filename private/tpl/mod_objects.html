@@ -76,8 +76,13 @@
                 <td><div id="catalog_path"></div></td>
             </tr>
             <tr>
-                <td>Расположение:</td>
-                <td><div id="location_path"></div></td>
+                <td>
+                    Расположение:<br>
+                    ##<input type="text" size="3" id="location_input" value="{location_id}" onchange="draw_location_path(this.value)">
+                </td>
+                <td>
+                    <div id="location_path"></div>
+                </td>
             </tr>
             <!-- START BLOCK : box_fullness -->
                 <tr>

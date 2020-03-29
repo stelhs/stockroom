@@ -76,6 +76,8 @@ function draw_location_path(location_id)
             $$('location_path').innerHTML = t.result();
             if (!first_load_page)
                 $$('location_fullness').value = "";
+
+            $$('location_input').value = location_id;
             first_load_page = false;
         }
 
