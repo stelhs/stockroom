@@ -1,30 +1,91 @@
 <div align="center">
+    <script src="{http_js}mod_boxes.js?{time}"></script>
 
-    <h3> Ящики по заполненности </h3>
-    <h2>
-        <!-- START BLOCK : location_path_header --><a href="{link}">{name}</a><!-- END BLOCK : location_path_header -->
-    </h2>
+    <h3> Поиск свободного места </h3>
+
+    <form name="search" method="GET" action="{form_url}" id="form_search_box" style="border: solid 1px">
+        <input type="hidden" name="mod" value="{mod}">
+        <input type="hidden" name="location_id" value="{location_id}">
+        <table>
+            <tr>
+                <td>Искать в: </td>
+                <td><div id="location_path"></div></td>
+            </tr>
+            <tr>
+                <td>Параллелепипед:</td>
+                <td>
+                    <input type="text" name="parallelepiped_size1" size="3" value="{parallelepiped_size1}" onchange="calculate_volume()">
+                    <input type="text" name="parallelepiped_size2" size="3" value="{parallelepiped_size2}" onchange="calculate_volume()">
+                    <input type="text" name="parallelepiped_size3" size="3" value="{parallelepiped_size3}" onchange="calculate_volume()">
+                    <img class="img_button_del_mini" src="{http_img}delete2.png" onclick="clear_parallelepiped(); calculate_volume();">
+                </td>
+            </tr>
+            <tr>
+                <td>Цилиндр:</td>
+                <td>
+                    D: <input type="text" name="cylinder_diameter" size="3" value="{cylinder_diameter}" onchange="calculate_volume()">
+                    L: <input type="text" name="cylinder_height" size="3" value="{cylinder_height}" onchange="calculate_volume()">
+                    <img class="img_button_del_mini" src="{http_img}delete2.png" onclick="clear_cylinder(); calculate_volume();">
+                </td>
+            </tr>
+            <tr>
+                <td>Шар:</td>
+                <td>
+                    D: <input type="text" name="ball_diameter" size="3" value="{ball_diameter}" onchange="calculate_volume()">
+                    <img class="img_button_del_mini" src="{http_img}delete2.png" onclick="clear_ball(); calculate_volume();">
+                </td>
+            </tr>
+            <tr>
+                <td>Объём:</td>
+                <td>
+                    <input type="text" name="volume" size="5" value="{volume}" onchange="clear_parallelepiped(); clear_cylinder(); clear_ball();"> литры
+                </td>
+            </tr>
+            <tr>
+                <td>Ключевое слово:</td>
+                <td>
+                    <input type="text" name="search_text" size="20" value="{search_text}">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center">
+                    <br>
+                    <input class="buttonSend" type="submit" value="Искать"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <br>
+    <br>
 
     <!-- START BLOCK : location -->
-        <table border=1>
-            <tr>
-                <td>Заполненность</td>
-                <td>Расположение</td>
-                <td>Описание</td>
-            </tr>
+        <table>
             <!-- START BLOCK : location_row -->
                 <tr>
-                    <td width="200">{percent}%</td>
                     <td>
+                        <a href="{link}">
+                            <div class="obj_photo_node">
+                                    <img src="{location_img}">
+                            </div>
+                        </a>
+                    </td>
+                    <td>
+                        <span style="color: green">##{id}</span> {name}, {description}<br>
+                        {location_free_volume}л / {location_volume}л<br>
+                        Размер: {location_size1}x{location_size2}x{location_size3}<br>
+                        Заполненость: {percent}%<br>
+
                         <a href="{link}" style="color: green">
                             <!-- START BLOCK : location_path -->{name}<!-- END BLOCK : location_path -->
                         </a>
-                    </td>
-                    <td>{description}</td>
+
                 </tr>
             <!-- END BLOCK : location_row -->
         </table>
     <!-- END BLOCK : location -->
 
+    <script type="text/javascript">
+        draw_location_path({location_id});
+    </script>
 
 </div>

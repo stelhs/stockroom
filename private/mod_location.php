@@ -25,10 +25,23 @@ class Mod_location extends Module {
             $tpl->assign('location_path', ['name' => $item['name'],
                                            'link' => $item['url']]);
 
+
+        $size1 = (int)$location['size1'];
+        $size2 = (int)$location['size2'];
+        $size3 = (int)$location['size3'];
+        $fullness = (int)$location['fullness'];
+        $volume = ($size1 / 100 * $size2 / 100 * $size3 / 100);
+        $free_volume = $volume * (100 - $fullness) / 100;
+
         $tpl->assign('location', ['location_id' => $location_id,
                                   'location_name' => $location['name'],
                                   'location_description' => $location['description'],
-                                  'location_fullness' => $location['fullness'],
+                                  'location_size1' => $size1 ? $size1 : "",
+                                  'location_size2' => $size2 ? $size2 : "",
+                                  'location_size3' => $size3 ? $size3 : "",
+                                  'location_fullness' => $fullness,
+                                  'location_volume' => round($volume, 3),
+                                  'location_free_volume' => round($free_volume, 3),
                                   'form_url' => mk_url(['mod' => $this->name], 'query'),
                                   'link_delete' => mk_url(['mod' => $this->name,
                                                            'method' => 'remove_location',
@@ -160,12 +173,24 @@ class Mod_location extends Module {
             if ($args['method'] == 'add_sublocation')
                 $parent_id = (int)$args['location_id'];
 
+            $size1 = (int)$args['location_size1'];
+            $size2 = (int)$args['location_size2'];
+            $size3 = (int)$args['location_size3'];
+            $volume = ($size1 / 100 * $size2 / 100 * $size3 / 100);
+            $fullness = (int)$args['location_fullness'];
+            $free_volume = $volume * (100 - $fullness) / 100;
+
             $new_location_id = db()->insert('location',
                                             ['parent_id' => $parent_id,
                                              'name' => $args['location_name'],
                                              'description' => $args['location_description'],
-                                             'fullness' => (int)$args['location_fullness'],
-                                             'is_box' => ($args['is_box'] ? '1' : '0'),
+                                             'size1' => $size1,
+                                             'size2' => $size2,
+                                             'size3' => $size3,
+                                             'fullness' => $fullness,
+                                             'volume' => (int)($volume * 1000),
+                                             'free_volume' => (int)($free_volume * 1000),
+                                             'is_box' => ($volume ? '1' : '0'),
                                              'user_id' => (int)user_by_cookie()['id']]);
             if($new_location_id <= 0) {
                  message_box_err("Can't added new location");
@@ -177,29 +202,44 @@ class Mod_location extends Module {
                 if (!count($photos))
                     message_box_err('Can`t upload photos');
 
-                foreach ($photos as $photo)
-                     $photo->resize('mini', ['w' => 1000]);
+                foreach ($photos as $photo) {
+                    $photo->resize('mini', ['w' => 1000]);
+                    $photo->resize('list', ['w' => 300]);
+                }
             }
 
             return mk_url(['mod' => $this->name, 'id' => $new_location_id]);
 
         case 'edit_location':
+            $size1 = (int)$args['location_size1'];
+            $size2 = (int)$args['location_size2'];
+            $size3 = (int)$args['location_size3'];
+            $volume = ($size1 / 100 * $size2 / 100 * $size3 / 100);
+            $fullness = (int)$args['location_fullness'];
+            $free_volume = $volume * (100 - $fullness) / 100;
+
             db()->update('location',
                          $args['location_id'],
                          ['name' => $args['location_name'],
                           'description' => $args['location_description'],
-                          'fullness' => (int)$args['location_fullness'],
-                          'is_box' => ($args['is_box'] ? '1' : '0'),
+                          'size1' => $size1,
+                          'size2' => $size2,
+                          'size3' => $size3,
+                          'fullness' => $fullness,
+                          'volume' => (int)($volume * 1000),
+                          'free_volume' => (int)($free_volume * 1000),
+                          'is_box' => ($volume ? '1' : '0'),
                           'user_id' => (int)user_by_cookie()['id']]);
 
-
-            if ($_FILES['photos']['name']) {
+            if ($_FILES['photos']['name'][0]) {
                 $photos = images_upload_from_form('photos', 'locations', $args['location_id']);
                 if (!count($photos))
                     message_box_err('Can`t upload photos');
 
-                foreach ($photos as $photo)
-                     $photo->resize('mini', ['w' => 1000]);
+                foreach ($photos as $photo) {
+                    $photo->resize('mini', ['w' => 1000]);
+                    $photo->resize('list', ['w' => 300]);
+                }
             }
 
             return mk_url(['mod' => $this->name, 'id' => $args['location_id']]);

@@ -111,7 +111,7 @@ img {
 .location_photo {
     overflow: hidden;
     width:1000px;
-    height: 500px;
+    height: 600px;
     border: solid 2px gray;
     text-align: center;
     position: relative;
@@ -164,4 +164,8 @@ img {
 
 .img_button {
     padding: 20px;
+}
+
+.img_button_del_mini {
+    padding-left: 20px;
 }

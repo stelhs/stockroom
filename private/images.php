@@ -217,6 +217,9 @@ class Image {
 
     function duplicate($obj_type, $obj_id)
     {
+        if ($obj_id <= 0)
+            return -1;
+
         $img_dir = sprintf('%si/obj', conf()['absolute_root_path']);
         $filename = '';
         for (;;) {
@@ -269,6 +272,8 @@ class Image {
     function url($size_name = NULL)
     {
         $filename = $this->filename($size_name);
+        if (!$filename)
+            return NULL;
         return sprintf('%si/obj/%s', conf()['http_root_path'], $filename);
     }
 

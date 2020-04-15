@@ -43,14 +43,32 @@
         <script>
             function submit_location(method)
             {
-               var form;
-               form = document.getElementById("location_form");
-               fix_percent(form.location_fullness);
-               form.method.value = method;
-               if (!form.location_name.value)
-                   alert("Name is empty");
-               else
-                   form.submit();
+                var form;
+                form = document.getElementById("location_form");
+                fix_percent(form.location_fullness);
+                form.method.value = method;
+                if (!form.location_name.value) {
+                    alert("Name is empty");
+                    return;
+                }
+
+                if (form.location_size1.value || form.location_size1.value || form.location_size3.value) {
+                    if (!form.location_size1.value) {
+                        alert("size1 is empty");
+                        return;
+                    }
+
+                    if (!form.location_size2.value) {
+                        alert("size2 is empty");
+                        return;
+                    }
+
+                    if (!form.location_size3.value) {
+                        alert("size3 is empty");
+                        return;
+                    }
+                }
+                form.submit();
             }
         </script>
         <div>
@@ -74,8 +92,13 @@
                         </td>
                     </tr>
                     <tr>
-                        <td align="right" valign="top"></td>
-                        <td><input type="checkbox" name="is_box" {box_checked} style="width: 40px; height: 40px"> Коробка</td>
+                        <td align="right" valign="top">Размеры: </td>
+                        <td>
+                            <input type="text" name="location_size1" size="3" value="{location_size1}">
+                            <input type="text" name="location_size2" size="3" value="{location_size2}">
+                            <input type="text" name="location_size3" size="3" value="{location_size3}">
+                            {location_volume}л.
+                        </td>
                     </tr>
                     <tr>
                         <td align="right" valign="top">Заполненность: </td>

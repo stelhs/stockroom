@@ -117,7 +117,7 @@ class Mod_object extends Module {
                                     $args['location_id'],
                                     addslashes($args['object_name']),
                                     addslashes($args['object_description']),
-                                    $args['objects_number']);
+                                    1);
 
             if ($object_id <= 0) {
                 message_box_err('Can`t add new object');
