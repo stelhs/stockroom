@@ -27,7 +27,13 @@ class Mod_object extends Module {
                             'location_id' => $object['location_id'],
                             'object_id' => $object_id,
                             'object_name' => stripslashes($object['name']),
-                            'object_description' => stripslashes($object['description'])]);
+                            'object_description' => stripslashes($object['description']),
+                            'object_attrs' => $object['attrs']]);
+
+        $existed_attrs = get_existed_attrs();
+        if (count($existed_attrs))
+            foreach ($existed_attrs as $attr)
+                $tpl->assign('existed_attr', ['attr' => $attr]);
 
         print_absent_locations($tpl);
 
@@ -117,6 +123,7 @@ class Mod_object extends Module {
                                     $args['location_id'],
                                     addslashes($args['object_name']),
                                     addslashes($args['object_description']),
+                                    $args['object_attrs'],
                                     1);
 
             if ($object_id <= 0) {
@@ -153,7 +160,8 @@ class Mod_object extends Module {
                               $args['location_id'],
                               addslashes($args['object_name']),
                               addslashes($args['object_description']),
-                              $args['objects_number']);
+                              $args['objects_number'],
+                              $args['object_attrs']);
             if ($rc)
                 message_box_err('Can`t edit object');
 

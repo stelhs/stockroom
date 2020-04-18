@@ -1,68 +1,8 @@
-load_tpl('location_path');
 
-function draw_location_path(location_id)
+function on_draw_catalog_path(cat_id)
 {
-    $$("form_search_box").location_id.value = location_id;
-    display_sub_locations_mode = 0;
-
-    function result(data) {
-        eval("var list = " + data);
-        var t = tpl_open('location_path');
-
-        for (k in list) {
-            var p = list[k];
-            var last_id;
-
-            if (k != list.length - 1)
-                var block = 'location';
-            else {
-                var block = 'location_last';
-                last_id = p['id'];
-            }
-
-            t.assign(block, {'name': p['name'],
-                              'id': p['id']});
-        }
-
-        function result(data) {
-            eval("var list = " + data);
-            if (count(list)) {
-                t.assign('select_button');
-                for (k in list) {
-                    var p = list[k];
-                    t.assign('sub_location', {'name': p['name'],
-                                          'id': p['id']});
-                }
-            }
-
-            $$('location_path').innerHTML = t.result();
-        }
-
-        mk_query('get_sub_location',
-                 {'mod': 'location',
-                  'id': last_id}, result);
-    }
-
-    mk_query('location_path',
-             {'mod': 'location',
-              'id': location_id},
-             result);
+    $$("form_search_box").catalog_id.value = cat_id;
 }
-
-
-display_sub_locations_mode = 0;
-function display_sublocations()
-{
-    if (display_sub_locations_mode) {
-        $$('list_sublocations').style.display = 'none';
-        display_sub_locations_mode = 0;
-    } else {
-        $$('list_sublocations').style.display = 'inline-block';
-        display_sub_locations_mode = 1;
-    }
-}
-
-
 
 function clear_parallelepiped()
 {

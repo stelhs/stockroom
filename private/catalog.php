@@ -47,3 +47,21 @@ function catalog_chain_by_id($catalog_id)
     $list[] = ['name' => '', 'id' => '0'];
     return array_reverse($list);
 }
+
+function catalog_is_child($cat_id, $parent_cat_id)
+{
+    if ($cat_id == $parent_cat_id)
+        return true;
+
+    while (true) {
+        $row = db()->query('select parent_id from catalog where id = %d', $cat_id);
+        if (!($row && isset($row['parent_id'])))
+            break;
+
+        if ($row['parent_id'] == $parent_cat_id)
+            return true;
+        $cat_id = $row['parent_id'];
+    }
+    return false;
+}
+

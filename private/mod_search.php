@@ -10,47 +10,68 @@ class Mod_search extends Module {
     {
         $tpl = new strontium_tpl("private/tpl/mod_search.html", conf()['global_marks'], false);
         $text = trim($args['text']);
-        $text = $text ? $text : '#';
+        $catalog_id = (int)$args['cat_id'] ? (int)$args['cat_id'] : 0;
+        $object_attrs_text = trim($args['object_attrs']);
+
+        $obj_attrs = parse_attrs($object_attrs_text);
+        $object_attrs_text = attrs_to_text($obj_attrs);
 
         $tpl->assign(NULL, ['form_url' => mk_url(),
                             'mod' => $this->name,
+                            'cat_id' => $catalog_id,
+                            'object_attrs' => $object_attrs_text,
                             'text' => $text]);
 
-        if (!$text)
-            return $tpl->result();
+        $existed_attrs = get_existed_attrs();
+        if (count($existed_attrs))
+            foreach ($existed_attrs as $attr)
+                $tpl->assign('existed_attr', ['attr' => $attr]);
 
-        /* search object by #ID */
-        preg_match('/^#(\d+)/', $text, $m);
-        if (isset($m[1])) {
-            $object = object_by_id($m[1]);
-            if (!$object) {
-                $tpl->assign('no_result');
-                return $tpl->result();
+        if ($text) {
+            /* search object by #ID */
+            preg_match('/^#(\d+)/', $text, $m);
+            if (isset($m[1])) {
+                $object = object_by_id($m[1]);
+                if (!$object) {
+                    $tpl->assign('no_result');
+                    return $tpl->result();
+                }
+
+                header('location: '.mk_url(['mod' => 'object', 'id' => $object['id']]));
+                return;
             }
 
-            header('location: '.mk_url(['mod' => 'object', 'id' => $object['id']]));
-            return;
-        }
+            /* search location by ##ID */
+            preg_match('/^##(\d+)/', $text, $m);
+            if (isset($m[1])) {
+                $location = location_by_id($m[1]);
+                if (!$location) {
+                    $tpl->assign('no_result');
+                    return $tpl->result();
+                }
 
-        /* search location by ##ID */
-        preg_match('/^##(\d+)/', $text, $m);
-        if (isset($m[1])) {
-            $location = location_by_id($m[1]);
-            if (!$location) {
-                $tpl->assign('no_result');
-                return $tpl->result();
+                header('location: '.mk_url(['mod' => 'location', 'id' => $location['id']]));
+                return;
             }
-
-            header('location: '.mk_url(['mod' => 'location', 'id' => $location['id']]));
-            return;
         }
 
-        if ($text[0] == '#')
+        if ($text[0] == '' && $catalog_id == 0 && $object_attrs_text == "")
             return $tpl->result();
 
-        $cat_result = $this->find_by_catalog($text);
-        $loc_result = $this->find_by_location($text);
-        $obj_result = $this->find_by_object($text);
+        if (!$obj_attrs) {
+            $cat_result = $this->find_by_catalog($text, $catalog_id);
+            $loc_result = $this->find_by_location($text);
+        }
+        $obj_result = $this->find_by_object($text, $catalog_id, $obj_attrs);
+  /*      dump($obj_result);
+        foreach ($obj_result as $object) {
+            preg_match('/-\s*(\d+)/i', $object['name'], $m);
+            if (!isset($m[1]))
+                continue;
+
+            db()->update('objects', $object['id'], ['attrs' => sprintf('Длина: %d\n', $m[1])]);
+        }exit;*/
+
 
         if (!count($cat_result) && !count($loc_result) && !count($obj_result))
             $tpl->assign('no_result');
@@ -117,8 +138,11 @@ class Mod_search extends Module {
         return $tpl->result();
     }
 
-    function find_by_catalog($text)
+    function find_by_catalog($text, $cat_id)
     {
+        if (!$text)
+            return NULL;
+
         $rows = db()->query_list('select id from catalog where '.
                                  'name LIKE "%%%s%%" or '.
                                  'description LIKE "%%%s%%" ',
@@ -128,13 +152,18 @@ class Mod_search extends Module {
             return NULL;
 
         $list = [];
-        foreach ($rows as $row)
-            $list[] = catalog_by_id($row['id']);
+        foreach ($rows as $row) {
+            if (catalog_is_child($row['id'], $cat_id))
+                $list[] = catalog_by_id($row['id']);
+        }
         return count($list) ? $list : NULL;
     }
 
     function find_by_location($text)
     {
+        if (!$text)
+            return NULL;
+
         $rows = db()->query_list('select id from location where '.
                                  'name LIKE "%%%s%%" or '.
                                  'description LIKE "%%%s%%" ',
@@ -148,9 +177,9 @@ class Mod_search extends Module {
         return count($list) ? $list : NULL;
     }
 
-    function find_by_object($text)
+    function find_by_object($text, $cat_id, $search_attrs)
     {
-        $rows = db()->query_list('select id from objects where '.
+        $rows = db()->query_list('select id, catalog_id from objects where '.
                                  'name LIKE "%%%s%%" or '.
                                  'description LIKE "%%%s%%" ',
                                  $text, $text);
@@ -158,8 +187,16 @@ class Mod_search extends Module {
             return NULL;
 
         $list = [];
-        foreach ($rows as $row)
-            $list[] = object_by_id($row['id']);
+        foreach ($rows as $row) {
+            if (!catalog_is_child($row['catalog_id'], $cat_id))
+                continue;
+
+            $object = object_by_id($row['id']);
+            if (!object_attrs_match(parse_attrs($object['attrs']), $search_attrs))
+                continue;
+
+            $list[] = $object;
+        }
         return count($list) ? $list : NULL;
     }
 

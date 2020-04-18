@@ -218,11 +218,12 @@
                         <!-- END BLOCK : object_is_absent -->
                         <a href="{link_to_object}">
                             <span style="color: blue">#{id}</span>
+                            <!-- START BLOCK : object_count -->
+                                <span style="color: red">{count}шт.</span>
+                            <!-- END BLOCK : object_count -->
                             <b>{name}</b><br>
                         </a>
-                        <!-- START BLOCK : object_count -->
-                            <span style="color: red">{count}шт.</span><br>
-                        <!-- END BLOCK : object_count -->
+                        <span style="color: #1177AA">{attrs}</span><br>
                         <span style="color: #777777">{description}</span><br>
                         <!-- START BLOCK : catalog_path -->
                             <a href="{link}"><span style="color: orange">{name}</span></a>

@@ -1,11 +1,56 @@
 <div align="center">
+    <script src="{http_js}mod_search.js?{time}"></script>
 
     <h3> Поиск </h3>
 
     <form name="search" method="GET" action="{form_url}" id="search_form">
         <input type="hidden" name="mod" value="{mod}">
-        <input type="text" name="text" size="20" value="{text}" autofocus>
-        <input class="buttonSend" type="submit" value="Искать"/>
+        <input type="hidden" name="cat_id" value="{cat_id}">
+
+        <table>
+            <tr>
+                <td>Поиск: </td>
+                <td>
+                    <input type="text" name="text" size="20" value="{text}" autofocus>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 250px">В каталоге:</td>
+                <td>
+                    <div id="catalog_path" style="align: left"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>Атрибуты:</td>
+                <td>
+                    <table border=0>
+                        <tr>
+                            <td rowspan="2">
+                                <textarea rows=4 cols=25 name="object_attrs" id="object_attrs" onclick="hide_view('list_attrs')">{object_attrs}</textarea>
+                            </td>
+                            <td>
+                                <img src="{http_img}delete2.png" onclick="clear_attrs();">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align: bottom">
+                                <img src="{http_img}plus.png" onclick="switch_view('list_attrs')"><br>
+                            </td>
+                        </tr>
+                    </table>
+                    <div id="list_attrs" style="display: none">
+                        <!-- START BLOCK : existed_attr -->
+                            <a href="javascript:;" onclick="insert_attr('{attr}'); hide_view('list_attrs')">{attr}</a><br>
+                        <!-- END BLOCK : existed_attr -->
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan=2>
+                    <input class="buttonSend" type="submit" value="Искать"/>
+                </td>
+            </tr>
+        </table>
     </form>
     <br>
     <div align="left">
@@ -75,4 +120,7 @@
         <!-- END BLOCK : result_objects -->
     </div>
 </div>
-<script type="text/javascript"></script>
+
+<script type="text/javascript">
+    draw_catalog_path('catalog_path', {cat_id}, on_draw_catalog_path);
+</script>
