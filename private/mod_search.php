@@ -62,15 +62,18 @@ class Mod_search extends Module {
             $cat_result = $this->find_by_catalog($text, $catalog_id);
             $loc_result = $this->find_by_location($text);
         }
+
         $obj_result = $this->find_by_object($text, $catalog_id, $obj_attrs);
-  /*      dump($obj_result);
+        /*set_time_limit(0);
+        dump($obj_result);
         foreach ($obj_result as $object) {
-            preg_match('/-\s*(\d+)/i', $object['name'], $m);
+            preg_match('/-\s*([\d\.]+)/i', $object['name'], $m);
             if (!isset($m[1]))
                 continue;
 
-            db()->update('objects', $object['id'], ['attrs' => sprintf('Длина: %d\n', $m[1])]);
-        }exit;*/
+            db()->update('objects', $object['id'], ['attrs' => sprintf('Длина: %s\n', $m[1])]);
+        }
+        exit;*/
 
 
         if (!count($cat_result) && !count($loc_result) && !count($obj_result))
@@ -118,6 +121,7 @@ class Mod_search extends Module {
                               'link' => mk_url(['mod' => 'object',
                                                 'id' => $object['id']]),
                               'name' => $object['name'],
+                              'attrs' => $object['attrs'],
                               'description' => $object['description'],
                               'img' => $img_url]);
                 if ($object['number'] > 1)

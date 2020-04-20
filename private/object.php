@@ -152,19 +152,19 @@ function object_attrs_match($object_attrs, $search_attrs)
 
 function match_range($i, $query)
 {
-    preg_match('/\s*<\s*(\d+)/i', $query, $m);
+    preg_match('/\s*<\s*([\d\.]+)/i', $query, $m);
     if ($m && isset($m[1]))
         return $i < $m[1];
 
-    preg_match('/\s*>\s*(\d+)/i', $query, $m);
+    preg_match('/\s*>\s*([\d\.]+)/i', $query, $m);
     if ($m && isset($m[1]))
         return $i > $m[1];
 
-    preg_match('/(\d+)\s*-\s*(\d+)/i', $query, $m);
+    preg_match('/([\d\.]+)\s*-\s*([\d\.]+)/i', $query, $m);
     if ($m && isset($m[2]))
         return ($i >= $m[1] && $i <= $m[2]);
 
-    preg_match('/(\d+)/i', $query, $m);
+    preg_match('/([\d\.]+)/i', $query, $m);
     if (!$m)
         return false;
 
