@@ -135,7 +135,8 @@ class Mod_search extends Module {
                 $catalog = catalog_by_id($object['catalog_id']);
                 foreach ($catalog['path'] as $item)
                     $tpl->assign('catalog_path', ['name' => $item['name'],
-                                                 'link' => $item['url']]);
+                                                  'id' => $item['id'],
+                                                  'link' => $item['url']]);
             }
         }
 

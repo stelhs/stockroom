@@ -16,6 +16,11 @@ class Mod_object extends Module {
                                 'catalog_id' => $args['catalog_id'] ? $args['catalog_id'] : 0,
                                 'location_id' => $args['location_id'] ? $args['location_id'] : 0]);
             $tpl->assign('object_add');
+
+            $existed_attrs = get_existed_attrs();
+            if (count($existed_attrs))
+                foreach ($existed_attrs as $attr)
+                    $tpl->assign('existed_attr', ['attr' => $attr]);
             return $tpl->result();
         }
 
@@ -123,8 +128,8 @@ class Mod_object extends Module {
                                     $args['location_id'],
                                     addslashes($args['object_name']),
                                     addslashes($args['object_description']),
-                                    $args['object_attrs'],
-                                    1);
+                                    1,
+                                    $args['object_attrs']);
 
             if ($object_id <= 0) {
                 message_box_err('Can`t add new object');

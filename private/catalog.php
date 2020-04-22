@@ -22,6 +22,7 @@ function catalog_by_id($catalog_id)
     $path = [];
     foreach ($catalogs as $sub_catalog)
         $path[] = ['name' => $sub_catalog['name'].' / ',
+                   'id' => $sub_catalog['id'],
                    'url' => mk_url(['mod' => 'catalog',
                                     'id' => $sub_catalog['id']])];
     $catalog['path'] = $path;

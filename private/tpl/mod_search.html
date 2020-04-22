@@ -11,7 +11,8 @@
             <tr>
                 <td>Поиск: </td>
                 <td>
-                    <input type="text" name="text" size="20" value="{text}" autofocus>
+                    <input type="text" name="text" size="20" value="{text}" id="search_text" autofocus>
+                    <img src="{http_img}delete2.png" onclick="clear_search_text();">
                 </td>
             </tr>
             <tr>
@@ -26,7 +27,7 @@
                     <table border=0>
                         <tr>
                             <td rowspan="2">
-                                <textarea rows=4 cols=25 name="object_attrs" id="object_attrs" onclick="hide_view('list_attrs')">{object_attrs}</textarea>
+                                <textarea rows=3 cols=25 name="object_attrs" id="object_attrs" onclick="hide_view('list_attrs')">{object_attrs}</textarea>
                             </td>
                             <td>
                                 <img src="{http_img}delete2.png" onclick="clear_attrs();">
@@ -38,6 +39,10 @@
                             </td>
                         </tr>
                     </table>
+                    <img src="{http_img}less.png" class="img_button" onclick="insert_char('<')">
+                    <img src="{http_img}more.png" class="img_button" onclick="insert_char('>')">
+                    <img src="{http_img}minus.png" class="img_button" onclick="insert_char('-')">
+                    <br>
                     <div id="list_attrs" style="display: none">
                         <!-- START BLOCK : existed_attr -->
                             <a href="javascript:;" onclick="insert_attr('{attr}'); hide_view('list_attrs')">{attr}</a><br>
@@ -113,7 +118,7 @@
 
                             <span style="color: #1177AA">{attrs}</span><br>
                             {description}<br>
-                            <!-- START BLOCK : catalog_path --><a href="{link}" style="color: orange">{name}</a><!-- END BLOCK : catalog_path --><br>
+                            <!-- START BLOCK : catalog_path --><a href="javascript:;" style="color: orange" onclick="draw_catalog_path('catalog_path', {id})">{name}</a><!-- END BLOCK : catalog_path --><br>
                             <!-- START BLOCK : location_path --><a href="{link}" style="color: green">{name}</a><!-- END BLOCK : location_path --><br>
                         </td>
                     </tr>
@@ -124,5 +129,5 @@
 </div>
 
 <script type="text/javascript">
-    draw_catalog_path('catalog_path', {cat_id}, on_draw_catalog_path);
+    draw_catalog_path('catalog_path', {cat_id}, false, on_draw_catalog_path);
 </script>

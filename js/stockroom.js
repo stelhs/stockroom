@@ -151,7 +151,7 @@ function draw_location_path(div_id, location_id, action)
 }
 
 draw_catalog_path_actions = {};
-function draw_catalog_path(div_id, cat_id, action)
+function draw_catalog_path(div_id, cat_id, expand, action)
 {
     if (action)
         draw_catalog_path_actions[div_id] = action;
@@ -194,7 +194,7 @@ function draw_catalog_path(div_id, cat_id, action)
                 return;
             }
 
-            if (count(list))
+            if (expand && count(list))
                 show_view(div_id + '_list_sub_catalogs');
 
             if (div_id in draw_catalog_path_actions)
