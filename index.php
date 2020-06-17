@@ -31,7 +31,7 @@ function main($tpl)
 
     $tpl->assign('user_logout', ['link_logout' => mk_url(['method' => 'user_logout'], 'query')]);
 
-    $mod_name = "catalog";
+    $mod_name = "search";
     if(isset($_GET['mod']))
        $mod_name = $_GET['mod'];
 
