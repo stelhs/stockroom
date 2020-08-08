@@ -178,7 +178,7 @@ class Mod_location extends Module {
             $size2 = (int)$args['location_size2'];
             $size3 = (int)$args['location_size3'];
             $volume = ($size1 / 100 * $size2 / 100 * $size3 / 100);
-            $fullness = (int)$args['location_fullness'];
+            $fullness = 0;
             $free_volume = $volume * (100 - $fullness) / 100;
 
             $new_location_id = db()->insert('location',
