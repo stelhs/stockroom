@@ -128,7 +128,7 @@ class Mod_object extends Module {
                                     $args['location_id'],
                                     addslashes($args['object_name']),
                                     addslashes($args['object_description']),
-                                    1,
+                                    ($args['object_id'] ? 1 : $args['objects_number']),
                                     $args['object_attrs']);
 
             if ($object_id <= 0) {
