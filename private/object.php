@@ -154,11 +154,11 @@ function match_range($i, $query)
 {
     preg_match('/\s*<\s*([\d\.]+)/i', $query, $m);
     if ($m && isset($m[1]))
-        return $i < $m[1];
+        return $i <= $m[1];
 
     preg_match('/\s*>\s*([\d\.]+)/i', $query, $m);
     if ($m && isset($m[1]))
-        return $i > $m[1];
+        return $i >= $m[1];
 
     preg_match('/([\d\.]+)\s*-\s*([\d\.]+)/i', $query, $m);
     if ($m && isset($m[2]))
