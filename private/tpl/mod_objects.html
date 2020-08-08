@@ -23,10 +23,6 @@
     </table>
     <hr>
 
-    <!-- START BLOCK : object_is_absent -->
-       <h1 style="color: red">Предмет отсутсвует!</h1>
-    <!-- END BLOCK : object_is_absent -->
-
     <!-- START BLOCK : object_edit_id -->
        <h3><span style="color: blue">#{id}</span> {name}<br>
        <span style="font-size: 18px">{created}</span></h3>
@@ -122,6 +118,10 @@
             <!-- END BLOCK : box_fullness_please_update -->
         </table>
         <div style="text-align: left">
+            <!-- START BLOCK : object_is_absent -->
+                <h3><span style="color: red">ПРЕДМЕТ ОТСУТСТВУЕТ в количестве: {number} шт.</span></h3>
+            <!-- END BLOCK : object_is_absent -->
+
             <!-- START BLOCK : edit_button -->
                 <a href="javascript:;" onclick="submit_object('object_edit')">
                     <img class="img_button" src="{http_img}edit.png">

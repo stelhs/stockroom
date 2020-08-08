@@ -42,7 +42,8 @@ class Mod_object extends Module {
             foreach ($existed_attrs as $attr)
                 $tpl->assign('existed_attr', ['attr' => $attr]);
 
-        print_absent_locations($tpl);
+        if ($object['absent'] > 0)
+            $tpl->assign('object_is_absent', ['number' => $object['absent']]);
 
         $this->print_take_away_buttons($tpl, $object);
 
