@@ -26,12 +26,14 @@ class Mod_object extends Module {
 
         $object_id = $args['id'];
         $object = object_by_id($object_id);
+        $name = stripslashes($object['name']);
         $tpl->assign(NULL, ['number' => $object['number'],
                             'form_url' => mk_url(['mod' => $this->name], 'query'),
                             'catalog_id' => $object['catalog_id'],
                             'location_id' => $object['location_id'] ? $object['location_id'] : "",
                             'object_id' => $object_id,
-                            'object_name' => stripslashes($object['name']),
+                            'object_name' => $name,
+                            'object_name_quoted' => str_replace('"', '&quot;', $name),
                             'object_description' => stripslashes($object['description']),
                             'object_attrs' => $object['attrs']]);
 
