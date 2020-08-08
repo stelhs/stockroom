@@ -31,7 +31,8 @@ class Mod_catalog extends Module {
                                  'link_delete' => mk_url(['mod' => $this->name,
                                                           'method' => 'remove_catalog',
                                                           'catalog_id' => $catalog_id], 'query'),
-                                 'link_add_object' => mk_url(['mod' => 'object', 'catalog_id' => $catalog_id])]);
+                                 'link_add_object' => mk_url(['mod' => 'object', 'catalog_id' => $catalog_id]),
+                                 'link_search' => mk_url(['mod' => 'search', 'cat_id' => $catalog_id, 'no_search' => 1])]);
 
         $photos = images_by_obj_id('catalogs', $catalog_id);
         foreach ($photos as $photo) {

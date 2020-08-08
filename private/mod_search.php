@@ -55,7 +55,7 @@ class Mod_search extends Module {
             }
         }
 
-        if ($text[0] == '' && $catalog_id == 0 && $object_attrs_text == "")
+        if (($text[0] == '' && $catalog_id == 0 && $object_attrs_text == "") || $args['no_search'])
             return $tpl->result();
 
         if (!$obj_attrs) {
