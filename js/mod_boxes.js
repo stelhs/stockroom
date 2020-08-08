@@ -1,5 +1,5 @@
 
-function on_draw_catalog_path(cat_id)
+function on_draw_location_path(cat_id)
 {
     $$("form_search_box").catalog_id.value = cat_id;
 }

@@ -62,12 +62,12 @@
                     </tr>
                     <tr>
                         <td align="right" valign="top">Группа: </td>
-                        <td> <input type="text" name="catalog_name" size="20" value='{catalog_name}'></td>
+                        <td> <input type="text" name="catalog_name" size="20" value='{catalog_name}' onchange="light_input(this)"></td>
                     </tr>
                     <tr>
                         <td align="right" valign="top">Описание: </td>
                         <td>
-                            <textarea rows=3 cols=23 name="catalog_description" onclick="this.select()">{catalog_description}</textarea>
+                            <textarea rows=3 cols=23 name="catalog_description" onclick="this.select()" onchange="light_input(this)">{catalog_description}</textarea>
                         </td>
                     </tr>
                 </table>

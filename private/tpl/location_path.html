@@ -1,16 +1,24 @@
 <!-- START BLOCK : location -->
-    <a style="vertical-align: top" href="javascript:;" style="display: inline" onclick="draw_location_path('{div_id}', {id}); ">{name} / </a>
+    <a style="vertical-align: top; display: inline;" href="javascript:;" onclick="draw_location_path('{div_id}', {id}, true); ">{name} / </a>
 <!-- END BLOCK : location -->
 
 <!-- START BLOCK : location_last -->
-    <a style="vertical-align: top" href="javascript:;" style="display: inline" onclick="switch_view('{div_id}_list_sublocations'); draw_location_path_actions['{div_id}']({id});">{name} / </a>
+    <a style="vertical-align: top; display: inline" href="javascript:;" onclick="switch_view('{div_id}_list_sublocations'); draw_location_path_actions['{div_id}']({id});">{name} / </a>
 <!-- END BLOCK : location_last -->
 
-<!-- START BLOCK : select_button -->
+<!-- START BLOCK : location_highted -->
+    <a style="vertical-align: top; display: inline; color: yellow" href="javascript:;" onclick="draw_location_path('{div_id}', {id}, true); ">{name} / </a>
+<!-- END BLOCK : location_highted -->
+
+<!-- START BLOCK : location_last_highted -->
+    <a style="vertical-align: top; display: inline; color: yellow" href="javascript:;" onclick="switch_view('{div_id}_list_sublocations'); draw_location_path_actions['{div_id}']({id});">{name} / </a>
+<!-- END BLOCK : location_last_highted -->
+
+<!-- START BLOCK : select_box -->
     <div style="display: none; border: solid 1px; padding-left: 20px; padding-right: 20px;" id="{div_id}_list_sublocations">
 
         <!-- START BLOCK : sub_location -->
-            <a href="javascript:;" onclick="draw_location_path('{div_id}', {id});">{name}</a><br>
+            <a href="javascript:;" onclick="draw_location_path('{div_id}', {id}, true);">{name}</a><br>
         <!-- END BLOCK : sub_location -->
     </div>
-<!-- END BLOCK : select_button -->
+<!-- END BLOCK : select_box -->

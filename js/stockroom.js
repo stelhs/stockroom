@@ -47,7 +47,7 @@ function dec_input(id, step, min)
         v = min;
     o.value = v;
     o.style.color = 'red';
-    setTimeout(function(){ o.style.color = 'lightgray'; }, 300);
+    setTimeout(function(){ o.style.color = 'lightgray'; o.style.border = "1px solid yellow" }, 300);
 }
 
 function inc_input(id, step, max)
@@ -62,7 +62,7 @@ function inc_input(id, step, max)
         v = max;
     o.value = v;
     o.style.color = 'red';
-    setTimeout(function(){ o.style.color = 'lightgray'; }, 300);
+    setTimeout(function(){ o.style.color = 'lightgray'; o.style.border = "1px solid yellow" }, 300);
 }
 
 function switch_view(div_id)
@@ -89,7 +89,7 @@ load_tpl('location_path');
 load_tpl('catalog_path');
 
 draw_location_path_actions = {};
-function draw_location_path(div_id, location_id, action)
+function draw_location_path(div_id, location_id, highlight, action)
 {
     if (action)
         draw_location_path_actions[div_id] = action;
@@ -109,6 +109,9 @@ function draw_location_path(div_id, location_id, action)
                 last_id = p['id'];
             }
 
+            if (highlight)
+                block += "_highted";
+
             t.assign(block, {'name': p['name'],
                               'id': p['id'],
                               'div_id': div_id});
@@ -117,7 +120,7 @@ function draw_location_path(div_id, location_id, action)
         function result(data) {
             eval("var list = " + data);
             if (count(list)) {
-                t.assign('select_button', {'div_id': div_id});
+                t.assign('select_box', {'div_id': div_id});
                 for (k in list) {
                     var p = list[k];
                     t.assign('sub_location', {'name': p['name'],
@@ -151,7 +154,7 @@ function draw_location_path(div_id, location_id, action)
 }
 
 draw_catalog_path_actions = {};
-function draw_catalog_path(div_id, cat_id, expand, action)
+function draw_catalog_path(div_id, cat_id, highlight, action)
 {
     if (action)
         draw_catalog_path_actions[div_id] = action;
@@ -171,6 +174,9 @@ function draw_catalog_path(div_id, cat_id, expand, action)
                 last_id = p['id'];
             }
 
+            if (highlight)
+                block += "_highted";
+
             t.assign(block, {'name': p['name'],
                               'id': p['id'],
                               'div_id': div_id});
@@ -179,7 +185,7 @@ function draw_catalog_path(div_id, cat_id, expand, action)
         function result(data) {
             eval("var list = " + data);
             if (count(list)) {
-                t.assign('select_button', {'div_id': div_id});
+                t.assign('select_box', {'div_id': div_id});
                 for (k in list) {
                     var p = list[k];
                     t.assign('sub_catalog', {'name': p['name'],
@@ -194,7 +200,7 @@ function draw_catalog_path(div_id, cat_id, expand, action)
                 return;
             }
 
-            if (expand && count(list))
+            if (count(list))
                 show_view(div_id + '_list_sub_catalogs');
 
             if (div_id in draw_catalog_path_actions)
@@ -212,3 +218,7 @@ function draw_catalog_path(div_id, cat_id, expand, action)
 }
 
 
+function light_input(input)
+{
+    input.style.border = "1px solid yellow";
+}

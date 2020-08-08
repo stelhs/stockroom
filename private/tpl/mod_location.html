@@ -83,27 +83,27 @@
                     </tr>
                     <tr>
                         <td align="right" valign="top">Название: </td>
-                        <td> <input type="text" name="location_name" size="20" value="{location_name}"></td>
+                        <td> <input type="text" name="location_name" size="20" value="{location_name}" onchange="light_input(this)"></td>
                     </tr>
                     <tr>
                         <td align="right" valign="top">Описание: </td>
                         <td>
-                            <textarea rows=3 cols=23 name="location_description">{location_description}</textarea>
+                            <textarea rows=3 cols=23 name="location_description" onchange="light_input(this)">{location_description}</textarea>
                         </td>
                     </tr>
                     <tr>
                         <td align="right" valign="top">Размеры: </td>
                         <td>
-                            <input type="text" name="location_size1" size="3" value="{location_size1}">
-                            <input type="text" name="location_size2" size="3" value="{location_size2}">
-                            <input type="text" name="location_size3" size="3" value="{location_size3}">
+                            <input type="text" name="location_size1" size="3" value="{location_size1}" onchange="light_input(this)">
+                            <input type="text" name="location_size2" size="3" value="{location_size2}" onchange="light_input(this)">
+                            <input type="text" name="location_size3" size="3" value="{location_size3}" onchange="light_input(this)">
                             {location_volume}л.
                         </td>
                     </tr>
                     <tr>
                         <td align="right" valign="top">Заполненность: </td>
                         <td>
-                            <input type="text" name="location_fullness" size="2" value="{location_fullness}" id="location_fullness" autocomplete="off"> %
+                            <input type="text" name="location_fullness" size="2" value="{location_fullness}" id="location_fullness" autocomplete="off" onchange="light_input(this)"> %
                             <a href="javascript:;" onclick="dec_input('location_fullness', 5, 0)">
                                 <img style="margin-left: 100px" src="{http_img}minus_mini.png">
                             </a>

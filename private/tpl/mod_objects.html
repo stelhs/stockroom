@@ -49,12 +49,12 @@
         <table border="0" cellspacing="5" cellpadding="5" width="100%">
             <tr>
                 <td align="right" valign="top">Название:</td>
-                <td><input type="text" name="object_name" size="30" value='{object_name}'></td>
+                <td><input type="text" name="object_name" size="30" value='{object_name}' onchange="light_input(this)"></td>
             </tr>
             <tr>
                 <td align="right" valign="top">Атрибуты:</td>
                 <td>
-                    <textarea rows=4 cols=25 name="object_attrs" id="object_attrs">{object_attrs}</textarea>
+                    <textarea rows=4 cols=25 name="object_attrs" id="object_attrs" onchange="light_input(this)">{object_attrs}</textarea>
                     <img src="{http_img}plus.png" onclick="switch_view('list_attrs')">
                     <br>
                     <div id="list_attrs" style="display: none">
@@ -66,12 +66,12 @@
             </tr>
             <tr>
                 <td align="right" valign="top">Описание:</td>
-                <td><textarea rows=3 cols=30 name="object_description">{object_description}</textarea></td>
+                <td><textarea rows=3 cols=30 name="object_description" onchange="light_input(this)">{object_description}</textarea></td>
             </tr>
             <tr>
                 <td align="right" valign="top">Количество:</td>
                 <td>
-                    <input type="text" name="objects_number" size="1" value="{number}" id="number"> шт.
+                    <input type="text" name="objects_number" size="1" value="{number}" id="number" onchange="light_input(this)"> шт.
                     <a href="javascript:;" onclick="dec_input('number', 1, 1)">
                         <img style="margin-left: 100px" src="{http_img}minus_mini.png">
                     </a>
@@ -91,7 +91,7 @@
             <tr>
                 <td>
                     Расположение:<br>
-                    ##<input type="text" size="3" id="location_input" value="{location_id}" onchange="draw_location_path('location_path', this.value)">
+                    ##<input type="text" size="3" id="location_input" value="{location_id}" onchange="draw_location_path('location_path', this.value, true); light_input(this)">
                 </td>
                 <td>
                     <div id="location_path"></div>
@@ -100,7 +100,7 @@
             <!-- START BLOCK : box_fullness -->
                 <tr>
                     <td align="right" valign="top">{location_name}:</td>
-                    <td> <input type="text" name="location_fullness" size="2" value="{location_fullness}" id="location_fullness"> % </td>
+                    <td> <input type="text" name="location_fullness" size="2" value="{location_fullness}" id="location_fullness" onchange="light_input(this)"> % </td>
                 </tr>
             <!-- END BLOCK : box_fullness -->
             <!-- START BLOCK : box_fullness_please_update -->
@@ -211,6 +211,6 @@
 
 <script type="text/javascript">
     first_load_page = true;
-    draw_location_path('location_path', "{location_id}", on_draw_location_path);
+    draw_location_path('location_path', "{location_id}", false, on_draw_location_path);
     draw_catalog_path('catalog_path', "{catalog_id}", false, on_draw_catalog_path);
 </script>
