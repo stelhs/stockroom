@@ -47,7 +47,8 @@ class Mod_object extends Module {
         $this->print_take_away_buttons($tpl, $object);
 
         $tpl->assign('object_edit_id', ['id' => $object_id,
-                                        'name' => $object['name']]);
+                                        'name' => $object['name'],
+                                        'created' => $object['created']]);
         $tpl->assign('edit_button', ['object_name' => stripslashes($object['name'])]);
         $tpl->assign('remove_button',
                      ['link' => mk_url(['mod' => $this->name,
