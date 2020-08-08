@@ -14,7 +14,7 @@ class Mod_object extends Module {
             $tpl->assign(NULL, ['number' => 1,
                                 'form_url' => mk_url(['mod' => $this->name], 'query'),
                                 'catalog_id' => $args['catalog_id'] ? $args['catalog_id'] : 0,
-                                'location_id' => $args['location_id'] ? $args['location_id'] : 0]);
+                                'location_id' => $args['location_id'] ? $args['location_id'] : ""]);
             $tpl->assign('object_add');
 
             $existed_attrs = get_existed_attrs();
@@ -29,7 +29,7 @@ class Mod_object extends Module {
         $tpl->assign(NULL, ['number' => $object['number'],
                             'form_url' => mk_url(['mod' => $this->name], 'query'),
                             'catalog_id' => $object['catalog_id'],
-                            'location_id' => $object['location_id'],
+                            'location_id' => $object['location_id'] ? $object['location_id'] : "",
                             'object_id' => $object_id,
                             'object_name' => stripslashes($object['name']),
                             'object_description' => stripslashes($object['description']),
@@ -124,8 +124,9 @@ class Mod_object extends Module {
 
         switch($args['method']) {
         case 'object_add':
+            $location_id = $args['location_id'] ? $args['location_id'] : 0;
             $object_id = object_add($args['catalog_id'],
-                                    $args['location_id'],
+                                    $location_id,
                                     addslashes($args['object_name']),
                                     addslashes($args['object_description']),
                                     ($args['object_id'] ? 1 : $args['objects_number']),
@@ -133,7 +134,7 @@ class Mod_object extends Module {
 
             if ($object_id <= 0) {
                 message_box_err('Can`t add new object');
-                return mk_url(['mod' => 'location', 'id' => $args['location_id']]);
+                return mk_url(['mod' => 'location', 'id' => $location_id]);
             }
 
             if ($_FILES['photos']['name'][0]) {
@@ -160,9 +161,10 @@ class Mod_object extends Module {
             return mk_url(['mod' => $this->name, 'id' => $object_id]);
 
         case 'object_edit':
+            $location_id = $args['location_id'] ? $args['location_id'] : 0;
             $rc = object_edit($args['object_id'],
                               $args['catalog_id'],
-                              $args['location_id'],
+                              $location_id,
                               addslashes($args['object_name']),
                               addslashes($args['object_description']),
                               $args['objects_number'],
@@ -173,7 +175,7 @@ class Mod_object extends Module {
             if (isset($args['location_fullness']) && $args['location_fullness'] !== "") {
                 $obj = object_by_id($args['object_id']);
                 db()->query('update location set fullness=%d where id=%d',
-                            $args['location_fullness'], $obj['location_id']);
+                            $args['location_fullness'], $location_id);
             }
 
             if ($_FILES['photos']['name'][0]) {
@@ -197,6 +199,7 @@ class Mod_object extends Module {
 
         case 'remove_object':
             $obj_id = $args['id'];
+            $location_id = $args['location_id'] ? $args['location_id'] : 0;
             $photos = images_by_obj_id('objects', $obj_id);
             if ($photos)
                 foreach ($photos as $photo)
@@ -204,7 +207,7 @@ class Mod_object extends Module {
             $obj = object_by_id($obj_id);
             db()->query('delete from objects where id = %d', $obj_id);
             message_box_ok(sprintf('Object %d was removed', $obj_id));
-            return mk_url(['mod' => 'location', 'id' => $obj['location_id']]);
+            return mk_url(['mod' => 'location', 'id' => $location_id]);
 
         case 'remove_photo':
             $photo = image_by_hash($args['photo_hash']);
