@@ -14,7 +14,9 @@ class Mod_object extends Module {
             $tpl->assign(NULL, ['number' => 1,
                                 'form_url' => mk_url(['mod' => $this->name], 'query'),
                                 'catalog_id' => $args['catalog_id'] ? $args['catalog_id'] : 0,
-                                'location_id' => $args['location_id'] ? $args['location_id'] : ""]);
+                                'location_id' => $args['location_id'] ? $args['location_id'] : "",
+                                'free_boxes_link' => mk_url(['mod' => 'boxes',
+                                                             'location_id' => 0])]);
             $tpl->assign('object_add');
 
             $existed_attrs = get_existed_attrs();
@@ -35,7 +37,9 @@ class Mod_object extends Module {
                             'object_name' => $name,
                             'object_name_quoted' => str_replace('"', '&quot;', $name),
                             'object_description' => stripslashes($object['description']),
-                            'object_attrs' => $object['attrs']]);
+                            'object_attrs' => $object['attrs'],
+                            'free_boxes_link' => mk_url(['mod' => 'boxes',
+                                                         'location_id' => 0])]);
 
         $existed_attrs = get_existed_attrs();
         if (count($existed_attrs))
