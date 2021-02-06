@@ -48,18 +48,8 @@ function location_chain_by_id($location_id)
     return array_reverse($list);
 }
 
-function print_absent_locations($tpl)
+function location_absent_cnt()
 {
-    $locations = db()->query_list('select * from location where is_absent=1');
-    if (!count($locations))
-        return;
-    $tpl->assign('absent_locations');
-    foreach ($locations as $row) {
-        $location = location_by_id($row['id']);
-        $tpl->assign('absent_location_row',
-                     ['link_to_location' => mk_url(['mod' => 'location',
-                                                    'id' => $location['id']])]);
-        foreach ($location['path'] as $node)
-            $tpl->assign('absent_location_path', ['name' => $node['name']]);
-    }
+    $locations = db()->query_list('select id from location where is_absent=1');
+    return count($locations);
 }

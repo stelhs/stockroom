@@ -12,9 +12,6 @@ class Mod_catalog extends Module {
 
         $tpl = new strontium_tpl("private/tpl/mod_catalog.html", conf()['global_marks'], false);
 
-        print_absent_objects($tpl);
-        print_absent_locations($tpl);
-
         if (!$catalog) {
             $tpl->assign('no_catalog', ['catalog_id' => $catalog_id]);
             return $tpl->result();

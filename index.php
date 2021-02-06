@@ -17,11 +17,19 @@ function main($tpl)
     $tpl->assign(NULL, ['link_location' => mk_url(['mod' => 'location']),
                         'link_catalog' => mk_url(['mod' => 'catalog']),
                         'link_search' => mk_url(['mod' => 'search']),
-                        'link_boxes' => mk_url(['mod' => 'boxes'])]);
+                        'link_boxes' => mk_url(['mod' => 'boxes']),
+                        'link_absent' => mk_url(['mod' => 'absent']),
+                        'link_photos' => mk_url(['mod' => 'photos']),
+                        ]);
 
     $mbx = message_box_get();
     if($mbx)
         $tpl->assign($mbx['block'], $mbx['data']);
+
+    $absent_cnt = object_absent_cnt() + location_absent_cnt();
+    if ($absent_cnt) {
+        $tpl->assign('absent_cnt', ['cnt' => $absent_cnt]);
+    }
 
     $user = user_by_cookie();
     if (!$user) {
@@ -37,6 +45,7 @@ function main($tpl)
 
     $content = modules()->mod_content($mod_name, $_GET);
     $tpl->assign('module', ['content' => $content]);
+
 }
 
 $tpl = new strontium_tpl("private/tpl/skeleton.html", conf()['global_marks'], false);

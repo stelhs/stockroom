@@ -13,9 +13,6 @@ class Mod_location extends Module {
 
         $tpl = new strontium_tpl("private/tpl/mod_location.html", conf()['global_marks'], false);
 
-        print_absent_objects($tpl);
-        print_absent_locations($tpl);
-
         if (!$location) {
             $tpl->assign('no_location', ['location_id' => $location_id]);
             return $tpl->result();

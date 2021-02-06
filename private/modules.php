@@ -5,6 +5,8 @@ require_once "private/mod_catalog.php";
 require_once "private/mod_objects.php";
 require_once "private/mod_search.php";
 require_once "private/mod_boxes.php";
+require_once "private/mod_absent.php";
+require_once "private/mod_photos.php";
 
 class Module {
     public $name = "undefined";
