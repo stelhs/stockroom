@@ -68,10 +68,13 @@ function inc_input(id, step, max)
 function switch_view(div_id)
 {
     var div = $$(div_id);
-    if (div.style.display != 'none')
+    if (div.style.display != 'none') {
         div.style.display = 'none';
-    else
-        div.style.display = 'inline-block';
+        return false;
+    }
+
+    div.style.display = 'inline-block';
+    return true;
 }
 
 function hide_view(div_id)

@@ -23,6 +23,15 @@ class Mod_object extends Module {
             if (count($existed_attrs))
                 foreach ($existed_attrs as $attr)
                     $tpl->assign('existed_attr', ['attr' => $attr]);
+
+            $photos = images_by_obj_type('not_assigned');
+            foreach ($photos as $photo) {
+                $tpl->assign('not_assigned_photo',
+                             ['img' => $photo->url('mini'),
+                              'photo_hash' => $photo->hash(),
+                              'img_orig' => $photo->url()]);
+            }
+
             return $tpl->result();
         }
 
@@ -73,6 +82,18 @@ class Mod_object extends Module {
                                    'img_orig' => $photo->url(),
                                    'link_remove' => $link_remove]);
         }
+
+        $photos = images_by_obj_type('not_assigned');
+        if (count($photos)) {
+            $tpl->assign('not_assigned_photo_expand');
+            foreach ($photos as $photo) {
+                $tpl->assign('not_assigned_photo',
+                             ['img' => $photo->url('mini'),
+                              'photo_hash' => $photo->hash(),
+                              'img_orig' => $photo->url()]);
+            }
+        }
+
 
         $location = location_by_id($object['location_id']);
         foreach ($location['path'] as $item)
@@ -133,6 +154,8 @@ class Mod_object extends Module {
         switch($args['method']) {
         case 'object_add':
             $location_id = $args['location_id'] ? $args['location_id'] : 0;
+            $photos_for_attach = isset($args['attach_not_assigned_photos']) ? $args['attach_not_assigned_photos'] : [];
+
             $object_id = object_add($args['catalog_id'],
                                     $location_id,
                                     addslashes($args['object_name']),
@@ -156,6 +179,16 @@ class Mod_object extends Module {
                 }
             }
 
+            if (count($photos_for_attach)) {
+                foreach ($photos_for_attach as $photo_hash => $checked) {
+                    if ($checked == "false")
+                        continue;
+                    $img = new Image($photo_hash);
+                    $img->set_object_type('objects');
+                    $img->set_object_id($object_id);
+                }
+            }
+
             /* If duplicate */
             if ($args['object_id']) {
              /*   $photos = images_by_obj_id('objects', $args['object_id']);
@@ -170,6 +203,8 @@ class Mod_object extends Module {
 
         case 'object_edit':
             $location_id = $args['location_id'] ? $args['location_id'] : 0;
+            $photos_for_attach = isset($args['attach_not_assigned_photos']) ? $args['attach_not_assigned_photos'] : [];
+
             $rc = object_edit($args['object_id'],
                               $args['catalog_id'],
                               $location_id,
@@ -198,6 +233,16 @@ class Mod_object extends Module {
                     }
                     $photo->resize('mini', ['w' => 1000]);
                     $photo->resize('list', ['w' => 300]);
+                }
+            }
+
+            if (count($photos_for_attach)) {
+                foreach ($photos_for_attach as $photo_hash => $checked) {
+                    if ($checked == "false")
+                        continue;
+                    $img = new Image($photo_hash);
+                    $img->set_object_type('objects');
+                    $img->set_object_id($args['object_id']);
                 }
             }
 
@@ -239,6 +284,61 @@ class Mod_object extends Module {
                 $absent = 0;
             db()->update('objects', $args['object_id'], ['absent' => $absent]);
             return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
+
+        /* AJAX requests */
+        case 'find_catalogs_by_string':
+            $text = $args['text'];
+            $cat_result = catalog_list_by_text($text);
+
+            if (!$cat_result)
+                return;
+
+            $tpl = new strontium_tpl("private/tpl/catalog_search_list.html", conf()['global_marks'], false);
+            $tpl->assign();
+
+            foreach ($cat_result as $category) {
+                $tpl->assign('row_cat',
+                             ['id' => $category['id']]);
+
+                foreach ($category['path'] as $node)
+                    $tpl->assign('row_cat_path', ['name' => $node['name']]);
+            }
+            $content = $tpl->result();
+
+            $cat_id = NULL;
+            if (count($cat_result) == 1)
+                $cat_id = $cat_result[0]['id'];
+
+            echo json_encode(['content' => $content,
+                              'cat_id' => $cat_id]);
+            return 0;
+
+        case 'find_locations_by_string':
+            $text = $args['text'];
+            $loc_result = location_list_by_text($text);
+            if (!$loc_result)
+                return;
+
+            $tpl = new strontium_tpl("private/tpl/location_search_list.html", conf()['global_marks'], false);
+            $tpl->assign();
+
+            foreach ($loc_result as $location) {
+                $tpl->assign('row_loc',
+                             ['id' => $location['id']]);
+
+                foreach ($location['path'] as $node)
+                    $tpl->assign('row_loc_path', ['name' => $node['name']]);
+            }
+            $content = $tpl->result();
+
+
+            $loc_id = NULL;
+            if (count($loc_result) == 1)
+                $loc_id = $loc_result[0]['id'];
+
+            echo json_encode(['content' => $content,
+                              'loc_id' => $loc_id]);
+            return 0;
 
         }
         return mk_url(['mod' => $this->name]);

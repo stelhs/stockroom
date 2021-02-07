@@ -53,3 +53,22 @@ function location_absent_cnt()
     $locations = db()->query_list('select id from location where is_absent=1');
     return count($locations);
 }
+
+
+function location_list_by_text($text)
+{
+    if (!$text)
+        return NULL;
+
+    $rows = db()->query_list('select id from location where '.
+                             'name LIKE "%%%s%%" or '.
+                             'description LIKE "%%%s%%" ',
+                             $text, $text);
+    if (!is_array($rows) || !count($rows))
+        return NULL;
+
+    $list = [];
+    foreach ($rows as $row)
+        $list[] = location_by_id($row['id']);
+    return count($list) ? $list : NULL;
+}

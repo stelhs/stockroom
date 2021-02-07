@@ -59,8 +59,8 @@ class Mod_search extends Module {
             return $tpl->result();
 
         if (!$obj_attrs) {
-            $cat_result = $this->find_by_catalog($text, $catalog_id);
-            $loc_result = $this->find_by_location($text);
+            $cat_result = catalog_list_by_text($text, $catalog_id);
+            $loc_result = location_list_by_text($text);
         }
 
         $obj_result = $this->find_by_object($text, $catalog_id, $obj_attrs);
@@ -143,44 +143,6 @@ class Mod_search extends Module {
         return $tpl->result();
     }
 
-    function find_by_catalog($text, $cat_id)
-    {
-        if (!$text)
-            return NULL;
-
-        $rows = db()->query_list('select id from catalog where '.
-                                 'name LIKE "%%%s%%" or '.
-                                 'description LIKE "%%%s%%" ',
-                                 $text, $text);
-
-        if (!is_array($rows) || !count($rows))
-            return NULL;
-
-        $list = [];
-        foreach ($rows as $row) {
-            if (catalog_is_child($row['id'], $cat_id))
-                $list[] = catalog_by_id($row['id']);
-        }
-        return count($list) ? $list : NULL;
-    }
-
-    function find_by_location($text)
-    {
-        if (!$text)
-            return NULL;
-
-        $rows = db()->query_list('select id from location where '.
-                                 'name LIKE "%%%s%%" or '.
-                                 'description LIKE "%%%s%%" ',
-                                 $text, $text);
-        if (!is_array($rows) || !count($rows))
-            return NULL;
-
-        $list = [];
-        foreach ($rows as $row)
-            $list[] = location_by_id($row['id']);
-        return count($list) ? $list : NULL;
-    }
 
     function find_by_object($text, $cat_id, $search_attrs)
     {

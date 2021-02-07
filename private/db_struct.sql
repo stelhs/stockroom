@@ -42,7 +42,7 @@ DROP TABLE IF EXISTS `images`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `images` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `obj_type` enum('objects','locations') NOT NULL,
+  `obj_type` enum('objects','locations','not_assigned') NOT NULL,
   `obj_id` int(11) NOT NULL,
   `name` varchar(50) DEFAULT NULL,
   `size_name` varchar(32) NOT NULL,

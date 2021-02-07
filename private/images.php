@@ -324,7 +324,35 @@ class Image {
 
         return $list;
     }
+
+    function set_object_id($obj_id)
+    {
+        db()->update('images', $this->id, ['obj_id' => $obj_id]);
+        $this->obj_id = $obj_id;
+    }
+
+    function set_object_type($obj_type)
+    {
+        db()->update('images', $this->id, ['obj_type' => $obj_type]);
+        $this->obj_type = $obj_type;
+    }
 }
+
+function images_by_obj_type($obj_type)
+{
+    $rows = db()->query_list('select hash from images ' .
+                             'where obj_type = "%s" and size_name ="original"',
+                             $obj_type);
+
+    if (!is_array($rows))
+        return [];
+    $images = [];
+    foreach ($rows as $row) {
+        $images[] = new Image($row['hash']);
+    }
+    return $images;
+}
+
 
 function images_by_obj_id($obj_type, $obj_id)
 {

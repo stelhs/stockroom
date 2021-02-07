@@ -66,3 +66,24 @@ function catalog_is_child($cat_id, $parent_cat_id)
     return false;
 }
 
+function catalog_list_by_text($text, $cat_id = NULL)
+{
+    if (!$text)
+        return NULL;
+
+    $rows = db()->query_list('select id from catalog where '.
+                             'name LIKE "%%%s%%" or '.
+                             'description LIKE "%%%s%%" ',
+                             $text, $text);
+
+    if (!is_array($rows) || !count($rows))
+        return NULL;
+
+    $list = [];
+    foreach ($rows as $row) {
+        if (!$cat_id || catalog_is_child($row['id'], $cat_id))
+            $list[] = catalog_by_id($row['id']);
+    }
+    return count($list) ? $list : NULL;
+}
+

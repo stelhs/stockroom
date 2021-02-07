@@ -77,18 +77,52 @@
             </tr>
             <tr>
                 <td>Фотографии:</td>
-                <td><input type="file" name="photos[]" accept="image/*" multiple></td>
-            </tr>
-            <tr>
-                <td>Каталог:</td>
-                <td><div id="catalog_path"></div></td>
+                <td>
+                    <input type="file" name="photos[]" accept="image/*" multiple>
+                    <!-- START BLOCK : not_assigned_photo_expand -->
+                        <br><br>
+                        <img src="{http_img}plus.png" onclick="switch_view('list_not_assigned_photos')">
+                        <br><br>
+                        <div id="list_not_assigned_photos" style="display: none">
+                            <!-- START BLOCK : not_assigned_photo -->
+                                <div class="obj_photo">
+                                    <img class="obj_select_img" src="{http_img}img_selected.png" id="img_selected_{photo_hash}" style="display: none">
+                                    <img src="{img}" onclick="on_click_not_assigned_photo('{photo_hash}')">
+                                    <input type="hidden" name="attach_not_assigned_photos[{photo_hash}]" value="false" id="input_selected_{photo_hash}">
+                                </div>
+                            <!-- END BLOCK : not_assigned_photo -->
+                        </div>
+                        <br>
+                    <!-- END BLOCK : not_assigned_photo_expand -->
+                </td>
             </tr>
             <tr>
                 <td>
-                    Расположение:<br>
+                    Каталог:
+                    <img src="{http_img}plus.png" onclick="switch_view('catalog_search'); $$('input_catalog_search').focus()">
+                </td>
+                <td>
+                    <div id="catalog_search" style="display: none">
+                        <input type="text" onchange="display_catalogs_by_search(this.value); this.value=''" id="input_catalog_search"><br>
+                        <div id="search_catalog_result">
+                        </div>
+                    </div>
+                    <div id="catalog_path"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Расположение:
+                    <img src="{http_img}plus.png" onclick="switch_view('location_search'); $$('input_location_search').focus()">
+                    <br>
                     ##<input type="text" size="3" id="location_input" value="{location_id}" onchange="draw_location_path('location_path', this.value, true); light_input(this)">
                 </td>
                 <td>
+                    <div id="location_search" style="display: none">
+                        <input type="text" onchange="display_locations_by_search(this.value); this.value=''" id="input_location_search"><br>
+                        <div id="search_location_result">
+                        </div>
+                    </div>
                     <div id="location_path"></div>
                 </td>
             </tr>

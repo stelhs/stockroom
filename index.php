@@ -31,6 +31,12 @@ function main($tpl)
         $tpl->assign('absent_cnt', ['cnt' => $absent_cnt]);
     }
 
+    $photos = images_by_obj_type('not_assigned');
+    $photos_cnt = count($photos);
+    if ($photos_cnt) {
+        $tpl->assign('photos_cnt', ['cnt' => $photos_cnt]);
+    }
+
     $user = user_by_cookie();
     if (!$user) {
         $tpl->assign('user_auth');

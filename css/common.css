@@ -162,6 +162,12 @@ img {
     top: 27px;
 }
 
+.obj_select_img {
+    position: absolute;
+    left: 900px;
+    top: 27px;
+}
+
 .img_button {
     padding: 20px;
 }

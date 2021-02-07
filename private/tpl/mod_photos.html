@@ -1,10 +1,20 @@
 <div align="center">
 
     <form name="form" method="POST" action="{form_url}" id="object_form" enctype='multipart/form-data'>
+        <input type="hidden" name="method" value="add_photo">
         <input type="file" name="photos[]" accept="image/*" multiple>
         <input type="submit" value="Загрузить">
     </form>
 
-
+    <!-- START BLOCK : photo -->
+        <div class="obj_photo">
+            <a href="{link_remove}" onclick="return window.confirm('Удалить фотографию?')">
+                <img class="obj_remove_img" src="{http_img}delete.png">
+            </a>
+            <a href="{img_orig}">
+                <img src="{img}">
+            </a>
+        </div>
+    <!-- END BLOCK : photo -->
 
 </div>
