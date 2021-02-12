@@ -111,7 +111,24 @@
                     </tr>
                     <tr>
                         <td>Фото узла:</td>
-                        <td><input type="file" name="photos[]" accept="image/*" multiple></td>
+                        <td>
+                            <input type="file" name="photos[]" accept="image/*" multiple>
+                            <!-- START BLOCK : not_assigned_photo_expand -->
+                                <br><br>
+                                <img src="{http_img}plus.png" onclick="switch_view('list_not_assigned_photos')">
+                                <br><br>
+                                <div id="list_not_assigned_photos" style="display: none">
+                                    <!-- START BLOCK : not_assigned_photo -->
+                                        <div class="obj_photo">
+                                            <img class="obj_select_img" src="{http_img}img_selected.png" id="img_selected_{photo_hash}" style="display: none">
+                                            <img src="{img}" onclick="on_click_not_assigned_photo('{photo_hash}')">
+                                            <input type="hidden" name="attach_not_assigned_photos[{photo_hash}]" value="false" id="input_selected_{photo_hash}">
+                                        </div>
+                                    <!-- END BLOCK : not_assigned_photo -->
+                                </div>
+                                <br>
+                            <!-- END BLOCK : not_assigned_photo_expand -->
+                        </td>
                     </tr>
                 </table>
                 <div style="text-align: left">

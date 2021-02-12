@@ -48,6 +48,17 @@ class Mod_location extends Module {
                                   'free_boxes_link' => mk_url(['mod' => 'boxes',
                                                                'location_id' => $location_id])]);
 
+        $photos = images_by_obj_type('not_assigned');
+        if (count($photos)) {
+            $tpl->assign('not_assigned_photo_expand');
+            foreach ($photos as $photo) {
+                $tpl->assign('not_assigned_photo',
+                             ['img' => $photo->url('mini'),
+                              'photo_hash' => $photo->hash(),
+                              'img_orig' => $photo->url()]);
+            }
+        }
+
         if ($location['is_absent']) {
             $tpl->assign('return_back');
         } else
@@ -177,6 +188,7 @@ class Mod_location extends Module {
             $volume = ($size1 / 100 * $size2 / 100 * $size3 / 100);
             $fullness = 0;
             $free_volume = $volume * (100 - $fullness) / 100;
+            $photos_for_attach = isset($args['attach_not_assigned_photos']) ? $args['attach_not_assigned_photos'] : [];
 
             $new_location_id = db()->insert('location',
                                             ['parent_id' => $parent_id,
@@ -206,6 +218,16 @@ class Mod_location extends Module {
                 }
             }
 
+            if (count($photos_for_attach)) {
+                foreach ($photos_for_attach as $photo_hash => $checked) {
+                    if ($checked == "false")
+                        continue;
+                    $img = new Image($photo_hash);
+                    $img->set_object_type('locations');
+                    $img->set_object_id($new_location_id);
+                }
+            }
+
             return mk_url(['mod' => $this->name, 'id' => $new_location_id]);
 
         case 'edit_location':
@@ -215,6 +237,7 @@ class Mod_location extends Module {
             $volume = ($size1 / 100 * $size2 / 100 * $size3 / 100);
             $fullness = (int)$args['location_fullness'];
             $free_volume = $volume * (100 - $fullness) / 100;
+            $photos_for_attach = isset($args['attach_not_assigned_photos']) ? $args['attach_not_assigned_photos'] : [];
 
             db()->update('location',
                          $args['location_id'],
@@ -237,6 +260,16 @@ class Mod_location extends Module {
                 foreach ($photos as $photo) {
                     $photo->resize('mini', ['w' => 1000]);
                     $photo->resize('list', ['w' => 300]);
+                }
+            }
+
+            if (count($photos_for_attach)) {
+                foreach ($photos_for_attach as $photo_hash => $checked) {
+                    if ($checked == "false")
+                        continue;
+                    $img = new Image($photo_hash);
+                    $img->set_object_type('locations');
+                    $img->set_object_id($args['location_id']);
                 }
             }
 

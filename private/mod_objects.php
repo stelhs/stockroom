@@ -25,11 +25,14 @@ class Mod_object extends Module {
                     $tpl->assign('existed_attr', ['attr' => $attr]);
 
             $photos = images_by_obj_type('not_assigned');
-            foreach ($photos as $photo) {
-                $tpl->assign('not_assigned_photo',
-                             ['img' => $photo->url('mini'),
-                              'photo_hash' => $photo->hash(),
-                              'img_orig' => $photo->url()]);
+            if (count($photos)) {
+                $tpl->assign('not_assigned_photo_expand');
+                foreach ($photos as $photo) {
+                    $tpl->assign('not_assigned_photo',
+                                 ['img' => $photo->url('mini'),
+                                  'photo_hash' => $photo->hash(),
+                                  'img_orig' => $photo->url()]);
+                }
             }
 
             return $tpl->result();

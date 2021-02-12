@@ -225,3 +225,11 @@ function light_input(input)
 {
     input.style.border = "1px solid yellow";
 }
+
+
+function on_click_not_assigned_photo(photo_id)
+{
+    visible = switch_view("img_selected_" + photo_id);
+    input = $$('input_selected_' + photo_id);
+    input.value = visible;
+}

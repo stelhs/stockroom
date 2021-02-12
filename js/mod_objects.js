@@ -33,13 +33,6 @@ function on_draw_catalog_path(cat_id)
     $$("object_form").catalog_id.value = cat_id;
 }
 
-function on_click_not_assigned_photo(photo_id)
-{
-    visible = switch_view("img_selected_" + photo_id);
-    input = $$('input_selected_' + photo_id);
-    input.value = visible;
-}
-
 function display_catalogs_by_search(text)
 {
     function result(data) {
