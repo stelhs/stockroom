@@ -155,6 +155,7 @@ class Mod_object extends Module {
             return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
 
         switch($args['method']) {
+        case 'object_add_with_img':
         case 'object_add':
             $location_id = $args['location_id'] ? $args['location_id'] : 0;
             $photos_for_attach = isset($args['attach_not_assigned_photos']) ? $args['attach_not_assigned_photos'] : [];
@@ -194,9 +195,11 @@ class Mod_object extends Module {
 
             /* If duplicate */
             if ($args['object_id']) {
-             /*   $photos = images_by_obj_id('objects', $args['object_id']);
-                foreach ($photos as $photo)
-                    $photo->duplicate('objects', $object_id);*/
+                if ($args['method'] == 'object_add_with_img') {
+                    $photos = images_by_obj_id('objects', $args['object_id']);
+                    foreach ($photos as $photo)
+                        $photo->duplicate('objects', $object_id);
+                }
                 $_SESSION['duplicated'] = 1;
             }
 
