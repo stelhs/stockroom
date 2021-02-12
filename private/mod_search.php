@@ -148,7 +148,7 @@ class Mod_search extends Module {
     {
         $rows = db()->query_list('select id, catalog_id from objects where '.
                                  'name LIKE "%%%s%%" or '.
-                                 'description LIKE "%%%s%%" ',
+                                 'description LIKE "%%%s%%" ORDER BY name ASC',
                                  $text, $text);
         if (!is_array($rows) || !count($rows))
             return NULL;
