@@ -19,8 +19,8 @@
         <!-- END BLOCK : user_logout -->
         <a href="{link_catalog}" style="color: orange"> Каталог </a> |
         <a href="{link_location}" style="color: green"> Локация </a> |
-        <a href="{link_search}"> Поиск </a> |
         <a href="{link_boxes}"> Место </a> |
+        <a href="{link_new}"> Новый </a>
         <hr>
 
         <a href="{link_absent}">
@@ -30,7 +30,17 @@
         <a href="{link_photos}">
             Фото
             <!-- START BLOCK : photos_cnt --><span style="color: yellow">(+{cnt})</span><!-- END BLOCK : photos_cnt -->
-        </a>
+        </a> |
+        <div style="display: inline-block">
+            <form name="search_form" method="GET" action="{search_url}" id="search_form">
+                <input type="text" name="text" size="12" value="{text}" id="search_text" autofocus>
+                <input type="hidden" name="mod" value="search">
+
+                <a href="javascript:;" onclick="search_form.submit();">
+                    <img src="{http_img}search_mini.png" style="vertical-align: middle">
+                </a>
+            </form>
+        </div>
         <hr>
 
 

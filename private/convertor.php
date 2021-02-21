@@ -76,56 +76,38 @@ function convert_base()
 }
 
 
-function convert_metal_base()
-{
-    $c = file_get_contents("source.txt");
-    $rows = split_string_by_separators($c, "\n");
-    $list = [];
-    foreach ($rows as $row) {
-        $row = trim($row);
-        if (!$row)
-            continue;
-
-//        preg_match('/([\w\s]+)\s([\d\w\.]+)\s+длина\s+(\d+)/ui', $row, $mathed);
-//        preg_match('/([\w\s]+)\s([\d\w\.]+)x(\d+)/ui', $row, $mathed);
-        preg_match('/([\w\s]+)\s([\d\w\.]+)\s+(\d+)/ui', $row, $mathed);
-        $list[trim($mathed[1])][$mathed[2]][] = $mathed[3];
-    }
-    dump($list);
-    return;
-    foreach ($list as $cat_name => $sub_list) {
-        $cat_id = db()->insert('catalog', ['name' => $cat_name,
-                                           'parent_id' => 101,
-                                           'user_id' => 1]);
-        if ($cat_id < 1) {
-            printf("catalog create fail\n");
-            return;
-        }
-        foreach ($sub_list as $size_name => $lengths_list) {
-            $sub_cat_id = db()->insert('catalog', ['name' => $size_name,
-                                                   'parent_id' => $cat_id,
-                                                   'user_id' => 1]);
-            if ($sub_cat_id < 1) {
-                printf("sub catalog create fail\n");
-                return;
-            }
-
-            foreach ($lengths_list as $length) {
-                db()->insert('objects', ['name' => sprintf('%s %s - %s', $cat_name, $size_name, $length),
-                                         'catalog_id' => $sub_cat_id,
-                                         'location_id' => 117,
-                                         'user_id' => 1]);
-            }
-        }
-    }
-
-}
 
 function main()
 {
     set_time_limit(0);
 
-//    convert_metal_base();
+    $box_imgs = images_by_obj_id('locations', 203);
+
+    for($i = 0; $i < 15; $i++) {
+        $id = db()->insert('location', ['parent_id' => 278,
+                                        'name' => 'ячейка',
+                                        'description' => 'разное',
+                                        'size1' => '37',
+                                        'size2' => '120',
+                                        'size3' => '20',
+                                        'fullness' => 0,
+                                        'volume' => (37 * 120 * 20) / 1000,
+                                        'free_volume' => (37 * 120 * 20) / 1000,
+                                        'is_box' => 1,
+                                        'is_absent' => 0,
+                                        'user_id' => 1,
+                                       ]);
+
+        db()->update('location', $id, ['name' => sprintf("Ячейка %d", $id)]);
+        foreach ($box_imgs as $box_img)
+            $box_img->duplicate('locations', $id);
+/*
+        db()->update('location', $id, [
+                                        'size1' => '35',
+                                        'size2' => '120',
+                                        'size3' => '42',
+                                        ]);*/
+    }
 }
 
 

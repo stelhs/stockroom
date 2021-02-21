@@ -16,7 +16,7 @@ function main($tpl)
 
     $tpl->assign(NULL, ['link_location' => mk_url(['mod' => 'location']),
                         'link_catalog' => mk_url(['mod' => 'catalog']),
-                        'link_search' => mk_url(['mod' => 'search']),
+                        'link_new' => mk_url(['mod' => 'object']),
                         'link_boxes' => mk_url(['mod' => 'boxes']),
                         'link_absent' => mk_url(['mod' => 'absent']),
                         'link_photos' => mk_url(['mod' => 'photos']),
