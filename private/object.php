@@ -145,7 +145,7 @@ function match_range($i, $query)
         return ($i >= $m[1] && $i <= $m[2]);
 
     preg_match('/^\d*(?:\.\d+)?/i', $query, $m);
-    if (!$m)
+    if (count($m) <= 1)
         return strstr($i, $query) != NULL;
 
     return $i == $m[0];

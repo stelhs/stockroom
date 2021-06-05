@@ -26,8 +26,8 @@ class Mod_photos extends Module {
     function query($args)
     {
         $user = user_by_cookie();
-        if ($user['role'] != 'admin')
-            return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
+//        if ($user['role'] != 'admin')
+  //          return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
 
 
         switch($args['method']) {
