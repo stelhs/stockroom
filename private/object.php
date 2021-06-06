@@ -111,6 +111,9 @@ function objects_by_catalog($cat_id)
 
 function object_attrs_match($object_attrs, $search_attrs)
 {
+    if (!count($search_attrs))
+        return true;
+
     foreach ($search_attrs as $attr) {
         $key = $attr[0];
         $val = $attr[1];
@@ -118,16 +121,12 @@ function object_attrs_match($object_attrs, $search_attrs)
         foreach ($object_attrs as $o_attr) {
             if ($o_attr[0] == $key) {
                 $o_val = $o_attr[1];
-                break;
+                if (match_range($o_val, $val))
+                    return true;
             }
         }
-        if ($o_val === NULL)
-            return false;
-
-        if (!match_range($o_val, $val))
-            return false;
     }
-    return true;
+    return false;
 }
 
 function match_range($i, $query)
