@@ -114,18 +114,43 @@ function object_attrs_match($object_attrs, $search_attrs)
     if (!count($search_attrs))
         return true;
 
+    $i = 0;
+    $matched = 0;
     foreach ($search_attrs as $attr) {
+        $i ++;
+        $match = false;
+
         $key = $attr[0];
         $val = $attr[1];
         $o_val = NULL;
+
+        // grouping attributes by arrtibute name
+        $group_obj_attrs = [];
         foreach ($object_attrs as $o_attr) {
-            if ($o_attr[0] == $key) {
-                $o_val = $o_attr[1];
-                if (match_range($o_val, $val))
-                    return true;
+            if (!isset($group_obj_attrs[$o_attr[0]]))
+                $group_obj_attrs[$o_attr[0]] = [];
+            $group_obj_attrs[$o_attr[0]][] = $o_attr[1];
+        }
+
+        foreach ($group_obj_attrs as $o_attr => $o_vals) {
+            if ($o_attr != $key)
+                continue;
+
+            foreach ($o_vals as $o_val) {
+                if (match_range($o_val, $val)) {
+                    $match = true;
+                    break;
+                }
             }
         }
+
+        if ($match)
+            $matched ++;
     }
+
+    if ($i == $matched)
+        return true;
+
     return false;
 }
 
