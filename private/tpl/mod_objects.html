@@ -137,7 +137,7 @@
                 </tr>
             <!-- END BLOCK : box_fullness_please_update -->
             <tr>
-                <td align="right" valign="top">Количество:</td>
+                <td align="right" valign="top">Доступное количество:</td>
                 <td>
                     <!-- START BLOCK : edit_quanity -->
                         <input type="text" name="objects_number" size="1" value="{number}" id="number" onchange="light_input(this)"> шт.
@@ -150,7 +150,7 @@
                     <!-- END BLOCK : edit_quanity -->
                     <!-- START BLOCK : show_quanity -->
                         <span style="color: green">{number} шт.</span>
-                        <a href="javascript:;" onclick="quanityDialog.show('Увеличить на', 'inc_quanity', 0)">
+                        <a href="javascript:;" onclick="quanityDialog.show('Увеличить на', 'inc_quanity', 1, 0, null)">
                             <img style="margin-left: 50px" src="{http_img}plus_mini.png">
                         </a>
 
@@ -161,7 +161,23 @@
         </table>
         <div style="text-align: left">
             <!-- START BLOCK : object_is_absent -->
-                <h3><span style="color: red">ПРЕДМЕТ ОТСУТСТВУЕТ в количестве: {number} шт.</span></h3>
+                <span style="color: red">Отсутсвует в локации: {number} шт.</span>
+
+                <!-- START BLOCK : return_back -->
+                    <a href="javascript:;" onclick="if (window.confirm('Вернуть предмет ?')) submit_object('return_back')">
+                        <img style="vertical-align: middle" src="{http_img}return_back.png">
+                    </a>
+                <!-- END BLOCK : return_back -->
+                <!-- START BLOCK : return_back_many -->
+                    <a href="javascript:;" onclick="quanityDialog.show('Вернуть', 'return_back', 1, {max_number}, null)">
+                        <img style="vertical-align: middle" src="{http_img}return_back.png">
+                    </a>
+                <!-- END BLOCK : return_back_many -->
+
+                <a href="javascript:;" onclick="if (window.confirm('Удалить взятые ранее предметы ?')) submit_object('remove_absent')">
+                    <img style="vertical-align: middle; margin-left: 40px" src="{http_img}delete.png">
+                </a>
+                <br><br><br>
             <!-- END BLOCK : object_is_absent -->
 
             <!-- START BLOCK : edit_button -->
@@ -193,35 +209,23 @@
                 </a>
             <!-- END BLOCK : take_away -->
             <!-- START BLOCK : take_away_many -->
-                <a href="javascript:;" onclick="quanityDialog.show('Взять', 'take_away', {max_number})">
+                <a href="javascript:;" onclick="quanityDialog.show('Взять', 'take_away', 1, {max_number}, null)">
                     <img class="img_button" src="{http_img}take_away.png">
                 </a>
             <!-- END BLOCK : take_away_many -->
 
-            <!-- START BLOCK : return_back -->
-                <a href="javascript:;" onclick="if (window.confirm('Вернуть предмет ?')) submit_object('return_back')">
-                    <img class="img_button" src="{http_img}return_back.png">
-                </a>
-            <!-- END BLOCK : return_back -->
-            <!-- START BLOCK : return_back_many -->
-                <a href="javascript:;" onclick="quanityDialog.show('Вернуть', 'return_back', {max_number})">
-                    <img class="img_button" src="{http_img}return_back.png">
-                </a>
-            <!-- END BLOCK : return_back_many -->
             <a href="{free_boxes_link}" target="_blank">
                 <img class="img_button" src="{http_img}free_boxes.png">
             </a>
 
             <!-- START BLOCK : remove_button -->
-                <a href="{link}" onclick="return window.confirm('Удалить предмет \'{object_name_quoted}\' ?')">
+                <a href="javascript:;" onclick="quanityDialog.show('Уменьшить на', 'dec_quanity',
+                                                                   1, {max_number},
+                                                                   'Удалить предмет \'{object_name}\' ?',
+                                                                   function () {return check_for_remove({max_number})})">
                     <img class="img_button" src="{http_img}delete.png">
                 </a>
             <!-- END BLOCK : remove_button -->
-            <!-- START BLOCK : remove_button_many -->
-                <a href="javascript:;" onclick="quanityDialog.show('Уменьшить на', 'dec_quanity', {max_number})">
-                    <img class="img_button" src="{http_img}delete.png">
-                </a>
-            <!-- END BLOCK : remove_button_many -->
 
             // Quanity Dialog block
             <div style="display: none; border: solid 1px; width: max-content; padding: 20px" id="quanityDialogDiv">

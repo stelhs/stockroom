@@ -71,6 +71,16 @@ function object_add($catalog_id, $location_id, $name, $description = "", $number
                                     'user_id' => user_by_cookie()['id']]);
 }
 
+function object_remove($obj_id)
+{
+    $photos = images_by_obj_id('objects', $obj_id);
+    if ($photos)
+        foreach ($photos as $photo)
+            $photo->remove();
+    $obj = object_by_id($obj_id);
+    db()->query('delete from objects where id = %d', $obj_id);
+}
+
 function object_by_id($object_id)
 {
     return db()->query('select * from objects where id = %d', (int)$object_id);
@@ -87,8 +97,6 @@ function object_edit($obj_id, $catalog_id, $location_id, $name, $description = "
                     'attrs' => $attrs_text,
                     'catalog_id' => $catalog_id,
                     'location_id' => $location_id];
-    if ($absent !== "")
-        $update_data['absent'] = $absent;
 
     return db()->update('objects', $obj_id, $update_data);
 }

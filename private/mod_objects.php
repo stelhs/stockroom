@@ -53,7 +53,7 @@ class Mod_object extends Module {
                             'free_boxes_link' => mk_url(['mod' => 'boxes',
                                                          'location_id' => 0])]);
 
-        $tpl->assign('show_quanity', ['number' => $object['number']]);
+        $tpl->assign('show_quanity', ['number' => $object['number'] - $object['absent']]);
 
         $existed_attrs = get_existed_attrs();
         if (count($existed_attrs))
@@ -70,18 +70,9 @@ class Mod_object extends Module {
                                         'created' => $object['created']]);
         $tpl->assign('edit_button', ['object_name' => stripslashes($object['name'])]);
 
-        if ($object['number'] > 1) {
-            $tpl->assign('remove_button_many',
-                         ['max_number' => $object['number'] - 1]);
-        } else {
-            $tpl->assign('remove_button',
-                         ['link' => mk_url(['mod' => $this->name,
-                                            'method' => 'remove_object',
-                                            'id' => $object_id],
-                                           'query'),
-                          'object_name' => stripslashes($object['name'])]);
-        }
-
+        $tpl->assign('remove_button',
+                     ['object_name' => stripslashes($object['name']),
+                      'max_number' => $object['number']]);
 
         $photos = images_by_obj_id('objects', $object_id);
         foreach ($photos as $photo) {
@@ -264,18 +255,6 @@ class Mod_object extends Module {
             $_SESSION['updated'] = 1;
             return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
 
-        case 'remove_object':
-            $obj_id = $args['id'];
-            $location_id = $args['location_id'] ? $args['location_id'] : 0;
-            $photos = images_by_obj_id('objects', $obj_id);
-            if ($photos)
-                foreach ($photos as $photo)
-                    $photo->remove();
-            $obj = object_by_id($obj_id);
-            db()->query('delete from objects where id = %d', $obj_id);
-            message_box_ok(sprintf('Object %d was removed', $obj_id));
-            return mk_url(['mod' => 'location', 'id' => $location_id]);
-
         case 'remove_photo':
             $photo = image_by_hash($args['photo_hash']);
             $photo->remove();
@@ -300,13 +279,42 @@ class Mod_object extends Module {
             return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
 
         case 'dec_quanity':
-            $obj = db()->query('select * from objects where id=%d', $args['object_id']);
+            $obj_id = (int)$args['object_id'];
+            $obj = db()->query('select * from objects where id=%d', $obj_id);
             $quanity = isset($args['quanity']) ? (int)$args['quanity'] : 1;
             $left = $obj['number'] - $quanity;
-            if ($left < 1)
-                $left = 1;
-            db()->update('objects', $args['object_id'], ['number' => $left]);
+            if ($left < 1) {
+                object_remove($obj_id);
+                message_box_ok(sprintf('Object "%s" was removed', $obj['name']));
+                return mk_url(['mod' => 'catalog', 'id' => $obj['catalog_id']]);
+            }
+
+            $fields = ['number' => $left];
+            if ($left < $obj['absent'])
+                $fields['absent'] = $left;
+
+            db()->update('objects', $args['object_id'], $fields);
             return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
+
+        case 'remove_absent':
+            $obj_id = (int)$args['object_id'];
+            $obj = db()->query('select * from objects where id=%d', $obj_id);
+            if ($obj['absent'] < 1) {
+                message_box_ok(sprintf('Object "%s" was not removed', $obj['name']));
+                return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
+            }
+
+            $left = $obj['number'] - $obj['absent'];
+            if ($left < 1) {
+                object_remove($obj_id);
+                message_box_ok(sprintf('Object "%s" was removed', $obj['name']));
+                return mk_url(['mod' => 'catalog', 'id' => $obj['catalog_id']]);
+            }
+
+            db()->update('objects', $args['object_id'],
+                         ['number' => $left, 'absent' => 0]);
+            return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
+
 
         case 'inc_quanity':
             $obj = db()->query('select * from objects where id=%d', $args['object_id']);

@@ -90,11 +90,14 @@ class QuanityDialog {
         this.inputName = 'inputQuanityDialog';
     }
 
-    show(name, method, max_number) {
+    show(name, method, number, max_number, confirm_text, confirm_condition) {
         this.div.style.display='block';
         this.method = method;
         this.max_number = max_number;
         this.name.innerHTML = name + " :";
+        $$(this.inputName).value = number;
+        this.confirm_text = confirm_text;
+        this.confirm_condition = confirm_condition;
     }
 
     hide() {
@@ -110,7 +113,22 @@ class QuanityDialog {
     }
 
     submit() {
-        submit_object(this.method);
+        var is_removed = true;
+        var is_confirmed = this.confirm_text ? true : false
+
+        if (this.confirm_condition)
+            is_confirmed = this.confirm_condition();
+
+        if (is_confirmed)
+            is_removed = window.confirm(this.confirm_text);
+        if (!is_removed)
+            return false;
+
+        return submit_object(this.method);
     }
 }
 
+function check_for_remove(number) {
+    var entered_num = $$('inputQuanityDialog').value;
+    return entered_num >= number;
+}
