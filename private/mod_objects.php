@@ -18,6 +18,7 @@ class Mod_object extends Module {
                                 'free_boxes_link' => mk_url(['mod' => 'boxes',
                                                              'location_id' => 0])]);
             $tpl->assign('object_add');
+            $tpl->assign('edit_quanity', ['number' => 1]);
 
             $existed_attrs = get_existed_attrs();
             if (count($existed_attrs))
@@ -41,8 +42,7 @@ class Mod_object extends Module {
         $object_id = $args['id'];
         $object = object_by_id($object_id);
         $name = stripslashes($object['name']);
-        $tpl->assign(NULL, ['number' => $object['number'],
-                            'form_url' => mk_url(['mod' => $this->name], 'query'),
+        $tpl->assign(NULL, ['form_url' => mk_url(['mod' => $this->name], 'query'),
                             'catalog_id' => $object['catalog_id'],
                             'location_id' => $object['location_id'] ? $object['location_id'] : "",
                             'object_id' => $object_id,
@@ -52,6 +52,8 @@ class Mod_object extends Module {
                             'object_attrs' => $object['attrs'],
                             'free_boxes_link' => mk_url(['mod' => 'boxes',
                                                          'location_id' => 0])]);
+
+        $tpl->assign('show_quanity', ['number' => $object['number']]);
 
         $existed_attrs = get_existed_attrs();
         if (count($existed_attrs))
@@ -67,12 +69,19 @@ class Mod_object extends Module {
                                         'name' => $object['name'],
                                         'created' => $object['created']]);
         $tpl->assign('edit_button', ['object_name' => stripslashes($object['name'])]);
-        $tpl->assign('remove_button',
-                     ['link' => mk_url(['mod' => $this->name,
-                                        'method' => 'remove_object',
-                                        'id' => $object_id],
-                                       'query'),
-                      'object_name' => stripslashes($object['name'])]);
+
+        if ($object['number'] > 1) {
+            $tpl->assign('remove_button_many',
+                         ['max_number' => $object['number'] - 1]);
+        } else {
+            $tpl->assign('remove_button',
+                         ['link' => mk_url(['mod' => $this->name,
+                                            'method' => 'remove_object',
+                                            'id' => $object_id],
+                                           'query'),
+                          'object_name' => stripslashes($object['name'])]);
+        }
+
 
         $photos = images_by_obj_id('objects', $object_id);
         foreach ($photos as $photo) {
@@ -216,7 +225,6 @@ class Mod_object extends Module {
                               $location_id,
                               addslashes($args['object_name']),
                               addslashes($args['object_description']),
-                              $args['objects_number'],
                               $args['object_attrs']);
             if ($rc)
                 message_box_err('Can`t edit object');
@@ -290,6 +298,23 @@ class Mod_object extends Module {
                 $absent = 0;
             db()->update('objects', $args['object_id'], ['absent' => $absent]);
             return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
+
+        case 'dec_quanity':
+            $obj = db()->query('select * from objects where id=%d', $args['object_id']);
+            $quanity = isset($args['quanity']) ? (int)$args['quanity'] : 1;
+            $left = $obj['number'] - $quanity;
+            if ($left < 1)
+                $left = 1;
+            db()->update('objects', $args['object_id'], ['number' => $left]);
+            return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
+
+        case 'inc_quanity':
+            $obj = db()->query('select * from objects where id=%d', $args['object_id']);
+            $quanity = isset($args['quanity']) ? (int)$args['quanity'] : 1;
+            $new_num = $obj['number'] + $quanity;
+            db()->update('objects', $args['object_id'], ['number' => $new_num]);
+            return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
+
 
         /* AJAX requests */
         case 'find_catalogs_by_string':

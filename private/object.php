@@ -76,12 +76,9 @@ function object_by_id($object_id)
     return db()->query('select * from objects where id = %d', (int)$object_id);
 }
 
-function object_edit($obj_id, $catalog_id, $location_id, $name, $description = "", $number = 1, $attrs_text = "")
+function object_edit($obj_id, $catalog_id, $location_id, $name, $description = "", $attrs_text = "")
 {
     $obj = object_by_id($obj_id);
-    $absent = "";
-    if ($number < $obj['absent'])
-        $absent = 0;
 
     $attrs = parse_attrs($attrs_text);
     $attrs_text = attrs_to_text($attrs);
@@ -89,8 +86,7 @@ function object_edit($obj_id, $catalog_id, $location_id, $name, $description = "
                     'description' => $description,
                     'attrs' => $attrs_text,
                     'catalog_id' => $catalog_id,
-                    'location_id' => $location_id,
-                    'number' => $number];
+                    'location_id' => $location_id];
     if ($absent !== "")
         $update_data['absent'] = $absent;
 

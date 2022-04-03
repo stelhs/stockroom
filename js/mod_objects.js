@@ -80,3 +80,37 @@ function on_select_searched_location(id)
     $$('search_location_result').innerHTML="";
     hide_view('location_search');
 }
+
+class QuanityDialog {
+    constructor() {
+        this.method = "";
+        this.max_number = 0;
+        this.div = $$('quanityDialogDiv');
+        this.name = $$('nameQuanityDialog');
+        this.inputName = 'inputQuanityDialog';
+    }
+
+    show(name, method, max_number) {
+        this.div.style.display='block';
+        this.method = method;
+        this.max_number = max_number;
+        this.name.innerHTML = name + " :";
+    }
+
+    hide() {
+        this.div.style.display='none';
+    }
+
+    inc() {
+        inc_input(this.inputName, 1, this.max_number)
+    }
+
+    dec() {
+        dec_input(this.inputName, 1, 1);
+    }
+
+    submit() {
+        submit_object(this.method);
+    }
+}
+

@@ -64,18 +64,6 @@
                 <td><textarea rows=3 cols=30 name="object_description" onchange="light_input(this)">{object_description}</textarea></td>
             </tr>
             <tr>
-                <td align="right" valign="top">Количество:</td>
-                <td>
-                    <input type="text" name="objects_number" size="1" value="{number}" id="number" onchange="light_input(this)"> шт.
-                    <a href="javascript:;" onclick="dec_input('number', 1, 1)">
-                        <img style="margin-left: 100px" src="{http_img}minus_mini.png">
-                    </a>
-                    <a href="javascript:;" onclick="inc_input('number', 1, 0)">
-                        <img style="margin-left: 50px" src="{http_img}plus_mini.png">
-                    </a>
-                </td>
-            </tr>
-            <tr>
                 <td>Фотографии:</td>
                 <td>
                     <input type="file" name="photos[]" accept="image/*" multiple>
@@ -148,6 +136,28 @@
                     </td>
                 </tr>
             <!-- END BLOCK : box_fullness_please_update -->
+            <tr>
+                <td align="right" valign="top">Количество:</td>
+                <td>
+                    <!-- START BLOCK : edit_quanity -->
+                        <input type="text" name="objects_number" size="1" value="{number}" id="number" onchange="light_input(this)"> шт.
+                        <a href="javascript:;" onclick="dec_input('number', 1, 1)">
+                            <img style="margin-left: 100px" src="{http_img}minus_mini.png">
+                        </a>
+                        <a href="javascript:;" onclick="inc_input('number', 1, 0)">
+                            <img style="margin-left: 50px" src="{http_img}plus_mini.png">
+                        </a>
+                    <!-- END BLOCK : edit_quanity -->
+                    <!-- START BLOCK : show_quanity -->
+                        <span style="color: green">{number} шт.</span>
+                        <a href="javascript:;" onclick="quanityDialog.show('Увеличить на', 'inc_quanity', 0)">
+                            <img style="margin-left: 50px" src="{http_img}plus_mini.png">
+                        </a>
+
+                    <!-- END BLOCK : show_quanity -->
+                </td>
+            </tr>
+
         </table>
         <div style="text-align: left">
             <!-- START BLOCK : object_is_absent -->
@@ -168,12 +178,6 @@
                 <img class="img_button" src="{http_img}add_object_with_img.png">
             </a>
 
-            <!-- START BLOCK : remove_button -->
-                <a href="{link}" onclick="return window.confirm('Удалить предмет \'{object_name_quoted}\' ?')">
-                    <img class="img_button" src="{http_img}delete.png">
-                </a>
-            <!-- END BLOCK : remove_button -->
-
             <!-- START BLOCK : past_location -->
                 <a href="javascript:;" onclick="if (window.confirm('Вставить узел \'{past_location_name}\' в узел \'{location_name}\' ?')) submit_location('past_location')">
                     <img class="img_button" src="{http_img}past.png">
@@ -189,22 +193,9 @@
                 </a>
             <!-- END BLOCK : take_away -->
             <!-- START BLOCK : take_away_many -->
-                <a href="javascript:;" onclick="$$('take_away_quanity_block').style.display='block'">
+                <a href="javascript:;" onclick="quanityDialog.show('Взять', 'take_away', {max_number})">
                     <img class="img_button" src="{http_img}take_away.png">
                 </a>
-                <div style="display: none" id="take_away_quanity_block">
-                    <span style="color: red">Указать количество :</span>
-                    <input type="text" name="quanity" size="1" value="1" id="take_away_quanity">
-                    <a href="javascript:;" onclick="submit_object('take_away')">
-                        <img src="{http_img}ok.png">
-                    </a>
-                    <a href="javascript:;" onclick="dec_input('take_away_quanity', 1, 1)">
-                        <img style="margin-left: 100px" src="{http_img}minus_mini.png">
-                    </a>
-                    <a href="javascript:;" onclick="inc_input('take_away_quanity', 1, {max_number})">
-                        <img style="margin-left: 50px" src="{http_img}plus_mini.png">
-                    </a>
-                </div>
             <!-- END BLOCK : take_away_many -->
 
             <!-- START BLOCK : return_back -->
@@ -213,26 +204,43 @@
                 </a>
             <!-- END BLOCK : return_back -->
             <!-- START BLOCK : return_back_many -->
-                <a href="javascript:;" onclick="$$('return_back_quanity_block').style.display='block'">
+                <a href="javascript:;" onclick="quanityDialog.show('Вернуть', 'return_back', {max_number})">
                     <img class="img_button" src="{http_img}return_back.png">
                 </a>
-                <div style="display: none" id="return_back_quanity_block">
-                    <span style="color: red">Указать количество :</span>
-                    <input type="text" name="quanity" size="1" value="1" id="return_back_quanity">
-                    <a href="javascript:;" onclick="submit_object('return_back')">
-                        <img src="{http_img}ok.png">
-                    </a>
-                    <a href="javascript:;" onclick="dec_input('return_back_quanity', 1, 1)">
-                        <img style="margin-left: 100px" src="{http_img}minus_mini.png">
-                    </a>
-                    <a href="javascript:;" onclick="inc_input('return_back_quanity', 1, {max_number})">
-                        <img style="margin-left: 50px" src="{http_img}plus_mini.png">
-                    </a>
-                </div>
             <!-- END BLOCK : return_back_many -->
             <a href="{free_boxes_link}" target="_blank">
                 <img class="img_button" src="{http_img}free_boxes.png">
             </a>
+
+            <!-- START BLOCK : remove_button -->
+                <a href="{link}" onclick="return window.confirm('Удалить предмет \'{object_name_quoted}\' ?')">
+                    <img class="img_button" src="{http_img}delete.png">
+                </a>
+            <!-- END BLOCK : remove_button -->
+            <!-- START BLOCK : remove_button_many -->
+                <a href="javascript:;" onclick="quanityDialog.show('Уменьшить на', 'dec_quanity', {max_number})">
+                    <img class="img_button" src="{http_img}delete.png">
+                </a>
+            <!-- END BLOCK : remove_button_many -->
+
+            // Quanity Dialog block
+            <div style="display: none; border: solid 1px; width: max-content; padding: 20px" id="quanityDialogDiv">
+                <span style="color: green" id="nameQuanityDialog"></span>
+                <input type="text" name="quanity" size="1" value="1" id="inputQuanityDialog">
+                <a href="javascript:;" onclick="quanityDialog.dec()">
+                    <img style="margin-left: 20px" src="{http_img}minus_mini.png">
+                </a>
+                <a href="javascript:;" onclick="quanityDialog.inc()">
+                    <img style="margin-left: 50px; margin-right: 50px" src="{http_img}plus_mini.png">
+                </a>
+                <a href="javascript:;" onclick="quanityDialog.submit()">
+                    <img style="margin-right: 50px" src="{http_img}ok.png">
+                </a>
+                <a href="javascript:;" onclick="quanityDialog.hide()">
+                    <img src="{http_img}delete.png">
+                </a>
+            </div>
+            <script>quanityDialog = new QuanityDialog();</script>
         </div>
 
     </form>
