@@ -30,8 +30,10 @@ function process_query($args)
     }
 
     $user = user_by_cookie();
-    if (!$user)
+    if (!$user) {
+        header('Location: ' . mk_url());
         return;
+    }
 
     switch ($args['method']) {
     case 'user_logout':

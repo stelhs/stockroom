@@ -81,11 +81,11 @@ function on_select_searched_location(id)
     hide_view('location_search');
 }
 
-class QuanityDialog {
+class QuantityDialog {
     constructor() {
         this.method = "";
         this.max_number = 0;
-        this.div = $$('quanityDialogDiv');
+        this.div = $$('quantityDialogDiv');
         this.name = $$('nameQuanityDialog');
         this.inputName = 'inputQuanityDialog';
     }

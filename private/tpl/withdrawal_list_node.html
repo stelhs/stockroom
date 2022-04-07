@@ -1,0 +1,76 @@
+
+
+<!-- START BLOCK : object -->
+    <form name="form" method="POST"
+          action="{form_url}" id="object_form_{object_id}"
+          enctype='multipart/form-data'
+          style="margin-left: 0px;
+                 margin-top: 0px">
+        <input type="hidden" name="method" value="">
+        <input type="hidden" name="object_id" value="{object_id}">
+        <input type="hidden" name="quantity" value="{quantity}">
+
+        <br>
+        <span style="color: {parent_color}">-></span>
+        <a name="{object_id}"></a>
+        <a href="{link}" target="_blank" style="color: blue">#{object_id}</a><br>
+        <table>
+            <tr>
+                <td></td>
+                <td style="width: 400px">
+                    {name}<br>
+                    <span style="color: red">{quantity} шт.</span><br>
+                    <!-- START BLOCK : take_away -->
+                        <a href="javascript:;" onclick="submit_object_form('take_away', {object_id})">
+                            <img class="img_button" src="{http_img}take_away.png" title="Взять предмет">
+                        </a>
+                    <!-- END BLOCK : take_away -->
+                    <a href="javascript:;" onclick="submit_object_form('remove', {object_id})">
+                        <img class="img_button" src="{http_img}delete.png" title="Убрать из списка">
+                    </a>
+                </td>
+                <td>
+                    <a href="{link}" target="_blank">
+                        <img style="border: solid 1px; width:400" src="{img}">
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <br>
+<!-- END BLOCK : object -->
+
+<!-- START BLOCK : node -->
+    <table>
+        <tr>
+            <td style="padding: 0px">
+                <!-- START BLOCK : arrow -->
+                    <span style="color: {parent_color}">-></span>
+                <!-- END BLOCK : arrow -->
+            </td>
+            <td style="padding-left: 0px; padding-bottom: 0px">
+                <!-- START BLOCK : location_img -->
+                    <a href="{link}" target="_blank">
+                        <img style="border: solid 3px {color}; width:400" src="{img}">
+                    </a>
+                <!-- END BLOCK : location_img -->
+            </td>
+            <td style="max-width: 500px">
+                <a href="{link}" target="_blank">
+                    <span style="color: {color}">{name}</span>
+                </a>
+            </td>
+        </tr>
+    </table>
+    <div style="border: solid 3px {color};
+                margin-left: 50px;
+                text-align: left;
+                border-top: hidden;
+                border-right: hidden;
+                width: max-content;">
+        {node_content}
+    </div>
+    <br>
+<!-- END BLOCK : node -->
+
+

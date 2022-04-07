@@ -18,7 +18,7 @@ class Mod_object extends Module {
                                 'free_boxes_link' => mk_url(['mod' => 'boxes',
                                                              'location_id' => 0])]);
             $tpl->assign('object_add');
-            $tpl->assign('edit_quanity', ['number' => 1]);
+            $tpl->assign('edit_quantity', ['number' => 1]);
 
             $existed_attrs = get_existed_attrs();
             if (count($existed_attrs))
@@ -42,7 +42,8 @@ class Mod_object extends Module {
         $object_id = $args['id'];
         $object = object_by_id($object_id);
         $name = stripslashes($object['name']);
-        $tpl->assign(NULL, ['form_url' => mk_url(['mod' => $this->name], 'query'),
+        $tpl->assign(NULL, ['number' => $object['number'],
+                            'form_url' => mk_url(['mod' => $this->name], 'query'),
                             'catalog_id' => $object['catalog_id'],
                             'location_id' => $object['location_id'] ? $object['location_id'] : "",
                             'object_id' => $object_id,
@@ -53,7 +54,7 @@ class Mod_object extends Module {
                             'free_boxes_link' => mk_url(['mod' => 'boxes',
                                                          'location_id' => 0])]);
 
-        $tpl->assign('show_quanity', ['number' => $object['number'] - $object['absent']]);
+        $tpl->assign('show_quantity', ['number' => $object['number'] - $object['absent']]);
 
         $existed_attrs = get_existed_attrs();
         if (count($existed_attrs))
@@ -138,12 +139,12 @@ class Mod_object extends Module {
         else
             $tpl->assign('return_back_many', ['max_number' => $object['absent']]);
 
-        $take_quanity = ($object['number'] - $object['absent']);
-        if (!$take_quanity)
+        $take_quantity = ($object['number'] - $object['absent']);
+        if (!$take_quantity)
             return;
 
-        if ($take_quanity > 1)
-            $tpl->assign('take_away_many', ['max_number' => $take_quanity]);
+        if ($take_quantity > 1)
+            $tpl->assign('take_away_many', ['max_number' => $take_quantity]);
         else
             $tpl->assign('take_away');
     }
@@ -262,8 +263,8 @@ class Mod_object extends Module {
 
         case 'take_away':
             $obj = db()->query('select * from objects where id=%d', $args['object_id']);
-            $quanity = isset($args['quanity']) ? (int)$args['quanity'] : 1;
-            $take = $obj['absent'] + $quanity;
+            $quantity = isset($args['quantity']) ? (int)$args['quantity'] : 1;
+            $take = $obj['absent'] + $quantity;
             if ($take > $obj['number'])
                 $take = $obj['number'];
             db()->update('objects', $args['object_id'], ['absent' => $take]);
@@ -271,18 +272,18 @@ class Mod_object extends Module {
 
         case 'return_back':
             $obj = db()->query('select * from objects where id=%d', $args['object_id']);
-            $quanity = isset($args['quanity']) ? (int)$args['quanity'] : 1;
-            $absent = $obj['absent'] - $quanity;
+            $quantity = isset($args['quantity']) ? (int)$args['quantity'] : 1;
+            $absent = $obj['absent'] - $quantity;
             if ($absent < 0)
                 $absent = 0;
             db()->update('objects', $args['object_id'], ['absent' => $absent]);
             return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
 
-        case 'dec_quanity':
+        case 'dec_quantity':
             $obj_id = (int)$args['object_id'];
             $obj = db()->query('select * from objects where id=%d', $obj_id);
-            $quanity = isset($args['quanity']) ? (int)$args['quanity'] : 1;
-            $left = $obj['number'] - $quanity;
+            $quantity = isset($args['quantity']) ? (int)$args['quantity'] : 1;
+            $left = $obj['number'] - $quantity;
             if ($left < 1) {
                 object_remove($obj_id);
                 message_box_ok(sprintf('Object "%s" was removed', $obj['name']));
@@ -316,11 +317,32 @@ class Mod_object extends Module {
             return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
 
 
-        case 'inc_quanity':
+        case 'inc_quantity':
             $obj = db()->query('select * from objects where id=%d', $args['object_id']);
-            $quanity = isset($args['quanity']) ? (int)$args['quanity'] : 1;
-            $new_num = $obj['number'] + $quanity;
+            $quantity = isset($args['quantity']) ? (int)$args['quantity'] : 1;
+            $new_num = $obj['number'] + $quantity;
             db()->update('objects', $args['object_id'], ['number' => $new_num]);
+            return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
+
+
+        case 'to_withdrawal':
+            $obj_id = (int)$args['object_id'];
+            $obj = db()->query('select * from objects where id=%d', $obj_id);
+            $quantity = isset($args['quantity']) ? (int)$args['quantity'] : 1;
+
+            $row = db()->query('select * from withdrawal_list where obj_id = %d', $obj_id);
+            if ($row and is_array($row) and isset($row['quantity']) and (!$row['completed'])) {
+                $quantity += $row['quantity'];
+                db()->query('update withdrawal_list set ' .
+                            'quantity = %d where obj_id = %d',
+                            $quantity, $obj_id);
+            } else {
+                db()->query('delete from withdrawal_list where obj_id = %d', $obj_id);
+                db()->insert('withdrawal_list',
+                             ['obj_id' => $obj_id,
+                              'quantity' => $quantity]);
+            }
+            message_box_ok(sprintf("'%s' placed into withdrawal list", $obj['name']));
             return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
 
 

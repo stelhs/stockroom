@@ -14,9 +14,14 @@ function main($tpl)
 {
     session_start();
 
+    $mod_name = "search";
+    if(isset($_GET['mod']))
+       $mod_name = $_GET['mod'];
+
     $tpl->assign(NULL, ['link_location' => mk_url(['mod' => 'location']),
                         'link_catalog' => mk_url(['mod' => 'catalog']),
                         'link_new' => mk_url(['mod' => 'object']),
+                        'link_withdrawal' => mk_url(['mod' => 'withdrawal_list']),
                         'link_boxes' => mk_url(['mod' => 'boxes']),
                         'link_absent' => mk_url(['mod' => 'absent']),
                         'link_photos' => mk_url(['mod' => 'photos']),
@@ -37,17 +42,19 @@ function main($tpl)
         $tpl->assign('photos_cnt', ['cnt' => $photos_cnt]);
     }
 
+    $withdrawal_cnt = count(withdrawal_list());
+    if ($withdrawal_cnt) {
+        $tpl->assign('withdrawal_cnt', ['cnt' => $withdrawal_cnt]);
+    }
+
     $user = user_by_cookie();
-    if (!$user) {
+    if (!$user and $mod_name != 'withdrawal_list') {
         $tpl->assign('user_auth');
         return;
     }
 
     $tpl->assign('user_logout', ['link_logout' => mk_url(['method' => 'user_logout'], 'query')]);
 
-    $mod_name = "search";
-    if(isset($_GET['mod']))
-       $mod_name = $_GET['mod'];
 
     $content = modules()->mod_content($mod_name, $_GET);
     $tpl->assign('module', ['content' => $content]);

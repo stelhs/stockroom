@@ -79,6 +79,7 @@ function object_remove($obj_id)
             $photo->remove();
     $obj = object_by_id($obj_id);
     db()->query('delete from objects where id = %d', $obj_id);
+    db()->query('delete from withdrawal_list where obj_id = %d', $obj_id);
 }
 
 function object_by_id($object_id)
@@ -183,4 +184,9 @@ function object_absent_cnt()
 {
     $objects = db()->query_list('select id from objects where absent > 0');
     return count($objects);
+}
+
+function withdrawal_list()
+{
+    return db()->query_list('select * from withdrawal_list');
 }
