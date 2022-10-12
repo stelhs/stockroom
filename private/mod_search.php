@@ -41,6 +41,18 @@ class Mod_search extends Module {
                 return;
             }
 
+            preg_match('/^\.(\d+)/', $text, $m);
+            if (isset($m[1])) {
+                $object = object_by_id($m[1]);
+                if (!$object) {
+                    $tpl->assign('no_result');
+                    return $tpl->result();
+                }
+
+                header('location: '.mk_url(['mod' => 'object', 'id' => $object['id']]));
+      	        return;
+            } 
+
             /* search location by ##ID */
             preg_match('/^##(\d+)/', $text, $m);
             if (isset($m[1])) {

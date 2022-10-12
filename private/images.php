@@ -391,8 +391,8 @@ function image_upload($tmp_name, $orig_name, $obj_type, $obj_id, $img_name = "")
     }
 
     $rc = move_uploaded_file($tmp_name, $full_filename);
-    if ($rc <= 0) {
-        $img_log->err("can't move uploaded file. Error: %d\n", $rc);
+    if (!$rc) {
+        $img_log->err("can't move uploaded file. Error code: %d. Error: %s\n", $rc);
         return -1;
     }
 

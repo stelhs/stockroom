@@ -26,12 +26,12 @@ sudo apt install -y apache2 mysql-server php git
 ```
 
 - Stockroom also depends on the php_common repository by Michail Kurochkin. It
-has to be cloned as **/usr/lib/php**:
+has to be cloned as **/usr/local/lib/php**:
 
 ```sh
-sudo mkdir /usr/lib/php
-sudo chmod 777 /usr/lib/php
-git clone https://github.com/stelhs/php_common.git /usr/lib/php
+sudo mkdir /usr/local/lib
+sudo chmod 775 /usr/local/lib
+git clone https://github.com/stelhs/php_common.git /usr/local/lib/php
 ```
 
 - Clone the Stockroom repository to the desired directory (root from now on).
