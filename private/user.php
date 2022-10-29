@@ -3,7 +3,7 @@
 function user_by_login_pass($login, $pass)
 {
     $query = sprintf('SELECT * FROM users WHERE `login` = "%s" ' .
-                     'AND `pass` = password("%s")', $login, $pass);
+                     'AND `pass` = sha("%s")', $login, $pass);
     return db()->query($query);
 }
 
