@@ -1,5 +1,9 @@
 <div align="center">
     <script src="{http_js}mod_objects.js?{time}"></script>
+    <script type="text/javascript">
+        var ps = new Photo_selector();
+    </script>
+
 
     <table border="0" cellspacing="5" cellpadding="5" width="100%">
         <tr>
@@ -40,6 +44,7 @@
         <input type="hidden" name="object_id" value="{object_id}">
         <input type="hidden" name="catalog_id" value="{catalog_id}">
         <input type="hidden" name="location_id" value="{location_id}">
+        <input type="hidden" name="label_photo" id="label_photo" value="">
 
         <table border="0" cellspacing="5" cellpadding="5" width="100%">
             <tr>
@@ -250,17 +255,31 @@
             </div>
             <script>quantityDialog = new QuantityDialog();</script>
         </div>
-
     </form>
 
     <!-- START BLOCK : photo -->
         <div class="obj_photo">
-            <a href="{link_remove}" onclick="return window.confirm('Удалить фотографию?')">
-                <img class="obj_remove_img" src="{http_img}delete.png">
-            </a>
             <a href="{img_orig}">
                 <img src="{img}">
             </a>
+            <a href="{link_remove}" onclick="return window.confirm('Удалить фотографию?')">
+                <img class="obj_remove_img" src="{http_img}delete.png">
+            </a>
+            <img style="position: absolute;
+                        left: 780px;
+                        top: 27px;"
+                 src="{http_img}img_not_selected.png"
+                 id="img_label_not_selected_{img_hash}"
+                 onclick="ps.select('{img_hash}')">
+            <img style="display: none;
+                        position: absolute;
+                        left: 780px;
+                        top: 27px;"
+                 src="{http_img}img_selected.png"
+                 id="img_label_selected_{img_hash}">
+            <script type="text/javascript">
+                ps.add('{img_hash}', {selected});
+            </script>
         </div>
     <!-- END BLOCK : photo -->
 </div>
@@ -269,4 +288,5 @@
     first_load_page = true;
     draw_location_path('location_path', "{location_id}", false, on_draw_location_path);
     draw_catalog_path('catalog_path', "{catalog_id}", false, on_draw_catalog_path);
+    ps.update();
 </script>

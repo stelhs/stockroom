@@ -75,7 +75,20 @@ class Mod_object extends Module {
                      ['object_name' => stripslashes($object['name']),
                       'max_number' => $object['number']]);
 
-        $photos = images_by_obj_id('objects', $object_id);
+        $list = images_by_obj_id('objects', $object_id);
+        $first_photo = NULL;
+        foreach ($list as $photo) {
+            if ($photo->hash() == $object['label_photo']) {
+                $first_photo = $photo;
+                continue;
+            }
+            $photos[] = $photo;
+        }
+        if ($first_photo)
+            array_unshift($photos , $first_photo);
+        else
+            $photos = $list;
+
         foreach ($photos as $photo) {
             $link_remove = mk_url(['method' => 'remove_photo',
                                    'photo_hash' => $photo->hash(),
@@ -84,6 +97,8 @@ class Mod_object extends Module {
 
             $tpl->assign('photo', ['img' => $photo->url('mini'),
                                    'img_orig' => $photo->url(),
+                                   'img_hash' => $photo->hash(),
+                                   'selected' => ($photo->hash() == $object['label_photo'] ? 'true' : 'false'),
                                    'link_remove' => $link_remove]);
         }
 
@@ -217,7 +232,8 @@ class Mod_object extends Module {
                               $location_id,
                               addslashes($args['object_name']),
                               addslashes($args['object_description']),
-                              $args['object_attrs']);
+                              $args['object_attrs'],
+                              $args['label_photo']);
             if ($rc)
                 message_box_err('Can`t edit object');
 

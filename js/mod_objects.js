@@ -132,3 +132,32 @@ function check_for_remove(number) {
     var entered_num = $$('inputQuanityDialog').value;
     return entered_num >= number;
 }
+
+class Photo_selector {
+    constructor() {
+        this.images = [];
+        this.selected = NaN;
+    }
+
+    add(hash, selected) {
+        this.images.push(hash)
+        if (selected)
+            this.selected = hash;
+    }
+
+    select(hash) {
+        this.selected = hash;
+        this.update();
+    }
+
+    update() {
+        for (let h of this.images) {
+            $$('img_label_selected_' + h).style.display = 'none';
+        }
+        $$('img_label_selected_' + this.selected).style.display = 'block';
+        $$('label_photo').value = this.selected;
+    }
+}
+
+
+

@@ -87,7 +87,8 @@ function object_by_id($object_id)
     return db()->query('select * from objects where id = %d', (int)$object_id);
 }
 
-function object_edit($obj_id, $catalog_id, $location_id, $name, $description = "", $attrs_text = "")
+function object_edit($obj_id, $catalog_id, $location_id, $name,
+                     $description = "", $attrs_text = "", $label_photo = "")
 {
     $obj = object_by_id($obj_id);
 
@@ -97,7 +98,8 @@ function object_edit($obj_id, $catalog_id, $location_id, $name, $description = "
                     'description' => $description,
                     'attrs' => $attrs_text,
                     'catalog_id' => $catalog_id,
-                    'location_id' => $location_id];
+                    'location_id' => $location_id,
+                    'label_photo' => $label_photo];
 
     return db()->update('objects', $obj_id, $update_data);
 }

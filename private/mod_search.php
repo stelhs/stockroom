@@ -51,7 +51,7 @@ class Mod_search extends Module {
 
                 header('location: '.mk_url(['mod' => 'object', 'id' => $object['id']]));
       	        return;
-            } 
+            }
 
             /* search location by ##ID */
             preg_match('/^##(\d+)/', $text, $m);
@@ -122,10 +122,19 @@ class Mod_search extends Module {
             $tpl->assign('result_objects');
             foreach ($obj_result as $object) {
                 $img_url = '';
-                $photos = images_by_obj_id('objects', $object['id']);
-                if (count($photos)) {
-                    $photo = $photos[0];
+                $photo = NULL;
+
+                if ($object['label_photo']) {
+                    $photo = image_by_hash($object['label_photo']);
                     $img_url = $photo->url('list');
+                }
+
+                if (!$photo) {
+                    $photos = images_by_obj_id('objects', $object['id']);
+                    if (count($photos)) {
+                        $photo = $photos[0];
+                        $img_url = $photo->url('list');
+                    }
                 }
 
                 $tpl->assign('result_objects_row',

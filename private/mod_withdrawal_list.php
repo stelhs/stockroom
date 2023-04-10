@@ -88,16 +88,25 @@ class Mod_withdrawal_list extends Module {
                 $parent_color = $this->depth_color($depth - 1);
 
                 $photos = images_by_obj_id('objects', $obj['id']);
-                $img = '';
-                if (count($photos)) {
-                    $photo = $photos[0];
-                    $img = $photo->url('mini');
+                $img_url = '';
+                $photo = NULL;
+
+                if ($obj['label_photo']) {
+                    $photo = image_by_hash($obj['label_photo']);
+                    $img_url = $photo->url('mini');
+                }
+
+                if (!$photo) {
+                    if (count($photos)) {
+                        $photo = $photos[0];
+                        $img_url = $photo->url('mini');
+                    }
                 }
 
                 $tpl->assign('object',
                              ['name' => $obj['name'],
                               'object_id' => $obj['id'],
-                              'img' => $img,
+                              'img' => $img_url,
                               'quantity' => $obj['withdrawal_quantity'],
                               'form_url' => mk_url(['mod' => $this->name], 'query'),
                               'parent_color' => $parent_color,

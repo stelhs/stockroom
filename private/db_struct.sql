@@ -1,13 +1,13 @@
--- MySQL dump 10.13  Distrib 5.7.37, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.32, for Linux (x86_64)
 --
 -- Host: localhost    Database: stockroom
 -- ------------------------------------------------------
--- Server version	5.7.37-0ubuntu0.18.04.1
+-- Server version	8.0.32-0ubuntu0.20.04.2
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -21,16 +21,16 @@
 
 DROP TABLE IF EXISTS `catalog`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `catalog` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `parent_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `parent_id` int NOT NULL,
   `name` varchar(512) NOT NULL,
   `description` text,
-  `user_id` int(11) NOT NULL,
+  `user_id` int NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=508 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=527 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,22 +39,22 @@ CREATE TABLE `catalog` (
 
 DROP TABLE IF EXISTS `images`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `images` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `obj_type` enum('objects','locations','not_assigned') NOT NULL,
-  `obj_id` int(11) NOT NULL,
+  `obj_id` int NOT NULL,
   `name` varchar(50) DEFAULT NULL,
   `size_name` varchar(32) NOT NULL,
   `hash` varchar(500) DEFAULT NULL,
   `filename` varchar(500) DEFAULT NULL,
   `extension` varchar(8) NOT NULL,
-  `width` int(10) unsigned DEFAULT NULL,
-  `height` int(10) unsigned DEFAULT NULL,
+  `width` int unsigned DEFAULT NULL,
+  `height` int unsigned DEFAULT NULL,
   `original_filename` varchar(50) DEFAULT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21969 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26343 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -63,24 +63,24 @@ CREATE TABLE `images` (
 
 DROP TABLE IF EXISTS `location`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `location` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `parent_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `parent_id` int NOT NULL,
   `name` varchar(512) NOT NULL,
   `description` text,
-  `size1` int(11) NOT NULL COMMENT 'ширина или высота или глубина',
-  `size2` int(11) NOT NULL COMMENT 'ширина или высота или глубина',
-  `size3` int(11) NOT NULL COMMENT 'ширина или высота или глубина',
-  `fullness` int(11) NOT NULL COMMENT 'заполненность ячейки в процентах',
-  `volume` bigint(20) NOT NULL COMMENT 'объём ячейки в милилитрах',
-  `free_volume` bigint(20) NOT NULL COMMENT 'свободный объём в милилитрах',
+  `size1` int NOT NULL COMMENT 'ширина или высота или глубина',
+  `size2` int NOT NULL COMMENT 'ширина или высота или глубина',
+  `size3` int NOT NULL COMMENT 'ширина или высота или глубина',
+  `fullness` int NOT NULL COMMENT 'заполненность ячейки в процентах',
+  `volume` bigint NOT NULL COMMENT 'объём ячейки в милилитрах',
+  `free_volume` bigint NOT NULL COMMENT 'свободный объём в милилитрах',
   `is_box` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'локация является ячейкой или нет',
   `is_absent` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'стоит в true если ячейка отсутсвует',
-  `user_id` int(11) NOT NULL,
+  `user_id` int NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=695 DEFAULT CHARSET=utf8 COMMENT='nodes tree';
+) ENGINE=InnoDB AUTO_INCREMENT=705 DEFAULT CHARSET=utf8mb3 COMMENT='nodes tree';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -89,20 +89,21 @@ CREATE TABLE `location` (
 
 DROP TABLE IF EXISTS `objects`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `objects` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(512) NOT NULL,
   `description` text,
   `attrs` text NOT NULL COMMENT 'атрибуты. дополнительные параметры в формате ключ:значение с переносом строк',
-  `number` int(11) NOT NULL DEFAULT '1' COMMENT 'количество предметов',
-  `catalog_id` int(11) NOT NULL,
-  `location_id` int(11) NOT NULL,
-  `absent` int(1) NOT NULL DEFAULT '0' COMMENT 'выставляется в true если предмет отсутсвует на своём месте',
-  `user_id` int(11) NOT NULL,
+  `number` int NOT NULL DEFAULT '1' COMMENT 'количество предметов',
+  `catalog_id` int NOT NULL,
+  `location_id` int NOT NULL,
+  `label_photo` varchar(64) NOT NULL COMMENT 'Hash лицевой фотографии из таблицы images',
+  `absent` int NOT NULL DEFAULT '0' COMMENT 'выставляется в true если предмет отсутсвует на своём месте',
+  `user_id` int NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4649 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5499 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -111,16 +112,16 @@ CREATE TABLE `objects` (
 
 DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `login` varchar(512) NOT NULL,
   `pass` varchar(512) NOT NULL,
   `hash` varchar(512) NOT NULL,
   `role` enum('admin','viewer') NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -129,13 +130,13 @@ CREATE TABLE `users` (
 
 DROP TABLE IF EXISTS `withdrawal_list`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `withdrawal_list` (
-  `obj_id` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `completed` int(11) NOT NULL DEFAULT '0',
+  `obj_id` int NOT NULL,
+  `quantity` int NOT NULL,
+  `completed` int NOT NULL DEFAULT '0',
   UNIQUE KEY `obj_id` (`obj_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -147,4 +148,4 @@ CREATE TABLE `withdrawal_list` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-07 16:43:20
+-- Dump completed on 2023-04-10 16:34:16

@@ -138,10 +138,19 @@ class Mod_location extends Module {
             $tpl->assign('objects_list', ['total_number' => count($objects)]);
             foreach ($objects as $obj) {
                 $img_url = '';
-                $photos = images_by_obj_id('objects', $obj['id']);
-                if (count($photos)) {
-                    $photo = $photos[0];
+                $photo = NULL;
+
+                if ($obj['label_photo']) {
+                    $photo = image_by_hash($obj['label_photo']);
                     $img_url = $photo->url('list');
+                }
+
+                if (!$photo) {
+                    $photos = images_by_obj_id('objects', $obj['id']);
+                    if (count($photos)) {
+                        $photo = $photos[0];
+                        $img_url = $photo->url('list');
+                    }
                 }
                 $row = ['id' => $obj['id'],
                         'name' => $obj['name'],
