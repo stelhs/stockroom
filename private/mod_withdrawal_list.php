@@ -105,6 +105,7 @@ class Mod_withdrawal_list extends Module {
 
                 $tpl->assign('object',
                              ['name' => $obj['name'],
+                              'attrs' => str_replace("\n", '<br>', $obj['attrs']),
                               'object_id' => $obj['id'],
                               'img' => $img_url,
                               'quantity' => $obj['withdrawal_quantity'],
