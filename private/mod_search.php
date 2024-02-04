@@ -119,7 +119,10 @@ class Mod_search extends Module {
         }
 
         if ($obj_result) {
-            $tpl->assign('result_objects');
+            $tpl->assign('result_objects', ['total_num' => count($obj_result)]);
+
+            $attr_sum_table = [];
+
             foreach ($obj_result as $object) {
                 $img_url = '';
                 $photo = NULL;
@@ -135,6 +138,19 @@ class Mod_search extends Module {
                         $photo = $photos[0];
                         $img_url = $photo->url('list');
                     }
+                }
+
+
+                $attrs = parse_attrs($object['attrs']);
+                foreach ($attrs as $attr) {
+                    $name = $attr[0];
+                    $val = $attr[1];
+                    if (!$val)
+                        continue;
+                    if (isset($attr_sum_table[$name]))
+                        $attr_sum_table[$name] += $val;
+                    else
+                        $attr_sum_table[$name] = $val;
                 }
 
                 $tpl->assign('result_objects_row',
@@ -158,6 +174,14 @@ class Mod_search extends Module {
                     $tpl->assign('catalog_path', ['name' => $item['name'],
                                                   'id' => $item['id'],
                                                   'link' => $item['url']]);
+            }
+            if (count($attr_sum_table)) {
+                $tpl->assign('result_attrs_table');
+
+                foreach ($attr_sum_table as $name => $sum) {
+                    $tpl->assign('result_attrs_row', ['name' => $name,
+                                                      'sum' => $sum]);
+                }
             }
         }
 

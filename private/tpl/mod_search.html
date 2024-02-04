@@ -96,7 +96,22 @@
         <!-- END BLOCK : result_location -->
 
         <!-- START BLOCK : result_objects -->
-            <p style="color: blue">Результат по предметам:</p>
+            <p style="color: blue">Результат по предметам ({total_num}):</p>
+
+            <!-- START BLOCK : result_attrs_table -->
+                <div style="margin: 0 0 30 50">
+                    <p style="margin: 2; color: indianred">Сумма по артибутам: </p>
+                    <table style="margin-left: 50px">
+                        <!-- START BLOCK : result_attrs_row -->
+                            <tr>
+                                <td style="border: solid 1px; font-size: 16">{name}</td>
+                                <td style="border: solid 1px; font-size: 16">{sum}</td>
+                            </tr>
+                        <!-- END BLOCK : result_attrs_row -->
+                    </table>
+                </div>
+            <!-- END BLOCK : result_attrs_table -->
+
             <table align="left">
                 <!-- START BLOCK : result_objects_row -->
                     <tr>
