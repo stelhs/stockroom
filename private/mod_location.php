@@ -199,9 +199,11 @@ class Mod_location extends Module {
             $free_volume = $volume * (100 - $fullness) / 100;
             $photos_for_attach = isset($args['attach_not_assigned_photos']) ? $args['attach_not_assigned_photos'] : [];
 
+            $name = $args['location_name'];
+
             $new_location_id = db()->insert('location',
                                             ['parent_id' => $parent_id,
-                                             'name' => $args['location_name'],
+                                             'name' => $name,
                                              'description' => $args['location_description'],
                                              'size1' => $size1,
                                              'size2' => $size2,
@@ -211,6 +213,12 @@ class Mod_location extends Module {
                                              'free_volume' => (int)($free_volume * 1000),
                                              'is_box' => ($volume ? '1' : '0'),
                                              'user_id' => (int)user_by_cookie()['id']]);
+
+            if (strstr($name, '@')) {
+                $new_name = str_replace('@', $new_location_id, $name);
+                db()->update('location', $new_location_id, ['name' => $new_name]);
+            }
+
             if($new_location_id <= 0) {
                  message_box_err("Can't added new location");
                  return mk_url(['mod' => $this->name]);
