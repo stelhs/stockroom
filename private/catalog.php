@@ -36,6 +36,7 @@ function catalog_chain_by_id($catalog_id)
         $catalog = db()->query('select * from catalog where id = %d', $catalog_id);
         if (!$catalog)
             break;
+
         $list[] = $catalog;
 
         $catalog_parent = db()->query('select * from catalog ' .

@@ -19,7 +19,7 @@ function conf()
                                'http_css' => $http_root_path.'css/',
                                'http_img' => $http_root_path.'i/',
                                'http_js' => $http_root_path.'js/',
-                               'time' => time(),
+                               'time' => 0,//time(),
                                'query_url' => $http_root_path.'query.php'],
             'http_root_path' => $http_root_path,
             'absolute_root_path' => $absolute_root_path,

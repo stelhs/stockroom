@@ -12,10 +12,10 @@ class Mod_withdrawal_list extends Module {
 
         $tree = new Tree();
 
-        $rows = withdrawal_list();
+	    $rows = withdrawal_list();
         foreach ($rows as $row) {
-            $obj = object_by_id($row['obj_id']);
-            $chain = location_chain_by_id($obj['location_id']);
+		$obj = object_by_id($row['obj_id']);
+		$chain = location_chain_by_id($obj['location_id']);
 
             foreach ($chain as $location_item) {
                 if ($location_item['id'] == 0)
@@ -25,13 +25,13 @@ class Mod_withdrawal_list extends Module {
                                    $chain);
             }
             $obj['withdrawal_quantity'] = $row['quantity'];
-            $obj['withdrawal_completed'] = $row['completed'];
+    	    $obj['withdrawal_completed'] = $row['completed'];
             $tree->insert_object($row['obj_id'],
                                  $obj['location_id'],
                                  $obj);
         }
 
-        $tree->remove_empty_nodes();
+//        $tree->remove_empty_nodes();
 
         $html = $this->render_node($tree->root, 0);
         $tpl->assign('tree', ['html' => $html]);

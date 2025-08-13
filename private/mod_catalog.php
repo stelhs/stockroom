@@ -144,6 +144,28 @@ class Mod_catalog extends Module {
 
     function query($args)
     {
+        switch($args['method']) {
+        /* AJAX requests */
+        case 'catalog_path':
+            $catalog_id = $args['id'];
+            $path = catalog_chain_by_id($catalog_id);
+            echo json_encode($path);
+            return 0;
+
+        case 'get_sub_catalog':
+            $rows = db()->query_list('select * from catalog where parent_id = %d '.
+                                     'order by name asc', $args['id']);
+            if (!$rows) {
+                echo json_encode([]);
+                return 0;
+            }
+
+            foreach ($rows as $row)
+                $list[] = $row;
+            echo json_encode($list);
+            return 0;
+        }
+
         $user = user_by_cookie();
         if ($user['role'] != 'admin')
             return mk_url(['mod' => $this->name, 'id' => $args['catalog_id']]);
@@ -226,26 +248,6 @@ class Mod_catalog extends Module {
         case 'remove_photo':
             $this->remove_catalog_photo($args['photo_hash']);
             return mk_url(['mod' => $this->name, 'id' => $args['catalog_id']]);
-
-        /* AJAX requests */
-        case 'catalog_path':
-            $catalog_id = $args['id'];
-            $path = catalog_chain_by_id($catalog_id);
-            echo json_encode($path);
-            return 0;
-
-        case 'get_sub_catalog':
-            $rows = db()->query_list('select * from catalog where parent_id = %d '.
-                                     'order by name asc', $args['id']);
-            if (!$rows) {
-                echo json_encode([]);
-                return 0;
-            }
-
-            foreach ($rows as $row)
-                $list[] = $row;
-            echo json_encode($list);
-            return 0;
 
         }
 

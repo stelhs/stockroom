@@ -277,7 +277,7 @@ class Mod_object extends Module {
             $photo->remove();
             return mk_url(['mod' => $this->name, 'id' => $args['obj_id']]);
 
-        case 'take_away':
+	case 'take_away':
             $obj = db()->query('select * from objects where id=%d', $args['object_id']);
             $quantity = isset($args['quantity']) ? (int)$args['quantity'] : 1;
             $take = $obj['absent'] + $quantity;
@@ -341,18 +341,19 @@ class Mod_object extends Module {
             return mk_url(['mod' => $this->name, 'id' => $args['object_id']]);
 
 
-        case 'to_withdrawal':
+	case 'to_withdrawal':
             $obj_id = (int)$args['object_id'];
-            $obj = db()->query('select * from objects where id=%d', $obj_id);
-            $quantity = isset($args['quantity']) ? (int)$args['quantity'] : 1;
+	    $obj = db()->query('select * from objects where id=%d', $obj_id);
+	    $quantity = isset($args['quantity']) ? (int)$args['quantity'] : 1;
 
-            $row = db()->query('select * from withdrawal_list where obj_id = %d', $obj_id);
-            if ($row and is_array($row) and isset($row['quantity']) and (!$row['completed'])) {
-                $quantity += $row['quantity'];
+	    $row = db()->query('select * from withdrawal_list where obj_id = %d', $obj_id);
+
+	    if ($row and is_array($row) and isset($row['quantity']) and (!$row['completed'])) {
+		    $quantity += $row['quantity'];
                 db()->query('update withdrawal_list set ' .
                             'quantity = %d where obj_id = %d',
-                            $quantity, $obj_id);
-            } else {
+			    $quantity, $obj_id);
+	    } else {
                 db()->query('delete from withdrawal_list where obj_id = %d', $obj_id);
                 db()->insert('withdrawal_list',
                              ['obj_id' => $obj_id,
