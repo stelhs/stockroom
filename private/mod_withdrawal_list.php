@@ -91,9 +91,13 @@ class Mod_withdrawal_list extends Module {
                 $img_url = '';
                 $photo = NULL;
 
-                if ($obj['label_photo']) {
-                    $photo = image_by_hash($obj['label_photo']);
-                    $img_url = $photo->url('mini');
+		if ($obj['label_photo']) {
+                    try {
+                        $photo = image_by_hash($obj['label_photo']);
+                        $img_url = $photo->url('mini');
+                    } catch (Exception $e) {
+                        $img_url = "";
+                    }
                 }
 
                 if (!$photo) {

@@ -127,9 +127,12 @@ class Mod_search extends Module {
                 $img_url = '';
                 $photo = NULL;
 
-                if ($object['label_photo']) {
-                    $photo = image_by_hash($object['label_photo']);
-                    $img_url = $photo->url('list');
+		if ($object['label_photo']) {
+                    try {
+                             $photo = image_by_hash($object['label_photo']);
+                             $img_url = $photo->url('list');
+		    } catch (Exception $e) {
+		    }
                 }
 
                 if (!$photo) {
